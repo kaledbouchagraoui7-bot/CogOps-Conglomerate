@@ -1,0 +1,236 @@
+{
+ "asof": "2026-10",
+ "source": "europe-america-research-domains-analysis.md + switzerland-research-domains-analysis.md (uploaded 2026-10)",
+ "tracks": {
+  "ai_operations": {
+   "title": "AI Operations Practitioner",
+   "market_evidence": "AI/ML gap 9.8/10 (US), 1.6M open positions vs 518K candidates; CH #3",
+   "capstone": "Deploy a gated AI assistant for a real SME process (PR/FAQ \u2192 KB \u2192 gate policy)",
+   "modules": [
+    {
+     "title": "LLM systems & gateways",
+     "hours": 12,
+     "outcomes": [
+      "provider chains",
+      "token economics",
+      "fallback design"
+     ],
+     "assessment": "gateway design doc"
+    },
+    {
+     "title": "KB grounding & honesty",
+     "hours": 8,
+     "outcomes": [
+      "KB-first routing",
+      "mode labeling",
+      "no-fake-AI policy"
+     ],
+     "assessment": "grounded assistant demo"
+    },
+    {
+     "title": "Agent orchestration & gates",
+     "hours": 12,
+     "outcomes": [
+      "Type-1/2 classification",
+      "fail-closed gates",
+      "audit trails"
+     ],
+     "assessment": "agent with gate battery passed"
+    },
+    {
+     "title": "Automation audits",
+     "hours": 8,
+     "outcomes": [
+      "process mapping",
+      "human-gate placement",
+      "ROI estimation"
+     ],
+     "assessment": "client audit deliverable"
+    }
+   ]
+  },
+  "cyber_fundamentals": {
+   "title": "Cybersecurity for SME Advisors",
+   "market_evidence": "Cyber gap 9.1/10 (EU/US #4), CH #2; 504K unfilled US roles",
+   "capstone": "Run a full baseline audit + remediation plan for a live SME",
+   "modules": [
+    {
+     "title": "Control frameworks",
+     "hours": 10,
+     "outcomes": [
+      "CIS/nDSG/GDPR mapping",
+      "scoping"
+     ],
+     "assessment": "scoped control set"
+    },
+    {
+     "title": "Identity, network, data hygiene",
+     "hours": 12,
+     "outcomes": [
+      "MFA/least-privilege",
+      "headers/TLS",
+      "RoPA/deletion"
+     ],
+     "assessment": "hygiene audit"
+    },
+    {
+     "title": "AI security",
+     "hours": 8,
+     "outcomes": [
+      "injection battery",
+      "action gating",
+      "provenance"
+     ],
+     "assessment": "assistant review report"
+    },
+    {
+     "title": "Incident response",
+     "hours": 6,
+     "outcomes": [
+      "playbooks",
+      "tabletops"
+     ],
+     "assessment": "tabletop record"
+    }
+   ]
+  },
+  "comp_bio": {
+   "title": "Computational Biology for Reg-Science",
+   "market_evidence": "Bioinformatics gap 7.8/10; CH #6 'safest long-term bet'; blue-ocean AI+DrugDiscovery 9.8/10",
+   "capstone": "Ship a reproducible pipeline pack (QC + EDA + literature) with FIXES-style evidence log",
+   "modules": [
+    {
+     "title": "Sequence QC & NCBI APIs",
+     "hours": 10,
+     "outcomes": [
+      "Entrez/E-utilities",
+      "ORF/GC",
+      "cross-check gates"
+     ],
+     "assessment": "QC pack with PASS gate"
+    },
+    {
+     "title": "Clinical EDA & Table 1",
+     "hours": 14,
+     "outcomes": [
+      "audit-trailed cleaning",
+      "Welch/chi2",
+      "determinism"
+     ],
+     "assessment": "byte-reproducible Table 1"
+    },
+    {
+     "title": "Literature synthesis",
+     "hours": 10,
+     "outcomes": [
+      "PMID-first",
+      "DOI extraction",
+      "EPMC fallback"
+     ],
+     "assessment": "evidence matrix"
+    },
+    {
+     "title": "ICH/ALCOA+ discipline",
+     "hours": 6,
+     "outcomes": [
+      "M4 structure",
+      "data integrity"
+     ],
+     "assessment": "ALCOA+ QC checklist"
+    }
+   ]
+  },
+  "regulatory_writing": {
+   "title": "Regulatory & Medical Writing Ops",
+   "market_evidence": "Regulatory affairs CH #9 gap 7.0/10; ~120 CROs for the market; med-writing scarcity",
+   "capstone": "Assemble a CTD module pack with statistics and citations, ready for a human signatory",
+   "modules": [
+    {
+     "title": "CTD/M4 architecture",
+     "hours": 8,
+     "outcomes": [
+      "module tree",
+      "cross-referencing"
+     ],
+     "assessment": "assembled skeleton"
+    },
+    {
+     "title": "CSR statistics",
+     "hours": 10,
+     "outcomes": [
+      "Table 1",
+      "validated stats",
+      "transparency figures"
+     ],
+     "assessment": "validated Table 1"
+    },
+    {
+     "title": "Surveillance & PV literature",
+     "hours": 8,
+     "outcomes": [
+      "feed design",
+      "relevance filters",
+      "PMID traceability"
+     ],
+     "assessment": "live feed + matrix"
+    },
+    {
+     "title": "Quality & signoff discipline",
+     "hours": 6,
+     "outcomes": [
+      "ALCOA+",
+      "human-of-record routing"
+     ],
+     "assessment": "QC pass \u226595%"
+    }
+   ]
+  }
+ },
+ "market_snapshot": {
+  "ai_ml": {
+   "title": "AI / Machine Learning",
+   "gap": "9.8/10 US \u00b7 9.5/10 EU \u00b7 3.2:1 demand/supply",
+   "scope": "EU+US #1; CH #3",
+   "salary": "$150\u2013350K+ US; \u20ac80\u2013200K EU; CHF 350K+ CH senior (as of analyses)",
+   "why": "Universal AI transformation; every domain multiplied by AI",
+   "asof": "2026-10",
+   "source": "europe-america-research-domains-analysis.md"
+  },
+  "cyber": {
+   "title": "Cybersecurity & AI Security",
+   "gap": "9.1/10 EU/US \u00b7 CH #2",
+   "scope": "EU/US #4; CH #2",
+   "salary": "US 504K unfilled roles; CHF 120\u2013180K CH",
+   "why": "Attack surface + AI Act compliance wave",
+   "asof": "2026-10",
+   "source": "both analyses"
+  },
+  "comp_bio": {
+   "title": "Computational Biology / Bioinformatics",
+   "gap": "7.8/10 US \u00b7 CH #6",
+   "scope": "EU/US #11; CH #6",
+   "salary": "$100\u2013280K US; CHF 100\u2013160K CH",
+   "why": "AlphaFold-era transformation; Basel pharma cluster is a permanent buyer",
+   "asof": "2026-10",
+   "source": "both analyses"
+  },
+  "quant_finance": {
+   "title": "Quantitative Finance",
+   "gap": "8.5/10 CH #4",
+   "scope": "CH #4",
+   "salary": "CHF 140\u2013600K+ total comp",
+   "why": "Fewest seats, worst fill rates; post-CS consolidation demand",
+   "asof": "2026-10",
+   "source": "switzerland-research-domains-analysis.md"
+  },
+  "regulatory": {
+   "title": "Regulatory Affairs & Clinical Research",
+   "gap": "7.0/10 CH #9",
+   "scope": "CH #9",
+   "salary": "CHF 90\u2013170K+",
+   "why": "Swissmedic/EMA/FDA complexity; decentralized trials",
+   "asof": "2026-10",
+   "source": "switzerland-research-domains-analysis.md"
+  }
+ }
+}

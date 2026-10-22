@@ -1,0 +1,63 @@
+{
+ "standard": "ICH M4 (CTD)",
+ "asof": "2026-10",
+ "source": "ICH M4E(R2) structure",
+ "modules": [
+  {
+   "id": "1",
+   "title": "Administrative information and prescribing information (region-specific)"
+  },
+  {
+   "id": "2.3",
+   "title": "Quality overall summary"
+  },
+  {
+   "id": "2.4",
+   "title": "Nonclinical overview"
+  },
+  {
+   "id": "2.5",
+   "title": "Clinical overview"
+  },
+  {
+   "id": "2.7.1",
+   "title": "Summary of biopharmaceutics"
+  },
+  {
+   "id": "2.7.2",
+   "title": "Summary of clinical pharmacology"
+  },
+  {
+   "id": "2.7.3",
+   "title": "Summary of clinical efficacy"
+  },
+  {
+   "id": "2.7.4",
+   "title": "Summary of clinical safety"
+  },
+  {
+   "id": "3.2.S",
+   "title": "Drug substance (manufacture, controls, stability)"
+  },
+  {
+   "id": "3.2.P",
+   "title": "Drug product (description, manufacture, controls, stability)"
+  },
+  {
+   "id": "4.2",
+   "title": "Nonclinical study reports"
+  },
+  {
+   "id": "5.3.1",
+   "title": "Biopharmaceutics studies"
+  },
+  {
+   "id": "5.3.5",
+   "title": "Efficacy clinical studies"
+  },
+  {
+   "id": "5.3.6",
+   "title": "Safety clinical studies"
+  }
+ ]
+}

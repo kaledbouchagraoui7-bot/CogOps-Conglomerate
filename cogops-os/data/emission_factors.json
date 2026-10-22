@@ -1,0 +1,59 @@
+{
+ "note": "PLACEHOLDER-FACTOR TABLE v0 \u2014 every value labeled with source+asof and MUST be replaced by a current licensed factor set (e.g. DEFRA/ecoinvent) before client-facing statements. CBS Ch.3 honesty.",
+ "scope1_fuel_kgco2e_per_l": {
+  "diesel": {
+   "value": 2.68,
+   "asof": "2024",
+   "source": "DEFRA GHG conversion factors 2024 (average biofuel blend, WTT+combustion ~2.68 kg/l)"
+  },
+  "petrol": {
+   "value": 2.31,
+   "asof": "2024",
+   "source": "DEFRA GHG conversion factors 2024 (~2.31 kg/l)"
+  },
+  "heating_oil": {
+   "value": 2.9,
+   "asof": "2024",
+   "source": "DEFRA 2024 gas oil (~2.90 kg/l)"
+  }
+ },
+ "scope2_electricity_kgco2e_per_kwh": {
+  "CH": {
+   "value": 0.024,
+   "asof": "2023",
+   "source": "Swiss grid mix ~24 g/kWh (FOEN/FOE estimates; low-carbon hydro+nuclear) \u2014 replace with current official factor"
+  },
+  "EU": {
+   "value": 0.23,
+   "asof": "2023",
+   "source": "EU-27 average ~230 g/kWh (EEA) \u2014 placeholder"
+  },
+  "US": {
+   "value": 0.38,
+   "asof": "2023",
+   "source": "US eGRID national average ~380 g/kWh \u2014 placeholder"
+  },
+  "WORLD": {
+   "value": 0.44,
+   "asof": "2023",
+   "source": "global average ~440 g/kWh (Ember) \u2014 placeholder"
+  }
+ },
+ "scope3_spend_kgco2e_per_chf": {
+  "goods": {
+   "value": 0.35,
+   "asof": "2023",
+   "source": "EEIO spend-based proxy ~0.3-0.6 kg/CHF (EXIOBASE-class) \u2014 coarse placeholder"
+  },
+  "business_travel": {
+   "value": 0.25,
+   "asof": "2023",
+   "source": "EEIO spend-based proxy (travel-intensive) \u2014 coarse placeholder"
+  },
+  "commuting": {
+   "value": 0.1,
+   "asof": "2023",
+   "source": "EEIO spend-based proxy \u2014 coarse placeholder"
+  }
+ }
+}

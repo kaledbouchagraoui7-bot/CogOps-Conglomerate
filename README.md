@@ -9,8 +9,9 @@
 > | [`research/09-swiss-holding-law.md`](research/09-swiss-holding-law.md) | The Swiss legal frame: entity forms, holding/participation exemption, naming, VAT, entity-evolution path |
 > | [`research/10-cross-case-synthesis.md`](research/10-cross-case-synthesis.md) | The comparison matrix (12 mechanisms × 8 benchmarks), scale-translation table, anti-pattern defenses, adoption ledger |
 > | [`structure/OPERATING-STRUCTURE.md`](structure/OPERATING-STRUCTURE.md) | **The operating system v1.0** — topology, decision rights, capital doctrine, lifecycle, autonomy contract, platform, cadence, metrics, workforce (CBS), risk gates, compounding, ten-company instantiation, invariants, change control |
+> | [`cogops-os/`](cogops-os/README.md) | **The operating system as running code** — every mechanism executable: gates, lifecycle, capital ladder, autonomy contract, SPQP metrics, cadence generators, CBS, agent squads & missions, the group automaton, and a state-of-the-art task engine per company. Pure stdlib Python; 89-check selftest ALL GREEN |
 >
-> **Reading order:** methodology → cases → synthesis → operating structure. Every structural element in `structure/` carries a lineage tag `[case §M#]` back to the research.
+> **Reading order:** methodology → cases → synthesis → operating structure → **cogops-os** (the structure, executed). Every structural element in `structure/` carries a lineage tag `[case §M#]` back to the research; every module in `cogops-os/` maps to an OS section in its README.
 
 > **One central business. One company per domain.**
 > A conglomerate of small, AI-operated companies — each owning one theme/domain — running on a single shared core. Every company is buildable with **today's** technology (software, data, AI, services). Deep-tech domains (quantum and anything needing technology that does not yet exist at accessible cost) are **explicitly excluded** — see [Excluded domains](#excluded-domains).

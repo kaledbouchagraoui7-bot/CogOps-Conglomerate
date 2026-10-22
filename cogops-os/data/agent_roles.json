@@ -1,0 +1,185 @@
+{
+ "attribution": "Condensed from the JARVIS 110-agent hierarchy (agent_universes.json) \u2014 7 universes; squads draw roles from here (OS \u00a710 staffing rights).",
+ "universes": {
+  "revenue": [
+   {
+    "role": "lead-researcher"
+   },
+   {
+    "role": "data-validator"
+   },
+   {
+    "role": "copywriter-personalization"
+   },
+   {
+    "role": "seo-page-factory"
+   },
+   {
+    "role": "outreach-operator"
+   },
+   {
+    "role": "media-editor"
+   },
+   {
+    "role": "newsletter-composer"
+   },
+   {
+    "role": "funnel-analyst"
+   },
+   {
+    "role": "partnership-scout"
+   },
+   {
+    "role": "research-briefer"
+   }
+  ],
+  "delivery": [
+   {
+    "role": "bio-qc-analyst"
+   },
+   {
+    "role": "eda-statistician"
+   },
+   {
+    "role": "literature-synthesizer"
+   },
+   {
+    "role": "dossier-assembler"
+   },
+   {
+    "role": "regulatory-monitor"
+   },
+   {
+    "role": "mdr-documenter"
+   },
+   {
+    "role": "audit-trail-clerk"
+   },
+   {
+    "role": "carbon-accountant"
+   },
+   {
+    "role": "esrs-reporter"
+   },
+   {
+    "role": "risk-modeler"
+   },
+   {
+    "role": "curriculum-designer"
+   },
+   {
+    "role": "matcher-engine"
+   },
+   {
+    "role": "deployment-engineer"
+   },
+   {
+    "role": "kb-librarian"
+   },
+   {
+    "role": "security-auditor"
+   },
+   {
+    "role": "ai-security-reviewer"
+   },
+   {
+    "role": "process-auditor"
+   },
+   {
+    "role": "pipeline-operator"
+   }
+  ],
+  "capital": [
+   {
+    "role": "treasury-accountant"
+   },
+   {
+    "role": "sweep-planner"
+   },
+   {
+    "role": "dca-operator"
+   },
+   {
+    "role": "compliance-checker"
+   },
+   {
+    "role": "backtest-analyst"
+   },
+   {
+    "role": "factor-researcher"
+   }
+  ],
+  "people": [
+   {
+    "role": "squad-coordinator"
+   },
+   {
+    "role": "role-staffer"
+   },
+   {
+    "role": "training-coordinator"
+   },
+   {
+    "role": "placement-counselor"
+   }
+  ],
+  "infrastructure": [
+   {
+    "role": "platform-operator"
+   },
+   {
+    "role": "site-factory-engineer"
+   },
+   {
+    "role": "gateway-operator"
+   },
+   {
+    "role": "crm-operator"
+   },
+   {
+    "role": "monitor-watcher"
+   },
+   {
+    "role": "backup-clerk"
+   }
+  ],
+  "strategy": [
+   {
+    "role": "portfolio-analyst"
+   },
+   {
+    "role": "funnel-screener"
+   },
+   {
+    "role": "prfaq-writer"
+   },
+   {
+    "role": "market-researcher"
+   },
+   {
+    "role": "kill-analyst"
+   }
+  ],
+  "continuity": [
+   {
+    "role": "auditor"
+   },
+   {
+    "role": "verifier"
+   },
+   {
+    "role": "ledger-keeper"
+   },
+   {
+    "role": "incident-responder"
+   },
+   {
+    "role": "wind-down-executor"
+   }
+  ]
+ },
+ "rules": {
+  "single_threaded_lead": "every squad has exactly one lead role (Amazon STL)",
+  "auditing_agent": "the 'auditor' role is the standing DBSL (Danaher) \u2014 reviews against CBS, never executes inside a subsidiary"
+ }
+}

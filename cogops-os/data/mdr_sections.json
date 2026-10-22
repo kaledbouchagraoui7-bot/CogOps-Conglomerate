@@ -1,0 +1,120 @@
+{
+ "regulation": "EU MDR 2017/745 Annex II & III",
+ "asof": "2026-10",
+ "sections": [
+  {
+   "annex": "II",
+   "id": "1.1",
+   "title": "Device description and specification",
+   "classes": [
+    "I",
+    "IIa",
+    "IIb",
+    "III"
+   ],
+   "signoff": false
+  },
+  {
+   "annex": "II",
+   "id": "2",
+   "title": "Information supplied by the manufacturer (labelling, IFU)",
+   "classes": [
+    "I",
+    "IIa",
+    "IIb",
+    "III"
+   ],
+   "signoff": true
+  },
+  {
+   "annex": "II",
+   "id": "3",
+   "title": "Design and manufacturing information",
+   "classes": [
+    "IIa",
+    "IIb",
+    "III"
+   ],
+   "signoff": false
+  },
+  {
+   "annex": "II",
+   "id": "4",
+   "title": "General safety and performance requirements (GSPR)",
+   "classes": [
+    "I",
+    "IIa",
+    "IIb",
+    "III"
+   ],
+   "signoff": true
+  },
+  {
+   "annex": "II",
+   "id": "5",
+   "title": "Benefit-risk analysis and risk management",
+   "classes": [
+    "I",
+    "IIa",
+    "IIb",
+    "III"
+   ],
+   "signoff": true
+  },
+  {
+   "annex": "II",
+   "id": "6.1",
+   "title": "Product verification and validation \u2014 pre-clinical",
+   "classes": [
+    "I",
+    "IIa",
+    "IIb",
+    "III"
+   ],
+   "signoff": false
+  },
+  {
+   "annex": "II",
+   "id": "6.2",
+   "title": "Clinical evaluation and PMCF",
+   "classes": [
+    "IIa",
+    "IIb",
+    "III"
+   ],
+   "signoff": true
+  },
+  {
+   "annex": "III",
+   "id": "1",
+   "title": "Post-market surveillance plan",
+   "classes": [
+    "I",
+    "IIa",
+    "IIb",
+    "III"
+   ],
+   "signoff": false
+  },
+  {
+   "annex": "III",
+   "id": "2",
+   "title": "PMS system: vigilance, PSUR, trend reporting",
+   "classes": [
+    "IIa",
+    "IIb",
+    "III"
+   ],
+   "signoff": true
+  },
+  {
+   "annex": "III",
+   "id": "3",
+   "title": "Systematic data updates (CER for III/implementable)",
+   "classes": [
+    "III"
+   ],
+   "signoff": true
+  }
+ ]
+}

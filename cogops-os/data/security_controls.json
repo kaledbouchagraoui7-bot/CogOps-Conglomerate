@@ -1,0 +1,235 @@
+{
+ "asof": "2026-10",
+ "sources": "CIS Controls v8 (flavored), nDSG/GDPR baselines, EU AI Act hygiene \u2014 adapted, not verbatim",
+ "controls": [
+  {
+   "id": "IAM-1",
+   "family": "identity",
+   "text": "MFA enforced on all admin accounts",
+   "severity": "critical",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Enforce MFA; hardware keys for founders"
+  },
+  {
+   "id": "IAM-2",
+   "family": "identity",
+   "text": "Least-privilege access reviews quarterly",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Document roles; remove stale access"
+  },
+  {
+   "id": "IAM-3",
+   "family": "identity",
+   "text": "Password hashing \u2265 PBKDF2-100k / bcrypt / argon2",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline",
+    "ai_assistant"
+   ],
+   "remediation": "Upgrade hash parameters (Workers cap: 100k PBKDF2)"
+  },
+  {
+   "id": "NET-1",
+   "family": "network",
+   "text": "TLS everywhere, HSTS enabled",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Add _headers: Strict-Transport-Security"
+  },
+  {
+   "id": "NET-2",
+   "family": "network",
+   "text": "Security headers: CSP, X-Frame-Options, nosniff",
+   "severity": "medium",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Deploy _headers file"
+  },
+  {
+   "id": "NET-3",
+   "family": "network",
+   "text": "Admin endpoints IP-restricted or gated",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline",
+    "ai_assistant"
+   ],
+   "remediation": "Gate or firewall admin routes"
+  },
+  {
+   "id": "DAT-1",
+   "family": "data",
+   "text": "Personal data inventory with legal basis (nDSG/GDPR)",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Build RoPA; map each field to a basis"
+  },
+  {
+   "id": "DAT-2",
+   "family": "data",
+   "text": "Deletion pipeline for data-subject requests (30d)",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Implement deletion API + ledger proof"
+  },
+  {
+   "id": "DAT-3",
+   "family": "data",
+   "text": "Backups encrypted, restore tested quarterly",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Encrypt at rest; schedule restore drills"
+  },
+  {
+   "id": "DAT-4",
+   "family": "data",
+   "text": "Secrets in vault/encrypted store, never in repos",
+   "severity": "critical",
+   "scopes": [
+    "sme_baseline",
+    "ai_assistant"
+   ],
+   "remediation": "Rotate exposed keys; use Pages secrets"
+  },
+  {
+   "id": "APP-1",
+   "family": "application",
+   "text": "Dependency vulnerability scanning in CI",
+   "severity": "medium",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Add dependabot/pip-audit"
+  },
+  {
+   "id": "APP-2",
+   "family": "application",
+   "text": "Input validation on all public endpoints",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline",
+    "ai_assistant"
+   ],
+   "remediation": "Schema-validate; length caps"
+  },
+  {
+   "id": "APP-3",
+   "family": "application",
+   "text": "Rate limiting on public APIs",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline",
+    "ai_assistant"
+   ],
+   "remediation": "CF WAF rate rule or KV counter"
+  },
+  {
+   "id": "AI-1",
+   "family": "ai",
+   "text": "System prompt not extractable (injection battery passed)",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline",
+    "ai_assistant"
+   ],
+   "remediation": "Run Sentinel battery; harden prompt"
+  },
+  {
+   "id": "AI-2",
+   "family": "ai",
+   "text": "Tool/action calls gated (no autonomous external acts)",
+   "severity": "critical",
+   "scopes": [
+    "sme_baseline",
+    "ai_assistant"
+   ],
+   "remediation": "Type-1 gate on all external tools"
+  },
+  {
+   "id": "AI-3",
+   "family": "ai",
+   "text": "Provider + mode labels on every AI answer",
+   "severity": "medium",
+   "scopes": [
+    "sme_baseline",
+    "ai_assistant"
+   ],
+   "remediation": "Honest labeling (kb/llm/template)"
+  },
+  {
+   "id": "AI-4",
+   "family": "ai",
+   "text": "Training/KB data provenance documented",
+   "severity": "medium",
+   "scopes": [
+    "sme_baseline",
+    "ai_assistant"
+   ],
+   "remediation": "KB entries carry source+asof"
+  },
+  {
+   "id": "OPS-1",
+   "family": "operations",
+   "text": "Incident response playbook tested",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Write playbook; tabletop annually"
+  },
+  {
+   "id": "OPS-2",
+   "family": "operations",
+   "text": "Logging centralized, retention defined",
+   "severity": "medium",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Ship logs; set retention"
+  },
+  {
+   "id": "LEG-1",
+   "family": "legal-ch",
+   "text": "Impressum complete (name, address, UID when registered)",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Fill legal pages before launch"
+  },
+  {
+   "id": "LEG-2",
+   "family": "legal-ch",
+   "text": "Privacy policy matches actual processing",
+   "severity": "high",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "Audit policy vs data flows"
+  },
+  {
+   "id": "LEG-3",
+   "family": "legal-ch",
+   "text": "Contracts limit liability & define data roles",
+   "severity": "medium",
+   "scopes": [
+    "sme_baseline"
+   ],
+   "remediation": "ToS/DPA templates per subsidiary"
+  }
+ ]
+}
