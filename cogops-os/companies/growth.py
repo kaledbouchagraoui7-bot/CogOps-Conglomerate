@@ -31,8 +31,107 @@ META = {
     ],
     "squad_roles": ["lead-researcher", "data-validator", "copywriter-personalization",
                     "seo-page-factory", "newsletter-composer", "funnel-analyst",
-                    "outreach-operator"],
+                    "outreach-operator", "process-auditor"],
 }
+
+
+# --------------------------------------- public-source sourcing (provenance) --
+# Claims on the site and DPA Annex 1 promise per-record SOURCE URLs. This is the
+# step that produces them: fetch a domain's public pages (robots-respecting,
+# rate-limited, labeled bot UA) and extract PUBLISHED business contacts.
+# Candidates are never used before enrich_leads validation.
+BOT_UA = "CogOpsGrowthBot/1.0 (+https://cogops-growth.pages.dev/privacy.html)"
+SOURCE_PATHS = ("", "/about", "/team", "/people", "/contact", "/impressum", "/imprint")
+MAILTO_RE = re.compile('<a[^>]*href=["\']mailto:([^"\'?]+)[^>]*>(.*?)</a>', re.I | re.S)
+EMAIL_RX = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+
+
+def parse_robots(robots_text: str, ua: str = "*") -> list[str]:
+    """Minimal robots.txt parser: Disallow rules for our UA or *."""
+    dis, active = [], False
+    for line in robots_text.splitlines():
+        line = line.split("#", 1)[0].strip().lower()
+        if line.startswith("user-agent:"):
+            active = line.split(":", 1)[1].strip() in ("*", ua.lower())
+        elif active and line.startswith("disallow:"):
+            p = line.split(":", 1)[1].strip()
+            if p:
+                dis.append(p)
+    return dis
+
+
+def _allowed(path: str, disallow: list[str]) -> bool:
+    return not any(path.startswith(d.rstrip("*") or d) for d in disallow)
+
+
+def extract_contacts(html: str, url: str) -> list[dict]:
+    """Published business contacts from one public page: mailto anchors give
+    name context; bare addresses get the page title as context. Provenance =
+    exact URL + fetch timestamp (DPA Annex 1 promise)."""
+    out, seen = [], set()
+    for m in MAILTO_RE.finditer(html):
+        email, anchor = m.group(1).strip().lower(), re.sub(r"<[^>]+>", "", m.group(2)).strip()
+        if email not in seen:
+            seen.add(email)
+            out.append({"email": email, "name": anchor or "", "source_url": url,
+                        "source_kind": "mailto_anchor"})
+    title = re.search(r"<title>(.*?)</title>", html, re.S | re.I)
+    title = re.sub(r"<[^>]+>", "", title.group(1)).strip() if title else ""
+    for m in EMAIL_RX.finditer(re.sub(r"<script.*?</script>", "", html, flags=re.S | re.I)):
+        email = m.group(0).lower()
+        if email in seen or email.endswith((".png", ".jpg", ".gif", ".webp")):
+            continue
+        seen.add(email)
+        out.append({"email": email, "name": "", "source_url": url,
+                    "source_kind": "page_text", "page_title": title[:80]})
+    return out
+
+
+def source_leads(params: dict, slug: str) -> dict:
+    """Domain → published-contact candidates WITH provenance. Offline-safe:
+    unreachable domain = honest empty result with the error, never fake rows."""
+    import urllib.error
+    import urllib.request
+    domain = (params.get("domain") or "").strip().lower().replace("https://", "").replace("http://", "").rstrip("/")
+    if not re.match(r"^[a-z0-9.-]+\.[a-z]{2,}$", domain):
+        raise ValueError("domain like example.ch required")
+    max_pages = min(int(params.get("max_pages", 6)), 10)
+    cands, log = [], []
+    try:
+        rq = urllib.request.Request(f"https://{domain}/robots.txt", headers={"User-Agent": BOT_UA})
+        with urllib.request.urlopen(rq, timeout=8) as r:
+            disallow = parse_robots(r.read().decode(errors="replace"))
+    except Exception:
+        disallow = []                      # no robots.txt = allow (standard)
+    for p in SOURCE_PATHS[:max_pages]:
+        if not _allowed("/" + p.lstrip("/"), disallow):
+            log.append(f"{p}: robots-disallowed")
+            continue
+        url = f"https://{domain}/{p}"
+        try:
+            rq = urllib.request.Request(url, headers={"User-Agent": BOT_UA})
+            with urllib.request.urlopen(rq, timeout=8) as r:
+                if r.status != 200:
+                    continue
+                html = r.read(400_000).decode(errors="replace")
+            found = extract_contacts(html, url)
+            log.append(f"{p}: {len(found)} contacts")
+            cands += found
+        except urllib.error.HTTPError as e:
+            log.append(f"{p}: HTTP {e.code}")
+        except Exception as e:
+            log.append(f"{p}: {str(e)[:60]}")
+    ded = {}
+    for c in cands:
+        ded.setdefault(c["email"], c)
+    artifact = {"mode": "engine:live" if any("contacts" in l for l in log) else "engine:offline",
+                "domain": domain, "candidates": list(ded.values()),
+                "fetched_at": config.stamp(), "fetch_log": log,
+                "rule": "candidates enter delivery ONLY after enrich_leads validation",
+                "asof": config.today()}
+    _emit(slug, f"sourced_{domain.replace('.', '_')}", artifact)
+    return artifact
+
 
 EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
 DISPOSABLE = {"mailinator.com", "guerrillamail.com", "tempmail.com", "yopmail.com",
@@ -55,7 +154,9 @@ def enrich_leads(params: dict, slug: str) -> dict:
     seen, out, rejected = set(), [], []
     for r in rows:
         email = (r.get("email") or "").strip().lower()
-        rec = {**r, "email": email}
+        rec = {**r, "email": email,
+               "source": r.get("source") or r.get("source_url") or "client-supplied",
+               "sourced_at": r.get("sourced_at") or r.get("fetched_at") or ""}
         problems = []
         if not EMAIL_RE.match(email):
             problems.append("malformed_email")
@@ -271,6 +372,53 @@ def quota_status(params: dict, slug: str) -> dict:
             "asof": config.today()}
 
 
+
+
+def pseo_qa(params: dict, slug: str) -> dict:
+    """The QA gate the site promises: pages that fail never get the
+    'publishable' flag. Checks: substance (≥120 words), meta completeness,
+    sibling uniqueness (Jaccard < 0.60), query-answer coverage (≥60% of query
+    terms present), no placeholder text."""
+    pages = params.get("pages", [])
+    results = []
+    for i, pg in enumerate(pages):
+        content = pg.get("content", "")
+        words = len(re.sub(r"[#|*`\-]", " ", content).split())
+        title, desc = pg.get("title", ""), pg.get("description", "")
+        query = (pg.get("query") or title).lower().split()
+        cov = (sum(1 for w in query if w in content.lower()) / len(query)) if query else 1.0
+        sib = max((_jaccard(content, o.get("content", "")) for j, o in enumerate(pages) if j != i),
+                  default=0.0)
+        reasons = []
+        if words < 120:
+            reasons.append(f"thin: {words} words < 120")
+        if not (10 <= len(title) <= 70):
+            reasons.append("title length outside 10-70")
+        if not (50 <= len(desc) <= 165):
+            reasons.append("meta description outside 50-165")
+        if cov < 0.6:
+            reasons.append(f"answers only {cov:.0%} of query terms")
+        if sib >= 0.6:
+            reasons.append(f"duplicate-ish sibling (Jaccard {sib:.2f})")
+        if re.search(r"lorem ipsum|TODO|placeholder|xxx", content, re.I):
+            reasons.append("placeholder text")
+        results.append({"path": pg.get("path", f"page{i}"), "words": words,
+                        "query_coverage": round(cov, 2), "max_sibling_overlap": round(sib, 2),
+                        "publishable": not reasons, "reasons": reasons})
+    ok = sum(1 for r in results if r["publishable"])
+    artifact = {"mode": "engine", "pages_checked": len(results), "publishable": ok,
+                "refused": len(results) - ok, "results": results,
+                "rule": "refused pages never reach a sitemap or a client domain",
+                "asof": config.today()}
+    _emit(slug, "pseo_qa", artifact)
+    return artifact
+
+
+def _jaccard(a: str, b: str) -> float:
+    sa, sb = set(a.lower().split()), set(b.lower().split())
+    return len(sa & sb) / len(sa | sb) if (sa | sb) else 0.0
+
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     import json
@@ -291,7 +439,8 @@ def lead_report_html(params: dict, slug: str) -> dict:
     gr, co = theme["group"], theme["companies"]["growth"]
     rows = "".join(
         f"<tr><td>{r.get('name','')}</td><td>{r['email']}</td><td>{r.get('company','')}</td>"
-        f"<td>{r.get('role','')}</td><td>{r['score']}/5</td><td>✓ {'; '.join(r['problems']) or 'clean'}</td></tr>"
+        f"<td>{r.get('role','')}</td><td>{r['score']}/5</td>"
+        f"<td>{r.get('source','client-supplied')}</td><td>✓ {'; '.join(r['problems']) or 'clean'}</td></tr>"
         for r in enrichment["leads"])
     copies = "".join(f"<div class=copy><b>{c['email']}</b> <span class=mode>({c['mode']})</span>"
                      f"<p>{c['copy']}</p></div>" for c in enrichment.get("copies", []))
@@ -309,7 +458,7 @@ def lead_report_html(params: dict, slug: str) -> dict:
             f"<p>Generated {config.stamp()} · {enrichment['valid_leads']} validated · "
             f"<span class=rej>{enrichment['rejected']} rejected</span> "
             f"({', '.join(f'{k}: {v}' for k, v in enrichment['rejection_reasons'].items()) or 'none'})</p>"
-            f"<table><tr><th>Name</th><th>Email</th><th>Company</th><th>Role</th><th>Score</th><th>Validation</th></tr>{rows}</table>"
+            f"<table><tr><th>Name</th><th>Email</th><th>Company</th><th>Role</th><th>Score</th><th>Source</th><th>Validation</th></tr>{rows}</table>"
             f"<h2 style='color:{co['accent']};font-size:16px>Per-prospect openers <span class=mode>(human review required before any send)</span></h2>{copies}"
             f"<div class=foot>Every record carries its validation evidence (format check, dedupe, disposable-domain screen). "
             f"Delivery version stamp: <b>{{HASH}}</b> · CogOps Growth · cogops.engine@gmail.com · "
@@ -334,4 +483,6 @@ TASKS = {
     "touch_draft": {"fn": touch_draft, "role": "outreach-operator"},
     "weekly_quota_sheet": {"fn": weekly_quota_sheet, "role": "funnel-analyst"},
     "quota_status": {"fn": quota_status, "role": "funnel-analyst"},
+    "source_leads": {"fn": source_leads, "role": "lead-researcher"},
+    "pseo_qa": {"fn": pseo_qa, "role": "process-auditor"},
 }

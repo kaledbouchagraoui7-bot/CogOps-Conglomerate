@@ -27,6 +27,8 @@ CATALOG = {
     "legal_templates":{"chf": 20.0, "sla_h": 24, "provides": "privacy/impressum/ToS baselines (CH)"},
     "brand_kit":      {"chf": 10.0, "sla_h": 8,  "provides": "name/visual/voice config for the factory"},
     "media_network":  {"chf": 25.0, "sla_h": 48, "provides": "newsletter slot in the company's domain journal"},
+    "lead_gen":       {"chf": 1.0,  "sla_h": 48, "per": "lead",  "provides": "validated lead (internal price, DR-0002)"},
+    "pseo_page":      {"chf": 10.0, "sla_h": 24, "per": "page",  "provides": "QA-passed programmatic page (internal, DR-0002)"},
     "gate_services":  {"chf": 0.0,  "sla_h": 0,  "provides": "Nexus gate, decision ledger, sweep engine"},
     "agent_core":     {"chf": 0.0,  "sla_h": 0,  "provides": "roster access + mission runtime"},
 }
@@ -46,13 +48,15 @@ def catalog() -> dict:
     return dict(CATALOG)
 
 
-def request(slug: str, service: str, spec: str) -> dict:
+def request(slug: str, service: str, spec: str, units: int = 1) -> dict:
     if service not in CATALOG:
         raise ValueError(f"unknown platform service {service!r} — catalog: {sorted(CATALOG)}")
     db = _db()
+    per = CATALOG[service].get("per")
+    notional = round(CATALOG[service]["chf"] * (units if per else 1), 2)
     t = {"id": f"PT-{len(db['tickets']) + 1:05d}", "slug": slug, "service": service,
-         "spec": spec, "status": "OPEN", "notional_chf": CATALOG[service]["chf"],
-         "requested_at": config.stamp()}
+         "spec": spec, "units": units if per else 1, "status": "OPEN",
+         "notional_chf": notional, "requested_at": config.stamp()}
     db["tickets"].append(t)
     _save(db)
     ledger.event("platform_request", slug, {"service": service, "ticket": t["id"]})

@@ -12,6 +12,7 @@
 > | [`structure/decisions.md`](structure/decisions.md) | Decision Records (append-only) — DR-0001 profit split · DR-0002 internal prices · DR-0003 brand architecture · DR-0004 single-entity doctrine · DR-0005 Growth live validation |
 > | [`ROADMAP.md`](ROADMAP.md) | Blueprint → real business: the founder's plan with owners (**YOU** / **ME** / **DONE**) and the critical path to the first franc |
 > | [`legal/`](legal/tos.md) | **Legal drafts v0.9 (lawyer-review-ready):** client ToS · DPA (Art. 28 GDPR / nFADP, 3 annexes) · processing register (RoPA, 10 rows) · retention & deletion schedule — cross-ref `LEGAL.md` checklist |
+> | [`helix/`](helix/OFFER.md) | **CogOps Helix, made real:** offer & delivery playbook · live landing source (`helix/site/` → https://cogops-helix.pages.dev) — free 48 h QC sample as the evidence machine |
 > | [`growth/`](growth/OFFER.md) | **CogOps Growth, made real**: offer & sales playbook · live landing source (`growth/site/` → https://cogops-growth.pages.dev) · Swiss QR-bill invoicing tool (`growth/tools/`) |
 > | [`cogops-os/`](cogops-os/README.md) | **The operating system as running code** — every mechanism executable: gates (+ phone notifications), lifecycle, capital ladder, autonomy contract, SPQP metrics, cadence generators, CBS, agent squads & missions, per-company LLM cost caps, brand theme, and a state-of-the-art task engine per company. Pure stdlib Python; 111-check selftest ALL GREEN |
 >

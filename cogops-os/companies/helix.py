@@ -255,6 +255,55 @@ def _matrix(recs: list[dict]) -> str:
     return "\n".join(lines)
 
 
+
+
+def helix_report_html(params: dict, slug: str) -> dict:
+    """Client-facing branded report (theme accent: helix violet) bundling a
+    sequence-QC and/or Table-1 artifact, with methods, as-of dates, the
+    reproducibility hash and the human-of-record line. Version-stamped."""
+    import hashlib
+    import json as _json
+    theme = _json.loads((config.ROOT / "data" / "theme.json").read_text(encoding="utf-8"))
+    gr, ac = theme["group"], theme["companies"]["helix"]["accent"]
+    client = params.get("client", "Client lab")
+    qc = params.get("qc") or sequence_qc(params, slug) if params.get("fasta") else params.get("qc")
+    t1 = params.get("table1")
+    blocks = []
+    if qc:
+        rows = "".join(f"<tr><td>{r['accession']}</td><td>{r['nt']}</td><td>{r['gc_pct']}</td>"
+                       f"<td>{r['orf_fwd_aa']}</td><td>{r.get('cross_check', '—')}</td></tr>"
+                       for r in qc["qc"])
+        blocks.append("<h2>Sequence QC</h2><table><tr><th>Accession</th><th>nt</th><th>GC%</th>"
+                      "<th>ORF aa (fwd)</th><th>Cross-check</th></tr>" + rows + "</table>")
+    if t1:
+        blocks.append("<h2>Cohort EDA &amp; Table 1</h2><p>Analyzed rows: "
+                      f"{t1['analyzed_rows']} of {t1['seed_rows']} · cleaning actions: "
+                      f"{len(t1['audit_trail'])} (fully attributable)</p>")
+    body = (f"<!DOCTYPE html><html><head><meta charset=utf-8><title>Helix report — {client}</title>"
+            f"<style>body{{background:{gr['bg']};color:{gr['ink']};font:14px/1.6 {gr['font']};padding:32px}}"
+            f".wrap{{max-width:860px;margin:0 auto}}h1{{color:{ac};font-size:22px}}"
+            f".badge{{display:inline-block;border:1px solid {gr['line']};color:{ac};border-radius:99px;padding:4px 12px;font-size:11px;letter-spacing:1px}}"
+            f"table{{width:100%;border-collapse:collapse;margin:12px 0}}td,th{{padding:8px 10px;border-bottom:1px solid {gr['line']};text-align:left;font-size:13px}}"
+            f"th{{color:{ac};font-size:11px;text-transform:uppercase;letter-spacing:1px}}"
+            f"h2{{color:{ac};font-size:16px;margin:22px 0 6px}}.foot{{color:{gr['dim']};font-size:12px;margin-top:26px;border-top:1px solid {gr['line']};padding-top:12px}}</style>"
+            f"</head><body><div class=wrap><span class=badge>COGOPS HELIX · a CogOps Group company</span>"
+            f"<h1>Dry-lab report — {client}</h1>"
+            f"<p>Generated {config.stamp()} · methods: NCBI-style QC (GC/ORF both strands), "
+            f"NR-validated statistics (Welch/χ² cross-validated &lt;1e-9 vs SciPy)</p>"
+            + "".join(blocks) +
+            f"<div class=foot>Version stamp <b>{{HASH}}</b> · reproducibility: re-run with the same "
+            f"inputs and frozen clock yields byte-identical artifacts · "
+            f"<b>Human of record: {META['human_of_record']}</b> — Helix never signs scientific "
+            f"conclusions. · cogops.engine@gmail.com</div></div></body></html>")
+    hh = hashlib.sha256(body.encode()).hexdigest()[:16]
+    body = body.replace("{HASH}", hh)
+    p = config.OUTBOX / f"helix_report_{client.lower().replace(' ', '_')}_{config.today()}_{hh[:8]}.html"
+    p.write_text(body, encoding="utf-8")
+    ledger.event("helix_deliverable", slug, {"client": client, "version": hh})
+    return {"mode": "engine", "html_file": p.name, "version_hash": hh,
+            "client": client, "asof": config.today()}
+
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     p.write_text(json.dumps(artifact, indent=1, sort_keys=True, default=str),
@@ -265,4 +314,5 @@ TASKS = {
     "sequence_qc": {"fn": sequence_qc, "role": "bio-qc-analyst"},
     "table1": {"fn": table1, "role": "eda-statistician"},
     "lit_surveil": {"fn": lit_surveil, "role": "literature-synthesizer"},
+    "helix_report_html": {"fn": helix_report_html, "role": "pipeline-operator"},
 }

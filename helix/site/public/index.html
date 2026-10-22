@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CogOps Helix — dry-lab results, on demand</title>
+<meta name="description" content="Sequence QC, regulatory-grade Table 1s and literature surveillance — computed by validated pipelines, reproducible byte-for-byte, signed by your PI. Free QC report on one sequence in 48 h.">
+<meta property="og:title" content="CogOps Helix — dry-lab results, on demand">
+<meta property="og:description" content="Sequence QC, audit-trailed EDA with regulatory Table 1, PMID-traceable literature feeds. Reproducible by construction. Your PI signs — we never do.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://cogops-helix.pages.dev/">
+<meta name="theme-color" content="#0b0e14">
+<meta property="og:image" content="https://cogops-helix.pages.dev/og-image.png">
+<meta property="og:url" content="https://cogops-helix.pages.dev/">
+<meta property="og:site_name" content="CogOps Helix">
+<style>
+:root{--bg:#0b0e14;--ink:#e8edf6;--dim:#9aa7bf;--acc:#b48eff;--acc2:#6ea8fe;--line:#222c40;--card:#121a28}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow-x:hidden}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}a{color:var(--acc2);text-decoration:none}
+.blobs{position:fixed;inset:0;z-index:-1;filter:blur(90px);opacity:.5}.blobs i{position:absolute;border-radius:50%}
+.blobs i:nth-child(1){width:480px;height:480px;background:#4a2e7d;top:-120px;left:-100px}
+.blobs i:nth-child(2){width:420px;height:420px;background:#274a7d;top:30%;right:-140px}
+nav{position:sticky;top:0;z-index:9;backdrop-filter:blur(14px);background:rgba(11,14,20,.72);border-bottom:1px solid var(--line)}
+.navin{display:flex;align-items:center;gap:18px;padding:14px 20px}
+.brand{font-weight:800;letter-spacing:.6px}.brand em{color:var(--acc);font-style:normal}
+.nlinks{display:flex;gap:16px;margin-left:auto;color:var(--dim);font-size:13.5px}.nlinks a:hover{color:var(--ink)}
+.btn{display:inline-block;border:1px solid var(--acc);color:var(--acc);background:transparent;border-radius:99px;padding:9px 18px;font-weight:600;font-size:13.5px;cursor:pointer;transition:.2s}
+.btn:hover{background:rgba(180,142,255,.12)}.btn.grad{background:linear-gradient(135deg,#7a4fd8,#3d7dd8);border:none;color:#fff}
+.hero{text-align:center;padding:96px 0 56px}
+.badge{display:inline-block;border:1px solid var(--line);background:var(--card);color:var(--acc);border-radius:99px;padding:6px 14px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:22px}
+h1{font-size:clamp(34px,6vw,56px);line-height:1.08;letter-spacing:-.5px}
+h1 em{font-style:normal;background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--dim);max-width:660px;margin:20px auto 32px;font-size:17px}
+.counter{color:#ffcf6e;font-size:13.5px;margin-top:16px;min-height:20px}
+form.signup{max-width:560px;margin:0 auto;display:grid;gap:10px;text-align:left}
+form.signup .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input,select,textarea{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:12px 14px;font:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc)}
+.hp{position:absolute;left:-9999px}.msg{min-height:22px;font-size:14px;text-align:center;margin-top:8px}.msg.ok{color:var(--acc)}.msg.bad{color:#ff8f8f}
+section{padding:60px 0}.eyebrow{color:var(--acc);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+h2{font-size:clamp(24px,3.6vw,32px);margin-bottom:24px;letter-spacing:-.3px}
+.grid{display:grid;gap:16px}.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+.card h3{font-size:17px;margin:8px 0}.card p{color:var(--dim);font-size:14px}.num{color:var(--acc);font-weight:800;font-size:13px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
+th{color:var(--acc);font-size:12px;letter-spacing:1px;text-transform:uppercase}td:last-child,th:last-child{text-align:right}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:600}.faq p{color:var(--dim);margin-top:10px;font-size:14px}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:13px;padding:34px 0;text-align:center}
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:12px 0;background:rgba(18,26,40,.5)}
+.mtrack{display:flex;gap:48px;white-space:nowrap;animation:mv 30s linear infinite;color:var(--dim);font-size:13px;width:max-content}
+.mtrack span b{color:var(--acc)}@keyframes mv{to{transform:translateX(-50%)}}
+.rv{opacity:0;transform:translateY(18px);transition:.6s}.rv.in{opacity:1;transform:none}
+@media(max-width:640px){.nlinks{display:none}form.signup .row{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"CogOps Helix",
+ "url":"https://cogops-helix.pages.dev/","description":"Computational biology services: sequence QC, regulatory-grade Table 1 statistics, literature surveillance. Reproducible pipelines, ICH/ALCOA+ discipline.",
+ "email":"cogops.engine@gmail.com","areaServed":"CH","currenciesAccepted":"CHF",
+ "parentOrganization":{"@type":"Organization","name":"CogOps Group"}}
+</script></head><body>
+<div class="blobs"><i></i><i></i></div>
+<nav><div class="wrap navin">
+  <span class="brand">CogOps <em>Helix</em></span>
+  <div class="nlinks"><a href="#products">Services</a><a href="#how">Process</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="/imprint.html">Legal</a></div>
+  <a class="btn grad" href="#signup">Request the free QC report</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="badge rv">Swiss-operated · ICH / ALCOA+ engineered · a CogOps Group company</div>
+  <h1 class="rv">Dry-lab results,<br><em>on demand.</em></h1>
+  <p class="sub rv">Sequence QC, regulatory-grade Table 1 statistics and literature surveillance — computed by validated pipelines, reproducible byte-for-byte, delivered with full audit trails. Your principal investigator signs. We never do.</p>
+  <div class="rv"><a class="btn grad" href="#signup">Get a free QC report on one sequence — 48 h</a></div>
+  <div class="counter rv" id="counter">…</div>
+</div></header>
+
+<div class="marquee"><div class="mtrack">
+  <span><b>48 h</b> sample QC turnaround</span><span><b>&lt;1e-9</b> stats cross-validated against SciPy</span><span><b>100%</b> reproducible artifacts</span><span><b>PMID-traceable</b> every citation</span><span><b>0</b> wet-lab claims — dry-lab only</span><span><b>14 days</b> re-run guarantee</span>
+  <span><b>48 h</b> sample QC turnaround</span><span><b>&lt;1e-9</b> stats cross-validated against SciPy</span><span><b>100%</b> reproducible artifacts</span><span><b>PMID-traceable</b> every citation</span><span><b>0</b> wet-lab claims — dry-lab only</span><span><b>14 days</b> re-run guarantee</span>
+</div></div>
+
+<section id="products"><div class="wrap">
+  <div class="eyebrow rv">Services</div>
+  <h2 class="rv">Three pipelines. One discipline.</h2>
+  <div class="grid g3">
+    <div class="card rv"><div class="num">① SEQUENCE QC</div><h3>Reference-transcript quality control</h3><p>GC content, longest ORF on both strands, length cross-checks against your expected values, versioned accessions in every row. A built-in PASS/FAIL gate per record. 48 hours per sequence.</p></div>
+    <div class="card rv"><div class="num">② TRIAL EDA &amp; TABLE 1</div><h3>Audit-trailed cohort analysis</h3><p>Dedup, range rejection, stratified imputation — every cleaning action logged and attributable. Baseline Table 1 with Welch t and χ² implemented from first principles and cross-validated against SciPy to &lt;1e-9. Reproducibility pack included.</p></div>
+    <div class="card rv"><div class="num">③ LITERATURE SURVEILLANCE</div><h3>PMID-traceable evidence feeds</h3><p>Weekly monitoring of PubMed with Europe PMC fallback: DOI-linked bibliographies and evidence matrices ready for IB/RIM assembly. Never a partial deliverable.</p></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <div class="eyebrow rv">Process</div>
+  <h2 class="rv">Proof first. Paperwork second.</h2>
+  <div class="grid g3">
+    <div class="card rv"><div class="num">STEP 01 · DAY 0</div><h3>Send one sequence</h3><p>FASTA plus your expected values (length, protein length). Or your cohort spec. Thirty minutes of your time, NDA on request before you send anything.</p></div>
+    <div class="card rv"><div class="num">STEP 02 · 48 HOURS</div><h3>Receive the free QC report</h3><p>Branded HTML report with per-record evidence, methods and version stamp. Re-run it yourself with the same inputs: byte-identical output, guaranteed.</p></div>
+    <div class="card rv"><div class="num">STEP 03 · YOUR DECISION</div><h3>Commission packs or feeds</h3><p>QC packs per sequence, full EDA studies, or standing surveillance feeds. Your PI remains the scientific signatory on everything — by design, in writing.</p></div>
+  </div>
+</div></section>
+
+<section id="pricing"><div class="wrap">
+  <div class="eyebrow rv">Pricing</div>
+  <h2 class="rv">Fixed prices. Reproducible results.</h2>
+  <table class="rv">
+    <tr><th>Service</th><th>Model</th><th>Price</th></tr>
+    <tr><td>Sample QC report — one sequence</td><td>one-off, 48 h</td><td><b>CHF 0</b></td></tr>
+    <tr><td>Sequence QC pack</td><td>per sequence</td><td>CHF 120</td></tr>
+    <tr><td>Sequence QC pack — batch of 10</td><td>fixed</td><td>CHF 900</td></tr>
+    <tr><td>Cohort EDA + regulatory Table 1</td><td>per study, incl. reproducibility pack</td><td>CHF 2,400</td></tr>
+    <tr><td>Literature surveillance feed</td><td>per topic, monthly</td><td>CHF 300</td></tr>
+    <tr><td>Evidence matrix (IB/RIM-ready)</td><td>per assembly</td><td>CHF 1,200</td></tr>
+  </table>
+  <p class="rv" style="color:var(--dim);font-size:13px;margin-top:12px">All prices in CHF, excl. VAT where applicable. Invoiced by Swiss QR-bill, net 14 days. If we cannot reproduce our own delivered artifact on request within 14 days, the re-run is free or the study fee is refunded — your choice.</p>
+</div></section>
+
+<section id="signup"><div class="wrap" style="max-width:640px">
+  <div class="eyebrow rv" style="text-align:center">Start here</div>
+  <h2 class="rv" style="text-align:center">Request your free QC report</h2>
+  <form class="signup rv" id="f">
+    <div class="row">
+      <input name="email" type="email" required placeholder="Work email *" aria-label="Work email">
+      <input name="company" type="text" required placeholder="Lab / company *" aria-label="Lab or company">
+    </div>
+    <div class="row">
+      <select name="product" required aria-label="Service needed">
+        <option value="" disabled selected>What do you need? *</option>
+        <option>Sequence QC</option>
+        <option>Cohort EDA + Table 1</option>
+        <option>Literature surveillance</option>
+        <option>All three</option>
+      </select>
+      <input name="icp" type="text" placeholder="Organism / target (e.g. human CFTR)" aria-label="Organism or target">
+    </div>
+    <textarea name="note" rows="2" placeholder="Context or constraints? (optional)" aria-label="Context, optional"></textarea>
+    <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+    <button class="btn grad" type="submit" id="go">Request my free QC report →</button>
+    <div class="msg" id="m"></div>
+  </form>
+  <p class="rv" style="color:var(--dim);font-size:13px;text-align:center;margin-top:14px">Sequences travel only after your NDA request is honored — ask in the note field and it arrives with our reply. A named person answers within 1 business day.</p>
+</div></section>
+
+<section id="faq"><div class="wrap" style="max-width:760px">
+  <div class="eyebrow rv">FAQ</div>
+  <h2 class="rv">Straight answers</h2>
+  <div class="faq rv">
+    <details><summary>Is my sequence data safe with you?</summary><p>Sequence data is not personal data, and we treat it as confidential from the first byte: transfer only after an executed NDA if you request one, storage on EU/Swiss-region infrastructure, deletion within 30 days of project close, and no use of your data for anything except your deliverable.</p></details>
+    <details><summary>Who signs the scientific conclusions?</summary><p>Your principal investigator or qualified scientist — never us. Every deliverable carries a mandatory human-of-record field. We supply computed, auditable evidence; the scientific call is yours by law and by design.</p></details>
+    <details><summary>How are your statistics validated?</summary><p>Our Welch t-test and χ² implementations are written from first principles (Numerical Recipes) and cross-validated against SciPy to below 1e-9 on published critical values. Every artifact ships with its validation record and a reproducibility pack: same inputs, same outputs, byte for byte.</p></details>
+    <details><summary>What exactly is in the free QC report?</summary><p>One sequence, fully analyzed: length, GC content, longest ORF on both strands, your cross-check values with PASS/FAIL gates, methods and version stamp — delivered as a branded HTML report within 48 hours. No invoice, no obligation.</p></details>
+    <details><summary>What if I doubt a delivered result?</summary><p>Request a re-run within 14 days. If our pipeline cannot reproduce its own artifact byte-identically, the re-run is free or the study fee is refunded, at your choice. Reproducibility is the product; this guarantee is how we prove it.</p></details>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <b>CogOps Helix</b> · a CogOps Group company · Switzerland<br>
+  <a href="mailto:cogops.engine@gmail.com">cogops.engine@gmail.com</a> · <a href="/privacy.html">Privacy</a> · <a href="/imprint.html">Impressum</a> · <a href="https://cogops-growth.pages.dev/terms.html">Terms (group-wide, v1.0)</a><br>
+  <span style="opacity:.7">© 2026 CogOps Group</span>
+</div></footer>
+
+<script>
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll(".rv").forEach(function(el){io.observe(el)});
+fetch("/api/count").then(function(r){return r.json()}).then(function(j){
+  document.getElementById("counter").textContent = j.count>0 ? "🧬 "+j.count+(j.count===1?" lab has":" labs have")+" requested a QC report" : "Request the first QC report";
+}).catch(function(){document.getElementById("counter").textContent=""});
+document.getElementById("f").addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var m=document.getElementById("m"),b=document.getElementById("go");
+  var d=Object.fromEntries(new FormData(this).entries());
+  b.disabled=true;b.textContent="Sending…";m.textContent="";m.className="msg";
+  fetch("/api/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)})
+  .then(function(r){return r.json().then(function(j){return{s:r.status,j:j}})})
+  .then(function(x){
+    if(x.s===200&&x.j.ok){m.className="msg ok";m.textContent="✓ Received — you are #"+x.j.position+" in the queue. A named person replies within 1 business day; your QC report follows within 48 h of sequence receipt.";document.getElementById("f").reset();fetch("/api/count").then(function(r){return r.json()}).then(function(j){document.getElementById("counter").textContent="🧬 "+j.count+(j.count===1?" lab has":" labs have")+" requested a QC report"})}
+    else{m.className="msg bad";m.textContent=x.j.error==="duplicate"?"Already received — you are in the queue; a reply is on its way within 1 business day.":(x.j.error||"Transmission failed. Email cogops.engine@gmail.com and we take it from there.")}
+  }).catch(function(){m.className="msg bad";m.textContent="Transmission failed. Email cogops.engine@gmail.com and we take it from there."})
+  .finally(function(){b.disabled=false;b.textContent="Request my free QC report →"});
+});
+</script>
+</body></html>

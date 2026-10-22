@@ -46,3 +46,9 @@
 
 ---
 *Next DR numbers: 0006+. Remember: append-only; supersede, never edit.*
+
+## DR-0006 — Helix enters real-market validation
+- **Date:** 2026-10-22 · **Trigger:** founder instruction — Growth audit closed, "move unto Helix"
+- **Evidence:** engines regression-tested (sequence QC with cross-check gates, audit-trailed Table 1 on NR-validated stats, PMID-traceable surveillance; branded version-hashed report task added); landing + signup machine deployed and verified end-to-end at https://cogops-helix.pages.dev (KV binding attached via API after wrangler sync gap — documented in SECRETS.md); offer/pricing/guarantee written (`helix/OFFER.md`); group Terms v1.0 linked.
+- **Decision:** Helix is in real-world Stage-1 validation. Window: 90 days from 2026-10-22. Success = ANY of: 100 signups · 3 pre-orders · CHF 200+ paid by unrelated customers. Miss ⇒ kill review as KILL_WIN (I8). Reproducibility guarantee published: byte-identical re-run on request within 14 days, else free re-run or refund. Human-of-record (client PI) field mandatory on every scientific deliverable (I12).
+- **Approval:** enacted by founder instruction 2026-10-22.

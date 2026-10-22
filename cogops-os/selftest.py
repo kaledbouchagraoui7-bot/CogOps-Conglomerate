@@ -554,6 +554,49 @@ def main() -> int:
           st["root_cause_required"] is True and st["misses"] == ["touches"]
           and st2["root_cause_required"] is False)
 
+    # ================= 13e. sourcing provenance, QA gate, internal pull ====
+    from companies import growth as gr
+    rb = gr.parse_robots("User-agent: *\nDisallow: /private/\nUser-agent: Other\nDisallow: /x/\n")
+    check("sourcing: robots parser honors our UA/* rules", rb == ["/private/"])
+    html = ('<html><head><title>ACME Team</title></head><body>'
+            '<a href="mailto:cto@acme.ch?subject=hi">Dr A Cto</a>'
+            '<p>reach us: ops@acme.ch</p><img src="logo.png"></body></html>')
+    ex = gr.extract_contacts(html, "https://acme.ch/team")
+    check("sourcing: mailto anchor gives name + provenance URL",
+          any(c["email"] == "cto@acme.ch" and c["name"] == "Dr A Cto"
+              and c["source_url"] == "https://acme.ch/team" for c in ex)
+          and any(c["email"] == "ops@acme.ch" and c["source_kind"] == "page_text" for c in ex))
+    off = registry.run_task("growth", "source_leads",
+                            {"domain": "nonexistent-domain-xyz.invalid", "max_pages": 2})
+    check("sourcing: unreachable domain = honest offline result, zero fake rows",
+          off["mode"] == "engine:offline" and off["candidates"] == [])
+    enr = registry.run_task("growth", "enrich_leads", {
+        "csv": "name,email,company,role,note,source\nDr A,cto@acme.ch,ACME,CTO,ctx,https://acme.ch/team"})
+    check("provenance: source URL travels record → report (DPA Annex 1 promise)",
+          enr["leads"][0]["source"] == "https://acme.ch/team")
+    qa = registry.run_task("growth", "pseo_qa", {"pages": [
+        {"path": "/p/a", "title": "CHF mortgage calculator Zurich", "description": "d" * 80,
+         "query": "CHF mortgage calculator Zurich",
+         "content": ("chf mortgage calculator zurich computes monthly cost ") * 20},
+        {"path": "/p/b", "title": "thin", "description": "d" * 80, "query": "thin page test",
+         "content": "word " * 20}]})
+    check("pseo QA: substance gate refuses thin page, passes real one",
+          qa["results"][0]["publishable"] is True and qa["results"][1]["publishable"] is False
+          and qa["refused"] == 1)
+    t = platformsvc.request("dossia", "lead_gen", "ICP: CROs", units=25)
+    platformsvc.serve(t["id"], {"ref": "internal"})
+    check("internal pull: other companies buy Growth output at DR-0002 prices",
+          t["notional_chf"] == 25.0
+          and lifecycle.load("dossia")["platform_charges_chf"] == 25.0)
+    hr = registry.run_task("helix", "helix_report_html", {
+        "client": "Basel Lab", "fasta": ">NM_TEST\nATGGGCTAA",
+        "cross_checks_in": None} if False else {
+        "client": "Basel Lab", "fasta": ">NM_TEST\nATGGGCTAA"})
+    hhtml = (config.OUTBOX / hr["html_file"]).read_text(encoding="utf-8")
+    check("helix: branded report = theme accent + version stamp + human-of-record",
+          "#b48eff" in hhtml and hr["version_hash"][:8] in hhtml
+          and "Human of record" in hhtml)
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))
