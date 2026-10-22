@@ -1,0 +1,8 @@
+name = "cogops-capital"
+compatibility_date = "2026-05-01"
+pages_build_output_dir = "public"
+
+kv_namespaces = [
+  { binding = "SIGNUPS", id = "bf0a50e4a3634f13ac7b88122e2d0db4" }
+]
+# Secrets (set via wrangler/dashboard, never here): ADMIN_TOKEN, NOTIFY_URL

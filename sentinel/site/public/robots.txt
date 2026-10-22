@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cogops-sentinel.pages.dev/sitemap.xml

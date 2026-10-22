@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{name} — {tagline}</title>
+<meta name="description" content="{metadesc}">
+<meta property="og:title" content="{name} — {tagline}">
+<meta property="og:description" content="{metadesc}">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://cogops-{dom}.pages.dev/">
+<meta name="theme-color" content="#0b0e14">
+<meta property="og:image" content="https://cogops-{dom}.pages.dev/og-image.png">
+<meta property="og:url" content="https://cogops-{dom}.pages.dev/">
+<meta property="og:site_name" content="{name}">
+<style>{css}</style>
+<script type="application/ld+json">
+{jsonld}
+</script></head><body>
+<div class="blobs"><i></i><i></i></div>
+<nav><div class="wrap navin">
+  <span class="brand">CogOps <em>{word}</em></span>
+  <div class="nlinks"><a href="#products">Services</a><a href="#boundary">Boundary</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="/imprint.html">Legal</a></div>
+  <a class="btn grad" href="#signup">{cta}</a>
+</div></nav>
+<header class="hero"><div class="wrap">
+  <div class="badge rv">{badge}</div>
+  <h1 class="rv">{h1a}<br><em>{h1b}</em></h1>
+  <p class="sub rv">{sub}</p>
+  <div class="grade rv">{boundary_band}</div>
+  <div class="rv" style="margin-top:16px"><a class="btn grad" href="#signup">{cta}</a></div>
+  <div class="counter rv" id="counter">…</div>
+</div></header>
+<div class="wrap"><div class="linkband rv"><b>The Regulatory-Science Clique:</b> {clique_links} — a complete graph: every pair trades verified services at published internal prices (DR-0009). One deliverable can carry evidence chains from several of them at once.</div></div>
+<div class="marquee" style="margin-top:22px"><div class="mtrack">
+  {marquee}
+  {marquee}
+</div></div>
+<section id="products"><div class="wrap">
+  <div class="eyebrow rv">Services</div>
+  <h2 class="rv">{services_h2}</h2>
+  <div class="grid g3">
+    {service_cards}
+  </div>
+</div></section>
+<section id="boundary"><div class="wrap">
+  <div class="eyebrow rv">Where we stop</div>
+  <h2 class="rv">The boundary is the product.</h2>
+  <div class="grid g3">
+    {boundary_cards}
+  </div>
+</div></section>
+<section id="pricing"><div class="wrap">
+  <div class="eyebrow rv">Pricing</div>
+  <h2 class="rv">Fixed prices. Written boundaries.</h2>
+  <table class="rv">
+    <tr><th>Service</th><th>Model</th><th>Price</th></tr>
+    {price_rows}
+  </table>
+  <p class="rv" style="color:var(--dim);font-size:13px;margin-top:12px">All prices in CHF, excl. VAT where applicable. Swiss QR-bill, net 14 days. {pricing_note}</p>
+</div></section>
+<section id="signup"><div class="wrap" style="max-width:640px">
+  <div class="eyebrow rv" style="text-align:center">Start here</div>
+  <h2 class="rv" style="text-align:center">{form_h2}</h2>
+  <form class="signup rv" id="f">
+    <div class="row">
+      <input name="email" type="email" required placeholder="Work email *" aria-label="Work email">
+      <input name="company" type="text" required placeholder="Organization *" aria-label="Organization">
+    </div>
+    <div class="row">
+      <select name="product" required aria-label="Service needed">
+        <option value="" disabled selected>What do you need? *</option>
+        {product_options}
+      </select>
+      <input name="icp" type="text" placeholder="{icp_ph}" aria-label="Context">
+    </div>
+    <textarea name="note" rows="2" placeholder="Context or constraints? (optional)" aria-label="Context, optional"></textarea>
+    <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+    <button class="btn grad" type="submit" id="go">{form_btn}</button>
+    <div class="msg" id="m"></div>
+  </form>
+  <p class="rv" style="color:var(--dim);font-size:13px;text-align:center;margin-top:14px">A named person replies within 1 business day. {sla_line}</p>
+</div></section>
+<section id="faq"><div class="wrap" style="max-width:760px">
+  <div class="eyebrow rv">FAQ</div>
+  <h2 class="rv">Straight answers</h2>
+  <div class="faq rv">
+    {faq}
+  </div>
+</div></section>
+<footer><div class="wrap">
+  <b>{name}</b> · a CogOps Group company · Switzerland<br>
+  <b>Clique:</b> {clique_links}<br>
+  <a href="mailto:cogops.engine@gmail.com">cogops.engine@gmail.com</a> · <a href="/privacy.html">Privacy</a> · <a href="/imprint.html">Impressum</a> · <a href="https://cogops-growth.pages.dev/terms.html">Terms (group-wide, v1.0)</a><br>
+  <span style="opacity:.7">© 2026 CogOps Group</span>
+</div></footer>
+<script>
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll(".rv").forEach(function(el){io.observe(el)});
+fetch("/api/count").then(function(r){return r.json()}).then(function(j){
+  document.getElementById("counter").textContent = j.count>0 ? "{counter_emoji} "+j.count+(j.count===1?" {counter_one}":" {counter_many}")+" in the queue" : "Be first in the queue";
+}).catch(function(){document.getElementById("counter").textContent=""});
+document.getElementById("f").addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var m=document.getElementById("m"),b=document.getElementById("go");
+  var d=Object.fromEntries(new FormData(this).entries());
+  b.disabled=true;b.textContent="Sending…";m.textContent="";m.className="msg";
+  fetch("/api/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)})
+  .then(function(r){return r.json().then(function(j){return{s:r.status,j:j}})})
+  .then(function(x){
+    if(x.s===200&&x.j.ok){m.className="msg ok";m.textContent="✓ Received — you are #"+x.j.position+" in the queue. A named person replies within 1 business day; {sla_line_short}";document.getElementById("f").reset();fetch("/api/count").then(function(r){return r.json()}).then(function(j){document.getElementById("counter").textContent="{counter_emoji} "+j.count+(j.count===1?" {counter_one}":" {counter_many}")+" in the queue"})}
+    else{m.className="msg bad";m.textContent=x.j.error==="duplicate"?"Already received — you are in the queue; a reply is on its way within 1 business day.":(x.j.error||"Transmission failed. Email cogops.engine@gmail.com and we take it from there.")}
+  }).catch(function(){m.className="msg bad";m.textContent="Transmission failed. Email cogops.engine@gmail.com and we take it from there."})
+  .finally(function(){b.disabled=false;b.textContent="{form_btn}"});
+});
+</script>
+</body></html>

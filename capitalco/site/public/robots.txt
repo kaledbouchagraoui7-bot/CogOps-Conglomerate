@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cogops-capital.pages.dev/sitemap.xml

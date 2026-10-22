@@ -24,7 +24,9 @@ META = {
         {"key": "pilot_lois", "layer": "P", "owner": "partnership-scout", "floor": 1},
     ],
     "squad_roles": ["mdr-documenter", "audit-trail-clerk", "regulatory-monitor",
-                    "verifier", "process-auditor"],
+                    "verifier", "process-auditor",
+                    "treasury-accountant",
+                    "ai-security-reviewer"],
 }
 
 
@@ -96,13 +98,88 @@ def imaging_pipeline_spec(params: dict, slug: str) -> dict:
     return artifact
 
 
+
+
+def mdr_with_evidence(params: dict, slug: str) -> dict:
+    """K5 link H-M: medtech buys drylab_stats FROM Helix via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on medtech's P&L (I7)."""
+    import platformsvc
+    from companies import helix as seller
+    ticket = platformsvc.request(slug, "drylab_stats", spec="verification evidence for MDR 6.1", units=1)
+    bought = seller.sequence_qc({"fasta": params.get("fasta", ">NM_TEST\nATGGGCTAA"), "cross_checks": params.get("cross_checks", {})}, "helix")
+    platformsvc.serve(ticket["id"], {"ref": f"medtech-mdr_with_evidence:{ticket['id']}"})
+    out = mdr_doc_tree(params, slug)
+    out["internal_purchase"] = {"from": "Helix", "service": "drylab_stats",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["verification_evidence"] = {"qc": bought["qc"], "ticket_ref": ticket["id"]}
+    return out
+
+
+
+def mdr_with_surveillance(params: dict, slug: str) -> dict:
+    """K5 link D-M: medtech buys ra_feed FROM Dossia via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on medtech's P&L (I7)."""
+    import platformsvc
+    from companies import dossia as seller
+    ticket = platformsvc.request(slug, "ra_feed", spec="MDR/PMS regulatory watch", units=1)
+    bought = seller.surveillance_feed({"topic": params.get("topic", "medical device software safety"), "max": 10}, "dossia")
+    platformsvc.serve(ticket["id"], {"ref": f"medtech-mdr_with_surveillance:{ticket['id']}"})
+    out = mdr_doc_tree(params, slug)
+    out["internal_purchase"] = {"from": "Dossia", "service": "ra_feed",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["surveillance"] = {"n": bought.get("n", 0), "feed": bought.get("feed", {}), "ticket_ref": ticket["id"]}
+    return out
+
+
+
+def treasury_setup(params: dict, slug: str) -> dict:
+    """K5 link M-C: medtech buys treasury_policy FROM Capital via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on medtech's P&L (I7)."""
+    import platformsvc
+    from companies import capitalco as seller
+    ticket = platformsvc.request(slug, "treasury_policy", spec="treasury policy for Medtech sweep", units=1)
+    bought = seller.treasury_policy({}, "capitalco")
+    platformsvc.serve(ticket["id"], {"ref": f"medtech-treasury_setup:{ticket['id']}"})
+    out = {"mode":"engine","company":"medtech"}
+    out["internal_purchase"] = {"from": "Capital", "service": "treasury_policy",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["policy"] = bought["policy"]
+    return out
+
+
+
+def secure_deployment(params: dict, slug: str) -> dict:
+    """K5 link M-S: medtech buys ai_sec_review FROM Sentinel via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on medtech's P&L (I7)."""
+    import platformsvc
+    from companies import sentinel as seller
+    ticket = platformsvc.request(slug, "ai_sec_review", spec="security review of R&D portal", units=1)
+    bought = seller.ai_security_review({"kb_first":True,"provider_labels":True,"refuses_advice":True,"gated_actions":True}, "sentinel")
+    platformsvc.serve(ticket["id"], {"ref": f"medtech-secure_deployment:{ticket['id']}"})
+    out = {"mode":"engine","company":"medtech"}
+    out["internal_purchase"] = {"from": "Sentinel", "service": "ai_sec_review",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["security"] = {"config": bought["config_checks"], "ticket_ref": ticket["id"]}
+    return out
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     p.write_text(json.dumps(artifact, indent=1, sort_keys=True, default=str),
                  encoding="utf-8")
 
 
+# K5 clique links: partner -> OUR buying task (complete graph, DR-0009)
+LINKS = {'helix': 'mdr_with_evidence', 'dossia': 'mdr_with_surveillance', 'capitalco': 'treasury_setup', 'sentinel': 'secure_deployment'}
+
 TASKS = {
+    "mdr_with_evidence": {"fn": mdr_with_evidence, "role": "mdr-documenter"},
+    "mdr_with_surveillance": {"fn": mdr_with_surveillance, "role": "regulatory-monitor"},
+    "treasury_setup": {"fn": treasury_setup, "role": "treasury-accountant"},
+    "secure_deployment": {"fn": secure_deployment, "role": "ai-security-reviewer"},
     "mdr_doc_tree": {"fn": mdr_doc_tree, "role": "mdr-documenter"},
     "alcoa_log": {"fn": alcoa_log, "role": "audit-trail-clerk"},
     "imaging_pipeline_spec": {"fn": imaging_pipeline_spec, "role": "process-auditor"},

@@ -12,6 +12,8 @@
 > | [`structure/decisions.md`](structure/decisions.md) | Decision Records (append-only) — DR-0001 profit split · DR-0002 internal prices · DR-0003 brand architecture · DR-0004 single-entity doctrine · DR-0005 Growth live validation |
 > | [`ROADMAP.md`](ROADMAP.md) | Blueprint → real business: the founder's plan with owners (**YOU** / **ME** / **DONE**) and the critical path to the first franc |
 > | [`legal/`](legal/tos.md) | **Legal drafts v0.9 (lawyer-review-ready):** client ToS · DPA (Art. 28 GDPR / nFADP, 3 annexes) · processing register (RoPA, 10 rows) · retention & deletion schedule — cross-ref `LEGAL.md` checklist |
+> | [`CAPABILITIES.html`](CAPABILITIES.html) | **The capabilities artifact:** every company alone, every combination together (pairs + K5 clique), principles → code mechanisms |
+> | [`sentinel/`](sentinel/OFFER.md) · [`capitalco/`](capitalco/OFFER.md) · [`dossia/`](dossia/OFFER.md) · [`medtech/`](medtech/OFFER.md) | **Regulatory-Science Clique live:** four new evidence machines + complete-graph internal market (DR-0009) |
 > | [`verde/`](verde/OFFER.md) · [`terra/`](terra/OFFER.md) | **Climate pair, made real:** live landings (cogops-verde / cogops-terra), CSRD-lite ↔ risk-screen internal-market link (DR-0008), model-grade honesty published |
 > | [`talent/`](talent/OFFER.md) | **CogOps Talent, made real:** offer & delivery playbook · live landing (`talent/site/` → https://cogops-talent.pages.dev) · Growth↔Talent internal-market link (DR-0007) |
 > | [`helix/`](helix/OFFER.md) | **CogOps Helix, made real:** offer & delivery playbook · live landing source (`helix/site/` → https://cogops-helix.pages.dev) — free 48 h QC sample as the evidence machine |

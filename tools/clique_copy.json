@@ -1,0 +1,472 @@
+{
+ "sentinel": {
+  "accent": "#6ea8fe",
+  "glow": [
+   46,
+   90,
+   160
+  ],
+  "grada": "#3d7dd8",
+  "gradb": "#274a7d",
+  "word": "Sentinel",
+  "tagline": "security posture, scored and fixed",
+  "metadesc": "22-control baseline audits (CIS-flavored + nDSG/GDPR), AI-security batteries for deployed assistants, monitoring with incident ledgers. Defensive only. Free edge snapshot in 48 h.",
+  "badge": "Defensive only · Swiss-operated · a CogOps Group company",
+  "h1a": "Security posture,",
+  "h1b": "scored and fixed.",
+  "sub": "Baseline audits your fiduciary and your clients can read: 22 controls scored with severities and remediation steps. AI assistants tested against a six-probe injection battery before they meet your customers. Monitoring that writes incident ledgers, not excuses.",
+  "boundary_band": "Boundary, stated up front: we are defensive only. No offensive tooling, no probing beyond read-only public checks, no clearance work, no fear-selling. Findings arrive with fixes, ranked.",
+  "cta": "Get the free edge snapshot",
+  "services_h2": "Three services. Read-only by default.",
+  "services": [
+   [
+    "① BASELINE AUDIT",
+    "22 controls, scored",
+    "Identity, network, data, application, AI, operations and Swiss-legal families. Every fail or gap ships with a severity and a concrete remediation step. Acceptance belongs to your IT lead."
+   ],
+   [
+    "② AI-SECURITY REVIEW",
+    "Six-probe injection battery",
+    "Prompt-override, jailbreak-persona, system-leak, exfiltration, obfuscated-override and policy-probe tests against your deployed assistant, plus gateway config checks (KB-first, labels, gates)."
+   ],
+   [
+    "③ MONITORING & INCIDENTS",
+    "Heartbeats with ledgers",
+    "Uptime heartbeats on your public edges; every failure becomes a ledgered incident with an ALCOA+-style trail via the clique."
+   ]
+  ],
+  "boundary": [
+   [
+    "DEFENSIVE ONLY",
+    "No offensive capability exists in our tooling — not hidden, not available on request. The absence is the guarantee."
+   ],
+   [
+    "HUMAN ACCEPTANCE",
+    "Your IT lead owns acceptance of every finding; we score and recommend, you decide and sign."
+   ],
+   [
+    "NO FEAR-SELLING",
+    "Reports state facts and fixes. No countdown timers, no invented threat theater."
+   ]
+  ],
+  "prices": [
+   [
+    "Edge snapshot (TLS + header posture, one domain)",
+    "one-off, 48 h",
+    "<b>CHF 0</b>"
+   ],
+   [
+    "Baseline audit (22 controls + remediation plan)",
+    "per audit",
+    "CHF 1,800"
+   ],
+   [
+    "AI-security review (battery + config checks)",
+    "per assistant",
+    "CHF 1,200"
+   ],
+   [
+    "Monitoring (heartbeats + incident ledger)",
+    "monthly, cancel monthly",
+    "CHF 150"
+   ],
+   [
+    "Remediation companion (weekly fix reviews)",
+    "monthly",
+    "CHF 300"
+   ]
+  ],
+  "pricing_note": "Audit deliverables include one re-check after your fixes — the follow-up pass is in the price.",
+  "form_h2": "Request your free edge snapshot",
+  "form_btn": "Request my free snapshot →",
+  "product_options": [
+   "Baseline audit",
+   "AI-security review",
+   "Monitoring",
+   "Not sure — snapshot first"
+  ],
+  "icp_ph": "Your stack in one line (hosting, stack, assistants)",
+  "sla_line": "The snapshot follows within 48 hours of receiving your URL.",
+  "sla_line_short": "the snapshot follows within 48 h of your URL.",
+  "counter_emoji": "🛡",
+  "counter_one": "organization has",
+  "counter_many": "organizations have",
+  "marquee": [
+   "<b>48 h</b> free edge snapshot",
+   "<b>22</b> controls scored",
+   "<b>6</b> injection probes per assistant",
+   "<b>defensive only</b> — by doctrine",
+   "<b>1 business day</b> reply time",
+   "<b>30 days</b> data deletion"
+  ],
+  "faq": [
+   [
+    "What does the free snapshot check?",
+    "One read-only GET on your public URL: TLS, HSTS, CSP, framing protection, nosniff, referrer policy — scored, with the full 22-control audit offered as the next step. Nothing is probed beyond that single request."
+   ],
+   [
+    "Do you perform penetration tests?",
+    "No. Offensive testing is outside our doctrine and tooling. We score configuration and posture, test AI assistants with a fixed defensive battery, and hand ranked fixes to your team."
+   ],
+   [
+    "Who accepts the findings?",
+    "Your IT lead or accountable manager — acceptance is recorded in the report. We never claim authority over your systems."
+   ],
+   [
+    "Can you review our AI assistant before launch?",
+    "Yes: the six-probe battery plus gateway config checks (KB-first grounding, provider labels, action gates). Containment failures arrive with hardening recommendations."
+   ]
+  ],
+  "jsonld": "{\"@context\":\"https://schema.org\",\"@type\":\"ProfessionalService\",\"name\":\"CogOps Sentinel\",\"url\":\"https://cogops-sentinel.pages.dev/\",\"description\":\"Defensive security audits, AI-security review batteries and monitoring for SMEs. CIS-flavored + nDSG/GDPR baselines.\",\"email\":\"cogops.engine@gmail.com\",\"areaServed\":\"CH\",\"currenciesAccepted\":\"CHF\",\"parentOrganization\":{\"@type\":\"Organization\",\"name\":\"CogOps Group\"}}"
+ },
+ "capitalco": {
+  "accent": "#ffcf6e",
+  "glow": [
+   160,
+   120,
+   30
+  ],
+  "grada": "#b89a3a",
+  "gradb": "#3d7dd8",
+  "word": "Capital",
+  "tagline": "discipline as a service",
+  "metadesc": "Guarded DCA backtests, factor briefs on your data, treasury policy setup with Swiss private-investor guardrails. Tools and research only — your keys, your approvals. Free plan check in 48 h.",
+  "badge": "Tools & research only · Swiss guardrails · a CogOps Group company",
+  "h1a": "Investment discipline,",
+  "h1b": "as a service.",
+  "sub": "Backtests where the compliance guard sits inside the loop, factor briefs computed on your data with validated statistics, and treasury policies that mirror the machine that executes them. Your keys stay yours; every live action stays yours to approve.",
+  "boundary_band": "Boundary, stated up front: no custody, no portfolio management, no investment advice, no fund. We build and check the tools; the decisions and the keys remain with you — in writing, on every artifact.",
+  "cta": "Get the free plan check",
+  "services_h2": "Three instruments. Guard inside the loop.",
+  "services": [
+   [
+    "① GUARDED BACKTESTS",
+    "Compliance in the loop",
+    "Every simulated order passes the Swiss private-investor guard before it fills: no leverage/derivatives/shorts, STK+CASH, 180-day FIFO holding, turnover ceiling with fresh-capital base, one-cent floor. Deterministic hash per run."
+   ],
+   [
+    "② FACTOR BRIEFS",
+    "Your data, validated stats",
+    "Tercile Welch tests and summary statistics from the SciPy-free kernel cross-validated to <1e-9 — computed on data you supply, returned with a research-not-advice label."
+   ],
+   [
+    "③ TREASURY POLICY",
+    "Sweep rules that match the machine",
+    "Profit-share sweeps, Pillar-3a routing, DCA cadence and guard invariants generated from live config — the document cannot drift from the engine."
+   ]
+  ],
+  "boundary": [
+   [
+    "YOUR KEYS, YOUR APPROVALS",
+    "We never hold client assets or credentials; live execution happens in your account under your approvals."
+   ],
+   [
+    "RESEARCH, NOT ADVICE",
+    "Every artifact carries the label; boundary memos are QC'd through the clique before delivery."
+   ],
+   [
+    "GUARDRAILS ARE INVARIANTS",
+    "No leverage, no derivatives, no shorts, no ceiling-gaming: the guard refuses by construction."
+   ]
+  ],
+  "prices": [
+   [
+    "Plan check (your existing order plan vs the guard)",
+    "one-off, 48 h",
+    "<b>CHF 0</b>"
+   ],
+   [
+    "Guarded backtest report (deterministic, hashed)",
+    "per study",
+    "CHF 600"
+   ],
+   [
+    "Factor brief on client-supplied data",
+    "per brief",
+    "CHF 900"
+   ],
+   [
+    "Treasury policy setup + sweep configuration",
+    "one-off",
+    "CHF 1,200"
+   ],
+   [
+    "Policy watch (monthly recompute + delta)",
+    "monthly, cancel monthly",
+    "CHF 100"
+   ]
+  ],
+  "pricing_note": "Backtests include the guard-violation ledger: blocked orders are reported with reasons, never silently dropped.",
+  "form_h2": "Request your free plan check",
+  "form_btn": "Request my free plan check →",
+  "product_options": [
+   "Guarded backtest",
+   "Factor brief",
+   "Treasury policy",
+   "Not sure — plan check first"
+  ],
+  "icp_ph": "Portfolio context in one line (assets, cadence)",
+  "sla_line": "The checked plan returns within 48 hours of receiving your order list.",
+  "sla_line_short": "the checked plan returns within 48 h of your order list.",
+  "counter_emoji": "📊",
+  "counter_one": "investor has",
+  "counter_many": "investors have",
+  "marquee": [
+   "<b>48 h</b> free plan check",
+   "<b>guard</b> inside every backtest loop",
+   "<b>&lt;1e-9</b> stats cross-validation",
+   "<b>deterministic</b> run hashes",
+   "<b>your keys</b> always yours",
+   "<b>1 business day</b> reply time"
+  ],
+  "faq": [
+   [
+    "Is this investment advice?",
+    "No. We deliver rule outcomes, computations and research briefs, labeled as such. Decisions, keys and approvals remain yours; the boundary is contractual (group Terms §7)."
+   ],
+   [
+    "What does the free plan check return?",
+    "Each order in your supplied plan run through the Swiss guard: passes or blocked, with the exact rule and number behind each verdict. One page, no obligation."
+   ],
+   [
+    "Can you execute trades for us?",
+    "No — custody and execution stay in your account. We build and verify the engine; your approvals move money. That separation is the product."
+   ],
+   [
+    "Which guardrails are hard-coded?",
+    "No margin/leverage, no derivatives, no short selling, stocks+cash only, 180-day FIFO minimum holding, trailing turnover ≤5× with fresh-capital base, order-frequency cap, one-cent floor and no ceiling."
+   ]
+  ],
+  "jsonld": "{\"@context\":\"https://schema.org\",\"@type\":\"ProfessionalService\",\"name\":\"CogOps Capital\",\"url\":\"https://cogops-capital.pages.dev/\",\"description\":\"Guarded DCA backtests, factor briefs and treasury policy tooling under Swiss private-investor guardrails. Tools and research only.\",\"email\":\"cogops.engine@gmail.com\",\"areaServed\":\"CH\",\"currenciesAccepted\":\"CHF\",\"parentOrganization\":{\"@type\":\"Organization\",\"name\":\"CogOps Group\"}}"
+ },
+ "dossia": {
+  "accent": "#ff9e7e",
+  "glow": [
+   170,
+   90,
+   50
+  ],
+  "grada": "#c56a3d",
+  "gradb": "#3d7dd8",
+  "word": "Dossia",
+  "tagline": "the dossier factory",
+  "metadesc": "ICH M4 CTD module packs, regulatory surveillance feeds and ALCOA+ QC at machine cost. Drafts for your qualified signatory — we never sign. Free module skeleton in 48 h.",
+  "badge": "ICH / ALCOA+ engineered · Swiss-operated · a CogOps Group company",
+  "h1a": "Regulatory dossiers,",
+  "h1b": "without the backlog.",
+  "sub": "CTD module packs assembled to ICH M4 with statistics and citations traceable to source, surveillance feeds that watch PubMed and Europe PMC for your product area, and ALCOA+ QC on every document. Your qualified RA lead signs — that is the point.",
+  "boundary_band": "Boundary, stated up front: we are never the signatory and never the person of record. Clinical claims are authored or approved by your qualified personnel; our skeletons say TODO loudly rather than inventing content.",
+  "cta": "Get the free module skeleton",
+  "services_h2": "Three deliverables. TODO over fiction.",
+  "services": [
+   [
+    "① CTD MODULE PACKS",
+    "M4 skeletons + drafted modules",
+    "Structure from the ICH tree; drafted content only where you supply it; everything else marked TODO with an authoring note. Cross-references checked by code."
+   ],
+   [
+    "② SURVEILLANCE FEEDS",
+    "PMID-traceable regulatory watch",
+    "Weekly PubMed monitoring with Europe PMC fallback, RA relevance filters, DOI-linked evidence matrices for IB/RIM assembly. Never a partial deliverable."
+   ],
+   [
+    "③ ALCOA+ QC",
+    "Nine-point document conformance",
+    "Attributable, legible, contemporaneous, original, accurate, complete, consistent, enduring, available — scored per document with a PASS/REVIEW verdict at 95%."
+   ]
+  ],
+  "boundary": [
+   [
+    "NEVER THE SIGNATORY",
+    "Every deliverable carries the human-of-record field; regulatory responsibility stays where the law puts it."
+   ],
+   [
+    "TODO OVER FICTION",
+    "Unsupplied clinical content stays TODO. Invention is a kill-flag offense for agents here."
+   ],
+   [
+    "TRACEABLE OR ABSENT",
+    "Every citation carries PMID/DOI and an as-of date; untraceable claims are refused."
+   ]
+  ],
+  "prices": [
+   [
+    "Module skeleton + gap list (one CTD module)",
+    "one-off, 48 h",
+    "<b>CHF 0</b>"
+   ],
+   [
+    "CTD module pack (drafted from your content)",
+    "per module",
+    "CHF 2,400"
+   ],
+   [
+    "Surveillance feed (topic, weekly)",
+    "monthly, cancel monthly",
+    "CHF 300"
+   ],
+   [
+    "ALCOA+ QC per document",
+    "per doc",
+    "CHF 400"
+   ]
+  ],
+  "pricing_note": "Packs include one revision round after your signatory's comments.",
+  "form_h2": "Request your free module skeleton",
+  "form_btn": "Request my free skeleton →",
+  "product_options": [
+   "CTD module pack",
+   "Surveillance feed",
+   "ALCOA+ QC",
+   "Not sure — skeleton first"
+  ],
+  "icp_ph": "Product area (e.g. CFTR modulators, oncology biologic)",
+  "sla_line": "The skeleton returns within 48 hours of receiving your module choice.",
+  "sla_line_short": "the skeleton returns within 48 h of your module choice.",
+  "counter_emoji": "📋",
+  "counter_one": "RA team has",
+  "counter_many": "RA teams have",
+  "marquee": [
+   "<b>48 h</b> free module skeleton",
+   "<b>ICH M4</b> structure by code",
+   "<b>PMID/DOI</b> traceability",
+   "<b>ALCOA+</b> nine-point QC",
+   "<b>never</b> the signatory",
+   "<b>1 business day</b> reply time"
+  ],
+  "faq": [
+   [
+    "What is in the free skeleton?",
+    "One CTD module of your choice: full ICH M4 structure with section-level TODO markers and an authoring note per gap — enough to size the work before buying the pack."
+   ],
+   [
+    "Do you write clinical claims?",
+    "No. We draft structure, statistics from supplied data, and citations from traceable sources. Clinical interpretation belongs to your qualified signatory."
+   ],
+   [
+    "Which regulators do you track?",
+    "Swissmedic, EMA and FDA signals via literature surveillance; the feed is scoped to your product area with relevance filters you approve."
+   ],
+   [
+    "How is QC scored?",
+    "Nine ALCOA+ attributes, pass/fail each, verdict PASS at ≥95% with the failing attributes listed — the checklist ships with the score."
+   ]
+  ],
+  "jsonld": "{\"@context\":\"https://schema.org\",\"@type\":\"ProfessionalService\",\"name\":\"CogOps Dossia\",\"url\":\"https://cogops-dossia.pages.dev/\",\"description\":\"Regulatory affairs support: ICH M4 CTD module packs, surveillance feeds, ALCOA+ QC. Never the signatory.\",\"email\":\"cogops.engine@gmail.com\",\"areaServed\":\"CH\",\"currenciesAccepted\":\"CHF\",\"parentOrganization\":{\"@type\":\"Organization\",\"name\":\"CogOps Group\"}}"
+ },
+ "medtech": {
+  "accent": "#7ed4e0",
+  "glow": [
+   40,
+   140,
+   150
+  ],
+  "grada": "#3da5b8",
+  "gradb": "#3d7dd8",
+  "word": "Medtech",
+  "tagline": "MDR paperwork, tamed",
+  "metadesc": "MDR Annex II/III documentation trees scoped by risk class, ALCOA+ experiment trails, pre-clinical imaging pipeline specs. Research-use software — never a medical device. Free gap snapshot in 48 h.",
+  "badge": "Research-use software · MDR-scoped · a CogOps Group company",
+  "h1a": "MDR documentation,",
+  "h1b": "tamed by structure.",
+  "sub": "Annex II/III trees generated for your risk class with owners and signoff flags, experiment trails where corrections are additions and never overwrites, and pre-clinical pipeline specs that say research-use in every header. Your QA signs; the machine keeps the paperwork honest.",
+  "boundary_band": "Boundary, stated up front: research-use and documentation software only. Nothing we deliver is a medical device, a clinical claim or a conformity assessment — and every artifact repeats that line.",
+  "cta": "Get the free gap snapshot",
+  "services_h2": "Three instruments. Structure first.",
+  "services": [
+   [
+    "① MDR DOC TREES",
+    "Annex II/III by risk class",
+    "Sections scoped to I/IIa/IIb/III with applicability, owners (client-QA vs documenter) and signoff flags; the gap list is your roadmap."
+   ],
+   [
+    "② ALCOA+ TRAILS",
+    "Append-only experiment records",
+    "Attributable, contemporaneous, original-value-preserving entries; corrections append, never overwrite; trail line counts verifiable on delivery."
+   ],
+   [
+    "③ PIPELINE SPECS",
+    "Pre-clinical, research-use",
+    "Ingest→QC→preprocess→model→evaluate→report stages with checks, ethics-approval flag and reproducibility-pack requirements."
+   ]
+  ],
+  "boundary": [
+   [
+    "RESEARCH-USE ONLY",
+    "Specs and trees carry the label; clinical deployment is your regulated project, not ours."
+   ],
+   [
+    "YOUR QA SIGNS",
+    "Signoff flags name your QA per section; we document, you approve."
+   ],
+   [
+    "CORRECTIONS APPEND",
+    "The trail never hides history — an ALCOA+ invariant enforced by code."
+   ]
+  ],
+  "prices": [
+   [
+    "Class-scoped gap snapshot (Annex tree + gaps)",
+    "one-off, 48 h",
+    "<b>CHF 0</b>"
+   ],
+   [
+    "MDR tree + gap roadmap (full Annex II/III)",
+    "per device",
+    "CHF 1,800"
+   ],
+   [
+    "ALCOA+ trail setup (+ monthly retention)",
+    "one-off + monthly",
+    "CHF 900 + 150"
+   ],
+   [
+    "Pre-clinical imaging pipeline spec",
+    "per modality",
+    "CHF 1,500"
+   ]
+  ],
+  "pricing_note": "Trees include one re-scope after your QA's first review.",
+  "form_h2": "Request your free gap snapshot",
+  "form_btn": "Request my free snapshot →",
+  "product_options": [
+   "MDR doc tree",
+   "ALCOA+ trail",
+   "Pipeline spec",
+   "Not sure — snapshot first"
+  ],
+  "icp_ph": "Device class & type in one line",
+  "sla_line": "The snapshot returns within 48 hours of receiving device class and scope.",
+  "sla_line_short": "the snapshot returns within 48 h of your device class.",
+  "counter_emoji": "⚕",
+  "counter_one": "R&D team has",
+  "counter_many": "R&D teams have",
+  "marquee": [
+   "<b>48 h</b> free gap snapshot",
+   "<b>Annex II/III</b> scoped by class",
+   "<b>append-only</b> experiment trails",
+   "<b>research-use</b> label on everything",
+   "<b>your QA</b> signs every section",
+   "<b>1 business day</b> reply time"
+  ],
+  "faq": [
+   [
+    "What does the free snapshot include?",
+    "The Annex II/III tree for your declared risk class with applicability and gap list — the exact roadmap your QA would otherwise build by hand."
+   ],
+   [
+    "Is your software a medical device?",
+    "No. Documentation and research-use tooling only; the classification question is answered in writing on every deliverable."
+   ],
+   [
+    "How do experiment trails handle corrections?",
+    "By appending: the original value stays, the correction references it, and both carry actor and timestamp. Overwrites do not exist in the trail format."
+   ],
+   [
+    "Can you prepare a conformity assessment?",
+    "No — we prepare structured documentation and evidence packs; the assessment itself is your notified body's job."
+   ]
+  ],
+  "jsonld": "{\"@context\":\"https://schema.org\",\"@type\":\"ProfessionalService\",\"name\":\"CogOps Medtech\",\"url\":\"https://cogops-medtech.pages.dev/\",\"description\":\"MDR documentation trees, ALCOA+ experiment trails and pre-clinical pipeline specs. Research-use software only.\",\"email\":\"cogops.engine@gmail.com\",\"areaServed\":\"CH\",\"currenciesAccepted\":\"CHF\",\"parentOrganization\":{\"@type\":\"Organization\",\"name\":\"CogOps Group\"}}"
+ }
+}

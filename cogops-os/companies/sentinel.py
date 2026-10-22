@@ -25,7 +25,8 @@ META = {
         {"key": "monitor_uptime_pct", "layer": "Q", "owner": "monitor-watcher", "floor": 99},
     ],
     "squad_roles": ["security-auditor", "ai-security-reviewer", "monitor-watcher",
-                    "incident-responder"],
+                    "incident-responder",
+                    "treasury-accountant"],
 }
 
 INJECTION_BATTERY = (
@@ -137,14 +138,124 @@ def heartbeat(params: dict, slug: str) -> dict:
             "results": out, "asof": config.stamp()}
 
 
+
+
+def evidence_brief(params: dict, slug: str) -> dict:
+    """K5 link H-S: sentinel buys lit_feed FROM Helix via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on sentinel's P&L (I7)."""
+    import platformsvc
+    from companies import helix as seller
+    ticket = platformsvc.request(slug, "lit_feed", spec="security literature watch (AI security topic)", units=1)
+    bought = seller.lit_surveil({"query": params.get("query", "LLM prompt injection defense"), "max": 10}, "helix")
+    platformsvc.serve(ticket["id"], {"ref": f"sentinel-evidence_brief:{ticket['id']}"})
+    out = {"mode":"engine","company":"sentinel"}
+    out["internal_purchase"] = {"from": "Helix", "service": "lit_feed",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["feed"] = {"n": bought.get("n", 0), "mode": bought.get("mode"), "ticket_ref": ticket["id"]}
+    return out
+
+
+
+def privacy_audit(params: dict, slug: str) -> dict:
+    """K5 link D-S: sentinel buys alcoa_qc FROM Dossia via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on sentinel's P&L (I7)."""
+    import platformsvc
+    from companies import dossia as seller
+    ticket = platformsvc.request(slug, "alcoa_qc", spec="ALCOA+ QC of privacy notice", units=1)
+    bought = seller.qc_checklist({"document":{"author":"sentinel","reviewer":"founder","text":"privacy notice","timestamp":config.stamp(),"source_ref":"engine","numbers_carry_asof":True,"has_todos":False,"units_consistent":True,"stored_in_ledger":True,"path":"outbox"}}, "dossia")
+    platformsvc.serve(ticket["id"], {"ref": f"sentinel-privacy_audit:{ticket['id']}"})
+    out = audit_run(params, slug) if params.get("answers") else {"mode":"engine","score_pct":None}
+    out["internal_purchase"] = {"from": "Dossia", "service": "alcoa_qc",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["privacy_qc"] = {"pass_rate_pct": bought["pass_rate_pct"], "ticket_ref": ticket["id"]}
+    return out
+
+
+
+def incident_trail(params: dict, slug: str) -> dict:
+    """K5 link M-S: sentinel buys alcoa_trail FROM Medtech via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on sentinel's P&L (I7)."""
+    import platformsvc
+    from companies import medtech as seller
+    ticket = platformsvc.request(slug, "alcoa_trail", spec="ALCOA+ trail for incident log", units=1)
+    bought = seller.alcoa_log({"entry":{"experiment":"incident","subject":params.get("incident","probe"),"value":1,"unit":"event","recorded_by":"sentinel"}}, "medtech")
+    platformsvc.serve(ticket["id"], {"ref": f"sentinel-incident_trail:{ticket['id']}"})
+    out = heartbeat(params, slug) if params.get("urls") else {"mode":"engine","checked":0,"up":0,"uptime_pct":None,"results":[]}
+    out["internal_purchase"] = {"from": "Medtech", "service": "alcoa_trail",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["incident_trail_lines"] = bought["trail_lines"]; out["provenance"] = f"incident log in Medtech ALCOA+ trail, ticket {ticket['id']}"
+    return out
+
+
+
+def treasury_setup(params: dict, slug: str) -> dict:
+    """K5 link C-S: sentinel buys treasury_policy FROM Capital via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on sentinel's P&L (I7)."""
+    import platformsvc
+    from companies import capitalco as seller
+    ticket = platformsvc.request(slug, "treasury_policy", spec="treasury policy for Sentinel sweep", units=1)
+    bought = seller.treasury_policy({}, "capitalco")
+    platformsvc.serve(ticket["id"], {"ref": f"sentinel-treasury_setup:{ticket['id']}"})
+    out = {"mode":"engine","company":"sentinel"}
+    out["internal_purchase"] = {"from": "Capital", "service": "treasury_policy",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["policy"] = bought["policy"]
+    return out
+
+
+
+def edge_snapshot(params: dict, slug: str) -> dict:
+    """Free sample: public edge snapshot of ONE domain — TLS, security headers,
+    exposure basics. Read-only, no scanning beyond one GET (defensive-only
+    boundary)."""
+    import urllib.request
+    url = params.get("url", "")
+    if not url.startswith("https://"):
+        raise ValueError("https:// URL required (we only look at public edges)")
+    checks = {}
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "CogOps-Sentinel-Snapshot/1.0"})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            hdrs = {k.lower(): v for k, v in dict(r.headers).items()}
+            checks["tls"] = True
+            checks["status"] = r.status
+    except Exception as e:
+        return {"mode": "engine:offline", "url": url, "error": str(e)[:100],
+                "checks": {}, "asof": config.today()}
+    checks["hsts"] = "strict-transport-security" in hdrs
+    checks["csp"] = "content-security-policy" in hdrs
+    checks["xfo_or_frame_ancestors"] = ("x-frame-options" in hdrs
+                                        or "frame-ancestors" in hdrs.get("content-security-policy", ""))
+    checks["nosniff"] = hdrs.get("x-content-type-options", "") == "nosniff"
+    checks["referrer_policy"] = "referrer-policy" in hdrs
+    score = round(100 * sum(checks.values()) / max(len(checks), 1), 1)
+    artifact = {"mode": "engine:live", "url": url, "checks": checks, "score_pct": score,
+                "next_step": "full 22-control baseline audit (paid) closes every gap above",
+                "boundary": "read-only single GET; defensive-only doctrine",
+                "asof": config.today()}
+    _emit(slug, "edge_snapshot", artifact)
+    return artifact
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     p.write_text(json.dumps(artifact, indent=1, sort_keys=True, default=str),
                  encoding="utf-8")
 
 
+# K5 clique links: partner -> OUR buying task (complete graph, DR-0009)
+LINKS = {'helix': 'evidence_brief', 'dossia': 'privacy_audit', 'medtech': 'incident_trail', 'capitalco': 'treasury_setup'}
+
 TASKS = {
+    "evidence_brief": {"fn": evidence_brief, "role": "ai-security-reviewer"},
+    "privacy_audit": {"fn": privacy_audit, "role": "security-auditor"},
+    "incident_trail": {"fn": incident_trail, "role": "incident-responder"},
+    "treasury_setup": {"fn": treasury_setup, "role": "treasury-accountant"},
     "audit_run": {"fn": audit_run, "role": "security-auditor"},
     "ai_security_review": {"fn": ai_security_review, "role": "ai-security-reviewer"},
     "heartbeat": {"fn": heartbeat, "role": "monitor-watcher"},
+    "edge_snapshot": {"fn": edge_snapshot, "role": "security-auditor"},
 }

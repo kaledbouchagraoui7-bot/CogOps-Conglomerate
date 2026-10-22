@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cogops-dossia.pages.dev/sitemap.xml

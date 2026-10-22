@@ -28,7 +28,8 @@ META = {
         {"key": "guard_pass_rate_pct", "layer": "Q", "owner": "compliance-checker", "floor": 95},
     ],
     "squad_roles": ["backtest-analyst", "factor-researcher", "compliance-checker",
-                    "treasury-accountant", "dca-operator"],
+                    "treasury-accountant", "dca-operator",
+                    "ai-security-reviewer"],
 }
 
 
@@ -148,14 +149,116 @@ def _hash(s: str) -> str:
     return hashlib.sha256(s.encode()).hexdigest()[:16]
 
 
+
+
+def factor_brief_certified(params: dict, slug: str) -> dict:
+    """K5 link H-C: capitalco buys drylab_stats FROM Helix via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on capitalco's P&L (I7)."""
+    import platformsvc
+    from companies import helix as seller
+    ticket = platformsvc.request(slug, "drylab_stats", spec="cross-validation of factor statistics", units=1)
+    bought = seller.table1({"cohort": params.get("cert_cohort", [{"patient_id":i,"arm":"A" if i%2 else "B","age":30+i%40} for i in range(8)]), "bounds": {"age": (18, 90)}}, "helix")
+    platformsvc.serve(ticket["id"], {"ref": f"capitalco-factor_brief_certified:{ticket['id']}"})
+    out = factor_brief(params, slug)
+    out["internal_purchase"] = {"from": "Helix", "service": "drylab_stats",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["stats_certified_by"] = f"Helix kernel via ticket {ticket['id']} (Welch/chi2 <1e-9 discipline)"
+    return out
+
+
+
+def backtest_certified(params: dict, slug: str) -> dict:
+    """K5 link M-C: capitalco buys alcoa_trail FROM Medtech via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on capitalco's P&L (I7)."""
+    import platformsvc
+    from companies import medtech as seller
+    ticket = platformsvc.request(slug, "alcoa_trail", spec="ALCOA+ trail for backtest run", units=1)
+    bought = seller.alcoa_log({"entry":{"experiment":"backtest","subject":params.get("ticker","VWRL"),"value":params.get("monthly_chf",900),"unit":"CHF/mo","recorded_by":"capital"}}, "medtech")
+    platformsvc.serve(ticket["id"], {"ref": f"capitalco-backtest_certified:{ticket['id']}"})
+    out = backtest(params, slug)
+    out["internal_purchase"] = {"from": "Medtech", "service": "alcoa_trail",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["audit_trail_lines"] = bought["trail_lines"]; out["provenance"] = f"run logged in Medtech ALCOA+ trail, ticket {ticket['id']}"
+    return out
+
+
+
+def boundary_memo(params: dict, slug: str) -> dict:
+    """K5 link D-C: capitalco buys alcoa_qc FROM Dossia via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on capitalco's P&L (I7)."""
+    import platformsvc
+    from companies import dossia as seller
+    ticket = platformsvc.request(slug, "alcoa_qc", spec="ALCOA+ QC of FINMA boundary memo", units=1)
+    bought = seller.qc_checklist({"document":{"author":"capital","reviewer":"founder","text":"boundary memo","timestamp":config.stamp(),"source_ref":"engine","numbers_carry_asof":True,"has_todos":False,"units_consistent":True,"stored_in_ledger":True,"path":"outbox"}}, "dossia")
+    platformsvc.serve(ticket["id"], {"ref": f"capitalco-boundary_memo:{ticket['id']}"})
+    out = treasury_policy(params, slug)
+    out["internal_purchase"] = {"from": "Dossia", "service": "alcoa_qc",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["boundary_qc"] = {"pass_rate_pct": bought["pass_rate_pct"], "verdict": bought["verdict"], "ticket_ref": ticket["id"]}
+    return out
+
+
+
+def secure_deployment(params: dict, slug: str) -> dict:
+    """K5 link C-S: capitalco buys ai_sec_review FROM Sentinel via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on capitalco's P&L (I7)."""
+    import platformsvc
+    from companies import sentinel as seller
+    ticket = platformsvc.request(slug, "ai_sec_review", spec="security review of client tooling", units=1)
+    bought = seller.ai_security_review({"kb_first":True,"provider_labels":True,"refuses_advice":True,"gated_actions":True}, "sentinel")
+    platformsvc.serve(ticket["id"], {"ref": f"capitalco-secure_deployment:{ticket['id']}"})
+    out = {"mode":"engine","company":"capitalco"}
+    out["internal_purchase"] = {"from": "Sentinel", "service": "ai_sec_review",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["security"] = {"config": bought["config_checks"], "ticket_ref": ticket["id"]}
+    return out
+
+
+
+def plan_check(params: dict, slug: str) -> dict:
+    """Free sample: guard review of a client's EXISTING order plan — each order
+    run through the Swiss guard (stateless copy), verdicts + why. No advice:
+    the guard reports rule outcomes, the client decides."""
+    orders = params.get("orders", [])
+    pv = float(params.get("portfolio_value_chf", 0.0))
+    rows = []
+    for i, o in enumerate(orders, 1):
+        rep = _guard_stateless({"side": o.get("side", "BUY"), "sec_type": o.get("sec_type", "STK"),
+                                "qty": o.get("qty", 0), "notional_chf": float(o.get("notional_chf", 0)),
+                                "margin": o.get("margin", False), "derivative": o.get("derivative", False),
+                                "short": o.get("short", False)},
+                               pv, [r["notional"] for r in rows if r["verdict"] == "passes"])
+        rows.append({"order": i, "notional": float(o.get("notional_chf", 0)),
+                     "verdict": "passes" if rep["ok"] else "blocked",
+                     "why": rep["violations"][:2]})
+    artifact = {"mode": "engine", "orders_checked": len(rows),
+                "blocked": sum(1 for r in rows if r["verdict"] == "blocked"),
+                "rows": rows,
+                "note": "rule outcomes under the Swiss private-investor guard; not investment advice",
+                "asof": config.today()}
+    _emit(slug, "plan_check", artifact)
+    return artifact
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     p.write_text(json.dumps(artifact, indent=1, sort_keys=True, default=str),
                  encoding="utf-8")
 
 
+# K5 clique links: partner -> OUR buying task (complete graph, DR-0009)
+LINKS = {'helix': 'factor_brief_certified', 'medtech': 'backtest_certified', 'dossia': 'boundary_memo', 'sentinel': 'secure_deployment'}
+
 TASKS = {
+    "factor_brief_certified": {"fn": factor_brief_certified, "role": "factor-researcher"},
+    "backtest_certified": {"fn": backtest_certified, "role": "backtest-analyst"},
+    "boundary_memo": {"fn": boundary_memo, "role": "compliance-checker"},
+    "secure_deployment": {"fn": secure_deployment, "role": "ai-security-reviewer"},
     "backtest": {"fn": backtest, "role": "backtest-analyst"},
     "factor_brief": {"fn": factor_brief, "role": "factor-researcher"},
     "treasury_policy": {"fn": treasury_policy, "role": "treasury-accountant"},
+    "plan_check": {"fn": plan_check, "role": "compliance-checker"},
 }

@@ -31,7 +31,9 @@ META = {
         {"key": "turnaround_hours", "layer": "Q", "owner": "squad-coordinator", "floor": None},
     ],
     "squad_roles": ["bio-qc-analyst", "eda-statistician", "literature-synthesizer",
-                    "pipeline-operator", "verifier"],
+                    "pipeline-operator", "verifier",
+                    "treasury-accountant",
+                    "ai-security-reviewer"],
 }
 
 CODON_START = {"ATG"}
@@ -304,13 +306,88 @@ def helix_report_html(params: dict, slug: str) -> dict:
             "client": client, "asof": config.today()}
 
 
+
+
+def qc_with_trail(params: dict, slug: str) -> dict:
+    """K5 link H-M: helix buys alcoa_trail FROM Medtech via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on helix's P&L (I7)."""
+    import platformsvc
+    from companies import medtech as seller
+    ticket = platformsvc.request(slug, "alcoa_trail", spec="ALCOA+ trail for QC run", units=1)
+    bought = seller.alcoa_log({"entry":{"experiment":"helix-qc","subject":params.get("fasta","")[:40],"value":1,"unit":"run","recorded_by":"helix"}}, "medtech")
+    platformsvc.serve(ticket["id"], {"ref": f"helix-qc_with_trail:{ticket['id']}"})
+    out = sequence_qc(params, slug)
+    out["internal_purchase"] = {"from": "Medtech", "service": "alcoa_trail",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["alcoa_trail"] = bought["trail_lines"]; out["provenance"] = f"audit trail via CogOps Medtech ticket {ticket['id']}"
+    return out
+
+
+
+def qc_with_alcoa(params: dict, slug: str) -> dict:
+    """K5 link H-D: helix buys alcoa_qc FROM Dossia via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on helix's P&L (I7)."""
+    import platformsvc
+    from companies import dossia as seller
+    ticket = platformsvc.request(slug, "alcoa_qc", spec="ALCOA+ QC of QC report", units=1)
+    bought = seller.qc_checklist({"document":{"author":"helix","reviewer":"pending-PI","text":"qc","timestamp":config.stamp(),"source_ref":"engine","numbers_carry_asof":True,"has_todos":False,"units_consistent":True,"stored_in_ledger":True,"path":"outbox"}}, "dossia")
+    platformsvc.serve(ticket["id"], {"ref": f"helix-qc_with_alcoa:{ticket['id']}"})
+    out = sequence_qc(params, slug)
+    out["internal_purchase"] = {"from": "Dossia", "service": "alcoa_qc",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["alcoa_pass_rate"] = bought["pass_rate_pct"]; out["provenance_qc"] = f"ALCOA+ checklist via CogOps Dossia ticket {ticket['id']}"
+    return out
+
+
+
+def treasury_setup(params: dict, slug: str) -> dict:
+    """K5 link H-C: helix buys treasury_policy FROM Capital via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on helix's P&L (I7)."""
+    import platformsvc
+    from companies import capitalco as seller
+    ticket = platformsvc.request(slug, "treasury_policy", spec="treasury policy for Helix sweep", units=1)
+    bought = seller.treasury_policy({}, "capitalco")
+    platformsvc.serve(ticket["id"], {"ref": f"helix-treasury_setup:{ticket['id']}"})
+    out = {"mode":"engine","company":"helix"}
+    out["internal_purchase"] = {"from": "Capital", "service": "treasury_policy",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["policy"] = bought["policy"]
+    return out
+
+
+
+def secure_deployment(params: dict, slug: str) -> dict:
+    """K5 link H-S: helix buys ai_sec_review FROM Sentinel via internal-market
+    ticket (DR-0009 price). Integrated into the deliverable with provenance;
+    the charge lands on helix's P&L (I7)."""
+    import platformsvc
+    from companies import sentinel as seller
+    ticket = platformsvc.request(slug, "ai_sec_review", spec="security review of delivery portal", units=1)
+    bought = seller.ai_security_review({"kb_first":True,"provider_labels":True,"refuses_advice":True,"gated_actions":True}, "sentinel")
+    platformsvc.serve(ticket["id"], {"ref": f"helix-secure_deployment:{ticket['id']}"})
+    out = {"mode":"engine","company":"helix"}
+    out["internal_purchase"] = {"from": "Sentinel", "service": "ai_sec_review",
+                                 "ticket": ticket["id"], "notional_chf": ticket["notional_chf"]}
+    out["security"] = {"containment": bought.get("containment_rate_pct"), "config": bought["config_checks"], "ticket_ref": ticket["id"]}
+    return out
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     p.write_text(json.dumps(artifact, indent=1, sort_keys=True, default=str),
                  encoding="utf-8")
 
 
+# K5 clique links: partner -> OUR buying task (complete graph, DR-0009)
+LINKS = {'medtech': 'qc_with_trail', 'dossia': 'qc_with_alcoa', 'capitalco': 'treasury_setup', 'sentinel': 'secure_deployment'}
+
 TASKS = {
+    "qc_with_trail": {"fn": qc_with_trail, "role": "verifier"},
+    "qc_with_alcoa": {"fn": qc_with_alcoa, "role": "verifier"},
+    "treasury_setup": {"fn": treasury_setup, "role": "treasury-accountant"},
+    "secure_deployment": {"fn": secure_deployment, "role": "ai-security-reviewer"},
     "sequence_qc": {"fn": sequence_qc, "role": "bio-qc-analyst"},
     "table1": {"fn": table1, "role": "eda-statistician"},
     "lit_surveil": {"fn": lit_surveil, "role": "literature-synthesizer"},

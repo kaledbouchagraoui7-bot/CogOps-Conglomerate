@@ -1,0 +1,8 @@
+name = "cogops-dossia"
+compatibility_date = "2026-05-01"
+pages_build_output_dir = "public"
+
+kv_namespaces = [
+  { binding = "SIGNUPS", id = "542701a1d5b54c8da9638c5ceb40f1e7" }
+]
+# Secrets (set via wrangler/dashboard, never here): ADMIN_TOKEN, NOTIFY_URL

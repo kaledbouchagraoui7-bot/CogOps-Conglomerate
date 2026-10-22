@@ -637,6 +637,43 @@ def main() -> int:
           ov["notional_chf"] == 8.0 and ov["adjustment"] <= 2.0 and ov["formula"]
           and lifecycle.load("terra")["platform_charges_chf"] == before_t + 8.0)
 
+    # ================= 13h. the K5 clique (complete graph, DR-0009) =========
+    import itertools as _it
+    clique = ["helix", "dossia", "medtech", "capitalco", "sentinel"]
+    missing_edges = []
+    for a, b in _it.combinations(clique, 2):
+        ma, mb = registry.module(a), registry.module(b)
+        ta = getattr(ma, "LINKS", {}).get(b)
+        tb = getattr(mb, "LINKS", {}).get(a)
+        if not (ta and tb and ta in ma.TASKS and tb in mb.TASKS):
+            missing_edges.append(f"{a}-{b}")
+    check("clique: complete graph K5 — all 10 edges have buy-tasks BOTH directions",
+          not missing_edges, str(missing_edges))
+    qt = registry.run_task("helix", "qc_with_trail", {"fasta": ">NM_T\nATGGGCTAA"})
+    check("edge H-M executes: trail bought from Medtech, charge on Helix P&L",
+          qt["internal_purchase"]["from"] == "Medtech"
+          and qt["internal_purchase"]["notional_chf"] == 4.0
+          and qt["alcoa_trail"] >= 1)
+    fb = registry.run_task("capitalco", "factor_brief_certified", {
+        "rows": [{"factor": i, "target": i * 2 + (i % 3)} for i in range(9)]})
+    check("edge H-C executes: stats certified by Helix kernel on Capital brief",
+          "Helix kernel" in fb["stats_certified_by"]
+          and fb["internal_purchase"]["notional_chf"] == 12.0)
+    es = registry.run_task("sentinel", "edge_snapshot",
+                           {"url": "https://cogops-growth.pages.dev"})
+    check("sentinel free sample: edge snapshot scores live headers (read-only)",
+          es.get("mode", "").startswith("engine") and es.get("score_pct", 0) >= 60
+          and es["checks"].get("tls") is True)
+    pc = registry.run_task("capitalco", "plan_check", {
+        "portfolio_value_chf": 1000,
+        "orders": [{"side": "SELL", "notional_chf": 59000, "qty": 500},
+                   {"side": "BUY", "notional_chf": 500, "qty": 4}]})
+    check("capital free sample: plan_check blocks churn sell, passes small buy",
+          pc["rows"][0]["verdict"] == "blocked" and pc["rows"][1]["verdict"] == "passes")
+    ts = registry.run_task("sentinel", "treasury_setup", {})
+    check("edge C-S executes: Sentinel buys treasury policy at DR-0009 price",
+          ts["internal_purchase"]["notional_chf"] == 15.0 and "sweep_share_of_net_profit" in ts["policy"])
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))
