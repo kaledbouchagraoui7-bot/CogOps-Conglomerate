@@ -808,6 +808,31 @@ def main() -> int:
     check("cbs: chapter amendment changes system version (versioned like software)",
           v2 != cbs.version()["cbs_version"])
 
+    # ================= 16. DR-0013 dormancy + DR-0014 instrument ============
+    import dormancy
+    dec_txt = (config.ROOT.parent / "structure" / "decisions.md").read_text(encoding="utf-8")
+    check("dormancy: partition of registry + DR cited + effective date",
+          dormancy.assert_consistent(registry.COMPANIES, dec_txt) == [])
+    d0 = dormancy.load()["dormant"][0]
+    aid_r = gates.stage(d0, {"external": True, "kind": "outreach"})
+    st_r = gates.queue("REFUSED")
+    check("dormancy: external action of dormant company REFUSED fail-closed",
+          any(x["id"] == aid_r and "DR-0013" in x["reason"] for x in st_r))
+    aid_o = gates.stage(d0, {"external": True, "kind": "reactivation",
+                             "dr_override": "DR-00XX", "money_movement": True})
+    q_all = {x["id"]: x for x in gates.queue("PENDING")}
+    check("dormancy: dr_override reactivation passes the door as G3 pending",
+          q_all.get(aid_o, {}).get("status") == "PENDING"
+          and q_all.get(aid_o, {}).get("level") == "G3")
+    aid_a = gates.stage("growth", {"external": True, "kind": "outreach"})
+    check("dormancy: active line still stages normally (no regression)",
+          gates.queue("REFUSED") and
+          all(x["id"] != aid_a for x in gates.queue("REFUSED")))
+    res = (config.ROOT.parent / "legal" / "reservation-agreement.md")
+    rtxt = res.read_text(encoding="utf-8") if res.exists() else ""
+    check("DR-0014: reservation template exists, zero-consideration + majority date",
+          res.exists() and "2027-06-16" in rtxt and "EUR 0 / CHF 0" in rtxt)
+
     print()
     if FAILS:
         print(f"FAILURES ({len(FAILS)}): {FAILS}")

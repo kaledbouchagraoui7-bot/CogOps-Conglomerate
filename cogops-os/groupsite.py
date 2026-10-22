@@ -111,9 +111,12 @@ def _company_cards(st: dict) -> str:
         acc = theme["companies"][slug]["accent"]
         cnt = st["counts"].get(slug)
         cnt_s = f" · queue {cnt}" if isinstance(cnt, int) else ""
+        dorm = (' <span class="pill" style="background:#3a2c14;color:var(--warn);'
+                'border:1px solid var(--warn)">DORMANT · DR-0013</span>'
+                if c.get("dormant") else "")
         cards.append(
             f'<div class="card"><h3><span class="dot" style="background:{acc}"></span>'
-            f'{c["name"].replace("CogOps ", "")} <span class="pill s{c["stage"]}">S{c["stage"]} {c["stage_name"]}</span></h3>'
+            f'{c["name"].replace("CogOps ", "")} <span class="pill s{c["stage"]}">S{c["stage"]} {c["stage_name"]}</span>{dorm}</h3>'
             f'<p>{theme["companies"][slug]["tagline"].capitalize()}.</p>'
             f'<p style="margin-top:6px">Promise: <b style="color:var(--ink)">{c["promise"]}</b>{cnt_s}<br>'
             f'Boundary: {c["boundary"]}</p>'

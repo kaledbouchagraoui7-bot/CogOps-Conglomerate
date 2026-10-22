@@ -55,9 +55,22 @@ def _save(q: dict) -> None:
 
 
 def stage(company: str, action: dict, proposed_by: str = "squad") -> str:
-    """Stage an action. Returns action id. G1 actions are auto-approved (notify)."""
+    """Stage an action. Returns action id. G1 actions are auto-approved (notify).
+    DR-0013: external/money/public actions of dormant companies are REFUSED at
+    the door (fail-closed), unless the action carries a DR reactivation override."""
+    import dormancy
+    block = dormancy.blocked(company, action)
     dtype, level, reason = classify(action)
     aid = f"GA-{config.today().replace('-', '')}-{len(_load()) + 1:04d}"
+    if block:
+        q = _load()
+        q[aid] = {"id": aid, "company": company, "action": action, "type": dtype,
+                  "level": level, "reason": block, "status": "REFUSED",
+                  "proposed_by": proposed_by, "staged_at": config.stamp()}
+        _save(q)
+        ledger.decide("gate_refused_dormancy", aid, {"company": company,
+                                                     "reason": block})
+        return aid
     q = _load()
     q[aid] = {"id": aid, "company": company, "action": action, "type": dtype,
               "level": level, "reason": reason, "status": "PENDING",

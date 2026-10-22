@@ -1,0 +1,393 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Vault · tree</title><style>
+:root{--bg:#0a0d12;--ink:#e8edf6;--dim:#93a1b8;--acc:#7ee0b8;--acc2:#6ea8fe;--warn:#ffcf6e;--line:#1e2836;--card:#101722}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 ui-sans-serif,system-ui,Segoe UI,Roboto,sans-serif}
+header{border-bottom:1px solid var(--line);padding:18px 28px;display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}
+header a{color:var(--dim);text-decoration:none}header a.on,header a:hover{color:var(--acc)}
+header .t{color:var(--ink);font-weight:700;letter-spacing:.4px}
+main{max-width:1060px;margin:0 auto;padding:28px}
+h1{font-size:26px;margin:6px 0 4px}h2{font-size:19px;margin:26px 0 8px;color:var(--acc)}h3{font-size:15.5px;margin:18px 0 6px}
+p{color:var(--dim)}li{color:var(--dim);margin:3px 0}.k{color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:10px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+pre{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto;color:#cfe3d8;font-size:12.5px;line-height:1.5}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:2px 10px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--acc2)}
+.pill.d{color:var(--warn);border-color:var(--warn)}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:10px 0}
+td,th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13.5px;color:var(--dim)}th{color:var(--ink)}
+a{color:var(--acc2)}code{color:var(--acc);background:#0e1520;padding:1px 5px;border-radius:6px}
+img{max-width:100%;border:1px solid var(--line);border-radius:14px}
+.warn{color:var(--warn)}
+</style></head><body><header><span class="t">COGOPS VAULT</span><a href="index.html">Overview</a><a href="tree.html">Path structure</a><a href="ai.html">AI & OS</a><a href="decisions.html">Decisions</a><a href="companies.html">Companies</a><a href="analysis.html">Analyst</a><a href="actions.html">Action kit</a><span style="margin-left:auto" class="pill">founder-only</span></header><main><h1>Complete path structure</h1><p>Generated from the repository at build time; excludes .git / caches / runtime state.</p><pre>CogOps-Conglomerate/
+├── analysis/
+│   ├── founder-actions.md
+│   └── round3.md
+├── brand/
+│   ├── cogops-capitalco.svg
+│   ├── cogops-dossia.svg
+│   ├── cogops-group.svg
+│   ├── cogops-growth.svg
+│   ├── cogops-helix.svg
+│   ├── cogops-intelligence.svg
+│   ├── cogops-medtech.svg
+│   ├── cogops-sentinel.svg
+│   ├── cogops-talent.svg
+│   ├── cogops-terra.svg
+│   └── cogops-verde.svg
+├── capitalco/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   └── wrangler.toml
+│   └── OFFER.md
+├── cogops-os/
+│   ├── cbs/
+│   │   ├── birth.md
+│   │   ├── build.md
+│   │   ├── kill.md
+│   │   ├── law.md
+│   │   ├── money.md
+│   │   ├── operate.md
+│   │   └── verify.md
+│   ├── companies/
+│   │   ├── __init__.py
+│   │   ├── capitalco.py
+│   │   ├── dossia.py
+│   │   ├── growth.py
+│   │   ├── helix.py
+│   │   ├── intelligence.py
+│   │   ├── medtech.py
+│   │   ├── sentinel.py
+│   │   ├── talent.py
+│   │   ├── terra.py
+│   │   └── verde.py
+│   ├── data/
+│   │   ├── agent_roles.json
+│   │   ├── ai_act_watch.json
+│   │   ├── curricula.json
+│   │   ├── dormancy.json
+│   │   ├── emission_factors.json
+│   │   ├── ich_m4_modules.json
+│   │   ├── mdr_sections.json
+│   │   ├── security_controls.json
+│   │   └── theme.json
+│   ├── automaton.py
+│   ├── autonomy.py
+│   ├── cadence.py
+│   ├── capital.py
+│   ├── cbs.py
+│   ├── cogops.py
+│   ├── config.py
+│   ├── dashboard.py
+│   ├── dormancy.py
+│   ├── gates.py
+│   ├── groupsite.py
+│   ├── holding.py
+│   ├── inbox.py
+│   ├── ledger.py
+│   ├── lifecycle.py
+│   ├── llm.py
+│   ├── metrics.py
+│   ├── nervous.py
+│   ├── notify.py
+│   ├── platformsvc.py
+│   ├── README.md
+│   ├── registry.py
+│   ├── selftest.py
+│   ├── squad.py
+│   └── statsnr.py
+├── dossia/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   └── wrangler.toml
+│   └── OFFER.md
+├── group/
+│   └── site/
+│       ├── .wrangler/
+│       │   ├── cache/
+│       │   │   └── pages.json
+│       │   └── tmp/
+│       ├── functions/
+│       │   └── api/
+│       │       ├── count.js
+│       │       ├── export.js
+│       │       └── signup.js
+│       ├── public/
+│       │   ├── 404.html
+│       │   ├── _headers
+│       │   ├── favicon.svg
+│       │   ├── governance.html
+│       │   ├── imprint.html
+│       │   ├── index.html
+│       │   ├── og-image.png
+│       │   ├── privacy.html
+│       │   ├── robots.txt
+│       │   └── sitemap.xml
+│       └── wrangler.toml
+├── growth/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── .well-known/
+│   │   │   │   └── security.txt
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   ├── sitemap.xml
+│   │   │   └── terms.html
+│   │   └── wrangler.toml
+│   ├── tools/
+│   │   └── qr_invoice.py
+│   └── OFFER.md
+├── helix/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   └── wrangler.toml
+│   └── OFFER.md
+├── holding/
+│   └── README.md
+├── intelligence/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   └── wrangler.toml
+│   └── OFFER.md
+├── legal/
+│   ├── dpa.md
+│   ├── reservation-agreement.md
+│   ├── retention.md
+│   ├── ropa.md
+│   └── tos.md
+├── medtech/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   └── wrangler.toml
+│   └── OFFER.md
+├── research/
+│   ├── 00-methodology.md
+│   ├── 01-berkshire-hathaway.md
+│   ├── 02-alphabet.md
+│   ├── 03-amazon.md
+│   ├── 04-constellation-software.md
+│   ├── 05-danaher.md
+│   ├── 06-haier.md
+│   ├── 07-venture-studios.md
+│   ├── 08-micro-holdcos.md
+│   ├── 09-swiss-holding-law.md
+│   └── 10-cross-case-synthesis.md
+├── sentinel/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   └── wrangler.toml
+│   └── OFFER.md
+├── structure/
+│   ├── decisions.md
+│   └── OPERATING-STRUCTURE.md
+├── talent/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   └── wrangler.toml
+│   └── OFFER.md
+├── terra/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   └── wrangler.toml
+│   └── OFFER.md
+├── tools/
+│   ├── clique_copy.json
+│   ├── clique_sitegen.py
+│   └── clique_template.html
+├── vault/
+│   ├── site/
+│   │   ├── functions/
+│   │   │   ├── api/
+│   │   │   │   └── login.ts
+│   │   │   └── _middleware.ts
+│   │   └── public/
+│   │       ├── assets/
+│   │       │   └── map.png
+│   │       └── index.html
+│   └── build_vault.py
+├── verde/
+│   ├── site/
+│   │   ├── .wrangler/
+│   │   │   ├── cache/
+│   │   │   │   └── pages.json
+│   │   │   └── tmp/
+│   │   ├── functions/
+│   │   │   └── api/
+│   │   │       ├── count.js
+│   │   │       ├── export.js
+│   │   │       └── signup.js
+│   │   ├── public/
+│   │   │   ├── 404.html
+│   │   │   ├── _headers
+│   │   │   ├── favicon.svg
+│   │   │   ├── imprint.html
+│   │   │   ├── index.html
+│   │   │   ├── og-image.png
+│   │   │   ├── privacy.html
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   └── wrangler.toml
+│   └── OFFER.md
+├── .gitignore
+├── CAPABILITIES.html
+├── dashboard_sample.html
+├── LEGAL.md
+├── README.md
+└── ROADMAP.md</pre></main></body></html>

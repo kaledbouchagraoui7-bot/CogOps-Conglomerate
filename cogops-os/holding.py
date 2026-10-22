@@ -169,10 +169,12 @@ def group_status(fetch_counts: bool = False) -> dict:
     import metrics
     import registry
     registry.ensure_registered()
+    import dormancy
     comps = []
     for slug in registry.COMPANIES:
         c = lifecycle.load(slug)
         comps.append({"slug": slug, "name": c["name"], "stage": c["stage"],
+                      "dormant": dormancy.is_dormant(slug),
                       "stage_name": lifecycle.STAGES[c["stage"]],
                       "revenue": c["revenue_chf"], "contribution": c["contribution_chf"],
                       "envelope": lifecycle.envelope_of(c), "spent": c["spent_chf"],
