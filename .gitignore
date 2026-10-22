@@ -1,3 +1,6 @@
 cogops-os/runtime/
 __pycache__/
 *.pyc
+
+# deploy-time copies (wrangler>=4 requires functions inside the output dir)
+*/site/public/functions/
