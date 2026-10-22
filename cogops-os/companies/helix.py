@@ -374,6 +374,33 @@ def secure_deployment(params: dict, slug: str) -> dict:
     out["security"] = {"containment": bought.get("containment_rate_pct"), "config": bought["config_checks"], "ticket_ref": ticket["id"]}
     return out
 
+
+
+def intelligence_ops(params: dict, slug: str) -> dict:
+    """Star link: this company buys Intelligence's deployment/automation service
+    via internal ticket (ai_ops, DR-0010 price)."""
+    import platformsvc
+    from companies import intelligence as intel
+    kind = params.get("kind", "automation_audit")
+    ticket = platformsvc.request(slug, "ai_ops", spec=f"{kind} for {slug}", units=1)
+    if kind == "deploy":
+        out = intel.deploy_client({"client": params.get("client", f"{slug}-client"),
+                                   "services": params.get("services",
+                                       ["site_factory", "llm_gateway", "crm_portal"])},
+                                  "intelligence")
+    else:
+        out = intel.automation_audit({"answers": params.get("answers", {
+            "process": f"{slug} delivery", "volume_month": 20, "minutes_per": 30,
+            "steps": ["collect client inputs", "draft deliverable", "human review",
+                      "approve delivery", "send to client"]})}, "intelligence")
+    platformsvc.serve(ticket["id"], {"ref": f"{slug}-intel:{ticket['id']}"})
+    return {"mode": "engine", "kind": kind,
+            "internal_purchase": {"from": "intelligence", "service": "ai_ops",
+                                  "ticket": ticket["id"],
+                                  "notional_chf": ticket["notional_chf"]},
+            "result": out, "asof": config.today()}
+
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     p.write_text(json.dumps(artifact, indent=1, sort_keys=True, default=str),
@@ -381,9 +408,10 @@ def _emit(slug: str, kind: str, artifact: dict) -> None:
 
 
 # K5 clique links: partner -> OUR buying task (complete graph, DR-0009)
-LINKS = {'medtech': 'qc_with_trail', 'dossia': 'qc_with_alcoa', 'capitalco': 'treasury_setup', 'sentinel': 'secure_deployment'}
+LINKS = {"intelligence": "intelligence_ops", 'medtech': 'qc_with_trail', 'dossia': 'qc_with_alcoa', 'capitalco': 'treasury_setup', 'sentinel': 'secure_deployment'}
 
 TASKS = {
+    "intelligence_ops": {"fn": intelligence_ops, "role": "pipeline-operator"},
     "qc_with_trail": {"fn": qc_with_trail, "role": "verifier"},
     "qc_with_alcoa": {"fn": qc_with_alcoa, "role": "verifier"},
     "treasury_setup": {"fn": treasury_setup, "role": "treasury-accountant"},

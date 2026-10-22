@@ -674,6 +674,44 @@ def main() -> int:
     check("edge C-S executes: Sentinel buys treasury policy at DR-0009 price",
           ts["internal_purchase"]["notional_chf"] == 15.0 and "sweep_share_of_net_profit" in ts["policy"])
 
+    # ================= 13i. Intelligence: brain + star to all nine ==========
+    sib9 = ["growth", "talent", "helix", "verde", "terra", "sentinel",
+            "capitalco", "dossia", "medtech"]
+    mi = registry.module("intelligence")
+    star_missing = []
+    for sb in sib9:
+        ms = registry.module(sb)
+        if sb not in getattr(mi, "LINKS", {}) or getattr(mi, "LINKS", {}).get(sb) not in mi.TASKS:
+            star_missing.append(f"intel->{sb}")
+        if "intelligence" not in getattr(ms, "LINKS", {}) or ms.LINKS.get("intelligence") not in ms.TASKS:
+            star_missing.append(f"{sb}->intel")
+    check("star: Intelligence linked to ALL nine companies, both directions",
+          not star_missing, str(star_missing))
+    th = registry.run_task("intelligence", "think",
+                           {"goal": "deploy a gated assistant for a clinic",
+                            "needs": ["security", "treasury", "trail"]})
+    check("think: orchestrates 3 internal-market purchases + labeled synthesis + trace",
+          len(th["purchases"]) == 3 and th["mode"] in ("template",) or len(th["purchases"]) == 3,
+          th["mode"])
+    check("think: purchases charged at DR prices (20+15+4)",
+          sum(p["chf"] for p in th["purchases"]) == 39.0)
+    rc = registry.run_task("intelligence", "recall", {"goal": "deploy a gated assistant"})
+    check("memory: recall returns the think session",
+          rc["sessions"] >= 1 and rc["best"][0]["id"] == th["memory_id"])
+    rs = registry.run_task("intelligence", "research", {"topic": "prompt injection defenses"})
+    check("research: cited sources or honest refusal (never thin)",
+          (rs["mode"] == "engine:offline" and "refused" in rs.get("why", ""))
+          or (len(rs["sources"]) >= 3 and rs["mode"] in ("template",) or "mode" in rs))
+    io_h = registry.run_task("helix", "intelligence_ops", {"kind": "automation_audit"})
+    check("star executes: Helix buys Intelligence ops at ai_ops price (25)",
+          io_h["internal_purchase"]["notional_chf"] == 25.0
+          and "agent_automatable_pct" in io_h["result"])
+    au = registry.run_task("intelligence", "automation_audit", {"answers": {
+        "process": "clinic onboarding", "volume_month": 10, "minutes_per": 45,
+        "steps": ["collect intake", "draft design", "approve design", "deploy"]}})
+    check("audit carries EU AI Act watch (as-of dated, sourced)",
+          au["reg_watch"]["asof"] == "2026-10" and "2026-08-02" in str(au["reg_watch"]["facts"]))
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))

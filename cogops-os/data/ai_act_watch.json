@@ -1,0 +1,15 @@
+{
+  "asof": "2026-10",
+  "sources": [
+    "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+    "https://www.dataguard.com/eu-ai-act/timeline",
+    "https://artificialintelligenceact.eu/implementation-timeline/"
+  ],
+  "facts": [
+    "EU AI Act entered into force 2024-08-01; general application 2026-08-02.",
+    "Digital Omnibus on AI (Regulation (EU) 2026/1744) in force 2026-07-27: high-risk obligations moved to 2027-12-02 and 2028-08-02.",
+    "GPAI models placed on the market before 2026-08-02 must comply by 2027-08-02.",
+    "Prohibited-practices bans and AI-literacy duties apply since 2025-02-02."
+  ],
+  "use": "automation_audit attaches this watch (as-of dated) to every deployment design; Sentinel's AI-security review cross-checks it."
+}

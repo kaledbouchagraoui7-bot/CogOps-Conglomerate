@@ -38,6 +38,7 @@ CATALOG = {
     "lit_feed":       {"chf": 9.0,  "sla_h": 24, "per": "feed",  "provides": "PMID-traceable literature feed (internal, DR-0009)"},
     "mdr_tree":       {"chf": 15.0, "sla_h": 24, "per": "tree",  "provides": "MDR Annex II/III doc tree (internal, DR-0009)"},
     "ra_feed":        {"chf": 9.0,  "sla_h": 24, "per": "feed",  "provides": "regulatory surveillance feed (internal, DR-0009)"},
+    "ai_ops":         {"chf": 25.0, "sla_h": 24, "per": "job",   "provides": "Intelligence deployment/automation-audit service (internal, DR-0010)"},
     "climate_risk":   {"chf": 10.0, "sla_h": 48, "per": "screen","provides": "physical/transition risk screen (internal, DR-0008)"},
     "pseo_page":      {"chf": 10.0, "sla_h": 24, "per": "page",  "provides": "QA-passed programmatic page (internal, DR-0002)"},
     "gate_services":  {"chf": 0.0,  "sla_h": 0,  "provides": "Nexus gate, decision ledger, sweep engine"},

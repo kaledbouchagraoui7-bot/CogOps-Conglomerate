@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CogOps Intelligence — the multiplier</title>
+<meta name="description" content="AI-operated back offices: deployments, automation audits and grounded concierges — linked to all nine CogOps companies, every action human-gated. Free automation audit in 48 h.">
+<meta property="og:title" content="CogOps Intelligence — the multiplier">
+<meta property="og:description" content="Your back office, run by agents under your keystroke. Deployments, audits, grounded assistants — with the whole CogOps group as its evidence supply chain.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://cogops-intelligence.pages.dev/">
+<meta name="theme-color" content="#0b0e14">
+<meta property="og:image" content="https://cogops-intelligence.pages.dev/og-image.png">
+<meta property="og:url" content="https://cogops-intelligence.pages.dev/">
+<meta property="og:site_name" content="CogOps Intelligence">
+<style>
+:root{--bg:#0b0e14;--ink:#e8edf6;--dim:#9aa7bf;--acc:#7ee0b8;--acc2:#6ea8fe;--line:#222c40;--card:#121a28}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow-x:hidden}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}a{color:var(--acc2);text-decoration:none}
+.blobs{position:fixed;inset:0;z-index:-1;filter:blur(90px);opacity:.5}.blobs i{position:absolute;border-radius:50%}
+.blobs i:nth-child(1){width:480px;height:480px;background:#1d6e4e;top:-120px;left:-100px}
+.blobs i:nth-child(2){width:420px;height:420px;background:#274a7d;top:30%;right:-140px}
+nav{position:sticky;top:0;z-index:9;backdrop-filter:blur(14px);background:rgba(11,14,20,.72);border-bottom:1px solid var(--line)}
+.navin{display:flex;align-items:center;gap:18px;padding:14px 20px}
+.brand{font-weight:800;letter-spacing:.6px}.brand em{color:var(--acc);font-style:normal}
+.nlinks{display:flex;gap:16px;margin-left:auto;color:var(--dim);font-size:13.5px}.nlinks a:hover{color:var(--ink)}
+.btn{display:inline-block;border:1px solid var(--acc);color:var(--acc);background:transparent;border-radius:99px;padding:9px 18px;font-weight:600;font-size:13.5px;cursor:pointer;transition:.2s}
+.btn:hover{background:rgba(126,224,184,.12)}.btn.grad{background:linear-gradient(135deg,#2ea97c,#3d7dd8);border:none;color:#fff}
+.hero{text-align:center;padding:90px 0 52px}
+.badge{display:inline-block;border:1px solid var(--line);background:var(--card);color:var(--acc);border-radius:99px;padding:6px 14px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:20px}
+h1{font-size:clamp(32px,6vw,54px);line-height:1.08;letter-spacing:-.5px}
+h1 em{font-style:normal;background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--dim);max-width:680px;margin:18px auto 30px;font-size:17px}
+.counter{color:#ffcf6e;font-size:13.5px;margin-top:14px;min-height:20px}
+.linkband{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:13px 20px;color:var(--dim);font-size:13px;text-align:center}
+.linkband b{color:var(--acc)}
+.grade{border:1px solid #6b561f;background:#3a2f14;color:#ffcf6e;border-radius:12px;padding:11px 18px;font-size:13px;max-width:780px;margin:0 auto}
+form.signup{max-width:560px;margin:0 auto;display:grid;gap:10px;text-align:left}
+form.signup .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input,select,textarea{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:12px 14px;font:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc)}
+.hp{position:absolute;left:-9999px}.msg{min-height:22px;font-size:14px;text-align:center;margin-top:8px}.msg.ok{color:var(--acc)}.msg.bad{color:#ff8f8f}
+section{padding:56px 0}.eyebrow{color:var(--acc);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+h2{font-size:clamp(24px,3.6vw,32px);margin-bottom:22px;letter-spacing:-.3px}
+.grid{display:grid;gap:16px}.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.card h3{font-size:17px;margin:8px 0}.card p{color:var(--dim);font-size:14px}.num{color:var(--acc);font-weight:800;font-size:13px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
+th{color:var(--acc);font-size:12px;letter-spacing:1px;text-transform:uppercase}td:last-child,th:last-child{text-align:right}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 20px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:600}.faq p{color:var(--dim);margin-top:10px;font-size:14px}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:13px;padding:32px 0;text-align:center}
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:12px 0;background:rgba(18,26,40,.5)}
+.mtrack{display:flex;gap:48px;white-space:nowrap;animation:mv 30s linear infinite;color:var(--dim);font-size:13px;width:max-content}
+.mtrack span b{color:var(--acc)}@keyframes mv{to{transform:translateX(-50%)}}
+.rv{opacity:0;transform:translateY(18px);transition:.6s}.rv.in{opacity:1;transform:none}
+@media(max-width:640px){.nlinks{display:none}form.signup .row{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"CogOps Intelligence",
+ "url":"https://cogops-intelligence.pages.dev/","description":"AI-operated back offices: deployments, automation audits, grounded concierges. Human-gated actions; linked to all nine CogOps companies.",
+ "email":"cogops.engine@gmail.com","areaServed":"CH","currenciesAccepted":"CHF",
+ "parentOrganization":{"@type":"Organization","name":"CogOps Group"}}
+</script></head><body>
+<div class="blobs"><i></i><i></i></div>
+<nav><div class="wrap navin">
+  <span class="brand">CogOps <em>Intelligence</em></span>
+  <div class="nlinks"><a href="#products">Services</a><a href="#boundary">Boundary</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="/imprint.html">Legal</a></div>
+  <a class="btn grad" href="#signup">Request the free audit</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="badge rv">The multiplier · Swiss-operated · a CogOps Group company</div>
+  <h1 class="rv">Your back office,<br><em>run by agents under your keystroke.</em></h1>
+  <p class="sub rv">Deployments, automation audits and grounded concierges — built on the same platform that runs our own ten companies. Every external, financial or irreversible action waits for a named human approval. Facts first: assistants answer from your knowledge base at zero model tokens, and label everything else.</p>
+  <div class="grade rv">Honesty, stated up front: no autonomous acting. Agents produce; humans approve. Answers carry their provider label (knowledge-base / model / template) — a reply never pretends to be smarter than it is.</div>
+  <div class="rv" style="margin-top:16px"><a class="btn grad" href="#signup">Get a free automation audit — 48 h</a></div>
+  <div class="counter rv" id="counter">…</div>
+</div></header>
+
+<div class="wrap"><div class="linkband rv"><b>The Multiplier, linked to all nine:</b>
+<a href="https://cogops-growth.pages.dev">Growth</a> · <a href="https://cogops-talent.pages.dev">Talent</a> · <a href="https://cogops-helix.pages.dev">Helix</a> · <a href="https://cogops-verde.pages.dev">Verde</a> · <a href="https://cogops-terra.pages.dev">Terra</a> · <a href="https://cogops-sentinel.pages.dev">Sentinel</a> · <a href="https://cogops-capital.pages.dev">Capital</a> · <a href="https://cogops-dossia.pages.dev">Dossia</a> · <a href="https://cogops-medtech.pages.dev">Medtech</a> — every deployment can pull verified evidence from any sibling through the group's internal market, at published prices.</div></div>
+
+<div class="marquee" style="margin-top:22px"><div class="mtrack">
+  <span><b>48 h</b> free automation audit</span><span><b>0</b> autonomous external actions</span><span><b>KB-first</b> zero-token fact answers</span><span><b>9</b> sibling companies as evidence supply</span><span><b>labeled</b> every AI answer</span><span><b>1 business day</b> reply time</span>
+  <span><b>48 h</b> free automation audit</span><span><b>0</b> autonomous external actions</span><span><b>KB-first</b> zero-token fact answers</span><span><b>9</b> sibling companies as evidence supply</span><span><b>labeled</b> every AI answer</span><span><b>1 business day</b> reply time</span>
+</div></div>
+
+<section id="products"><div class="wrap">
+  <div class="eyebrow rv">Services</div>
+  <h2 class="rv">Three ways to hand work to agents — safely.</h2>
+  <div class="grid g3">
+    <div class="card rv"><div class="num">① DEPLOYMENTS</div><h3>Your AI back office, live in days</h3><p>Site, portal, grounded assistant and CRM deployed from the group factory; KB built from your facts; gate policy configured so money and outbound actions need your keystroke. The group runs on this exact stack.</p></div>
+    <div class="card rv"><div class="num">② AUTOMATION AUDITS</div><h3>Process in, agent design out</h3><p>Your process mapped step by step: what agents take, what stays human (Type-1 gates), minutes saved per month, and the EU AI Act watch (as-of dated) attached. The audit is both the quote and the build spec.</p></div>
+    <div class="card rv"><div class="num">③ GROUNDED CONCIERGES</div><h3>Assistants that know their limits</h3><p>KB-first routing: your facts answered at zero model tokens; everything else labeled by provider; research answers carry cited sources or refuse. Injection-battery tested with Sentinel before launch.</p></div>
+  </div>
+</div></section>
+
+<section id="boundary"><div class="wrap">
+  <div class="eyebrow rv">Where we stop</div>
+  <h2 class="rv">The gate is the product.</h2>
+  <div class="grid g3">
+    <div class="card rv"><div class="num">B01</div><h3>No autonomous acting</h3><p>External, financial or irreversible actions are Type-1: staged, evidenced, and executed only on a named human's approval. The system has no code path around this.</p></div>
+    <div class="card rv"><div class="num">B02</div><h3>No fake intelligence</h3><p>Every answer carries its mode: knowledge-base, model (named provider), or template. Offline degrades honestly to templates — never a pretend AI.</p></div>
+    <div class="card rv"><div class="num">B03</div><h3>No black boxes</h3><p>Deliverables ship with reasoning traces, purchase tickets (when sibling evidence was used), version hashes and as-of dates. You can re-run and re-check.</p></div>
+  </div>
+</div></section>
+
+<section id="pricing"><div class="wrap">
+  <div class="eyebrow rv">Pricing</div>
+  <h2 class="rv">Audit first. Pay for proof.</h2>
+  <table class="rv">
+    <tr><th>Service</th><th>Model</th><th>Price</th></tr>
+    <tr><td>Automation audit (process → agent design, minutes saved)</td><td>one-off, 48 h</td><td><b>CHF 0</b></td></tr>
+    <tr><td>Full automation audit (on-site data, gate policy, AI Act watch)</td><td>per process</td><td>CHF 900</td></tr>
+    <tr><td>Deployment setup (site + portal + assistant + KB + gates)</td><td>one-off</td><td>CHF 2,400</td></tr>
+    <tr><td>Assistant retainer (hosting, KB updates, monitoring)</td><td>monthly, cancel monthly</td><td>CHF 500</td></tr>
+    <tr><td>Gateway ops (provider chain, cost caps, diagnostics)</td><td>monthly</td><td>CHF 150</td></tr>
+  </table>
+  <p class="rv" style="color:var(--dim);font-size:13px;margin-top:12px">All prices in CHF, excl. VAT where applicable. Swiss QR-bill, net 14 days. Model token spend on your assistant is capped per month at a number you set — the cap is enforced in code.</p>
+</div></section>
+
+<section id="signup"><div class="wrap" style="max-width:640px">
+  <div class="eyebrow rv" style="text-align:center">Start here</div>
+  <h2 class="rv" style="text-align:center">Request your free automation audit</h2>
+  <form class="signup rv" id="f">
+    <div class="row">
+      <input name="email" type="email" required placeholder="Work email *" aria-label="Work email">
+      <input name="company" type="text" required placeholder="Company *" aria-label="Company">
+    </div>
+    <div class="row">
+      <select name="product" required aria-label="Service needed">
+        <option value="" disabled selected>What do you need? *</option>
+        <option>Automation audit</option>
+        <option>Full deployment</option>
+        <option>Grounded concierge</option>
+        <option>Not sure — audit first</option>
+      </select>
+      <input name="icp" type="text" placeholder="The process that hurts (one line)" aria-label="Painful process">
+    </div>
+    <textarea name="note" rows="2" placeholder="Volume per month + minutes per run, if known (optional)" aria-label="Volume and minutes, optional"></textarea>
+    <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+    <button class="btn grad" type="submit" id="go">Request my free audit →</button>
+    <div class="msg" id="m"></div>
+  </form>
+  <p class="rv" style="color:var(--dim);font-size:13px;text-align:center;margin-top:14px">A named person replies within 1 business day; your audit returns within 48 hours of the process description.</p>
+</div></section>
+
+<section id="faq"><div class="wrap" style="max-width:760px">
+  <div class="eyebrow rv">FAQ</div>
+  <h2 class="rv">Straight answers</h2>
+  <div class="faq rv">
+    <details><summary>What exactly is in the free audit?</summary><p>Your process mapped step by step with three columns: agent-takes / human-gate / reason, plus estimated minutes saved per month and the gate policy we'd configure. It is the same document we build from if you say yes — no second discovery call.</p></details>
+    <details><summary>Can the agents act on their own at all?</summary><p>Internally and reversibly, yes (drafts, computations, research). Externally, financially or irreversibly: never without a named human's approval keystroke. That is architecture, not policy — there is no code path around the gate.</p></details>
+    <details><summary>What makes the assistants trustworthy?</summary><p>KB-first grounding (your facts, zero-token), provider labels on every other answer, injection-battery testing by CogOps Sentinel before launch, monthly token caps you set, and cited sources or refusal for research questions.</p></details>
+    <details><summary>Why should I believe this stack works?</summary><p>Ten CogOps companies run on it daily — five of them in regulated domains, linked in a complete graph of internal evidence trades. Your deployment is the same machine, one tenant down. Reference deployments are linked from every page footer.</p></details>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <b>CogOps Intelligence</b> · a CogOps Group company · Switzerland<br>
+  <b>The Multiplier, linked to all nine:</b> Growth · Talent · Helix · Verde · Terra · Sentinel · Capital · Dossia · Medtech<br>
+  <a href="mailto:cogops.engine@gmail.com">cogops.engine@gmail.com</a> · <a href="/privacy.html">Privacy</a> · <a href="/imprint.html">Impressum</a> · <a href="https://cogops-growth.pages.dev/terms.html">Terms (group-wide, v1.0)</a><br>
+  <span style="opacity:.7">© 2026 CogOps Group</span>
+</div></footer>
+
+<script>
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll(".rv").forEach(function(el){io.observe(el)});
+fetch("/api/count").then(function(r){return r.json()}).then(function(j){
+  document.getElementById("counter").textContent = j.count>0 ? "⚙ "+j.count+(j.count===1?" organization has":" organizations have")+" requested an audit" : "Request the first audit";
+}).catch(function(){document.getElementById("counter").textContent=""});
+document.getElementById("f").addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var m=document.getElementById("m"),b=document.getElementById("go");
+  var d=Object.fromEntries(new FormData(this).entries());
+  b.disabled=true;b.textContent="Sending…";m.textContent="";m.className="msg";
+  fetch("/api/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)})
+  .then(function(r){return r.json().then(function(j){return{s:r.status,j:j}})})
+  .then(function(x){
+    if(x.s===200&&x.j.ok){m.className="msg ok";m.textContent="✓ Received — you are #"+x.j.position+" in the queue. A named person replies within 1 business day; your audit follows within 48 h of the process description.";document.getElementById("f").reset();fetch("/api/count").then(function(r){return r.json()}).then(function(j){document.getElementById("counter").textContent="⚙ "+j.count+(j.count===1?" organization has":" organizations have")+" requested an audit"})}
+    else{m.className="msg bad";m.textContent=x.j.error==="duplicate"?"Already received — you are in the queue; a reply is on its way within 1 business day.":(x.j.error||"Transmission failed. Email cogops.engine@gmail.com and we take it from there.")}
+  }).catch(function(){m.className="msg bad";m.textContent="Transmission failed. Email cogops.engine@gmail.com and we take it from there."})
+  .finally(function(){b.disabled=false;b.textContent="Request my free audit →"});
+});
+</script>
+</body></html>

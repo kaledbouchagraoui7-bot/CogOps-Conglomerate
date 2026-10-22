@@ -33,6 +33,7 @@
 
 | # | Item | Owner | Status |
 |---|---|---|---|
+| 3.1f | Intelligence live + star to all nine (DR-0010) | ME + YOU | **LIVE ✓** 2026-10-22 |
 | 3.1e | Clique live: Sentinel, Capital, Dossia, Medtech + K5 links (DR-0009) | ME + YOU | **LIVE ✓** 2026-10-22 |
 | 3.1d | Verde + Terra live-validation & climate-pair link (DR-0008) | ME + YOU | **LIVE ✓** 2026-10-22 |
 | 3.1c | Talent live-validation (DR-0007) + Growth↔Talent link | ME + YOU | **LIVE ✓** 2026-10-22 |
