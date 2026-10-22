@@ -17,6 +17,70 @@ import urllib.request
 import config
 
 TIMEOUT_S = float(os.environ.get("LLM_TIMEOUT_S", "8"))
+
+# -------------------------------------------------- per-company cost caps --
+# Roadmap (Base): "An LLM gateway with a real API key and a cost cap per
+# company." Estimates are deliberately CONSERVATIVE (over-estimates) — a cap
+# that never lets you overspend beats a precise one that arrives late.
+MONTHLY_CAP_USD = float(os.environ.get("LLM_MONTHLY_CAP_USD", "5.00"))
+SPEND_FILE = None  # set lazily (config import cycle guard)
+
+# rough USD per 1M tokens by tier (as of 2026-10 catalog survey; estimates)
+PRICE_TIERS = {"frontier": (10.0, 50.0), "value": (2.0, 6.0), "free": (0.0, 0.0)}
+
+
+def _spend_file():
+    global SPEND_FILE
+    if SPEND_FILE is None:
+        import config
+        SPEND_FILE = config.RUNTIME_DIR / "llm_spend.json"
+    return SPEND_FILE
+
+
+def _spend_db() -> dict:
+    import json
+    p = _spend_file()
+    if p.exists():
+        return json.loads(p.read_text(encoding="utf-8"))
+    return {}
+
+
+def _spend_save(db: dict) -> None:
+    import json
+    _spend_file().write_text(json.dumps(db, indent=1, sort_keys=True), encoding="utf-8")
+
+
+def estimate_cost(mode: str, prompt_chars: int, max_tokens: int) -> float:
+    tier = "free"
+    if mode.startswith(("anthropic", "openai")):
+        tier = "frontier"
+    elif mode.startswith("openrouter:") and ":free" not in mode:
+        tier = "value"
+    pi, po = PRICE_TIERS[tier]
+    return (prompt_chars / 4.0) / 1e6 * pi + max_tokens / 1e6 * po
+
+
+def record_spend(company: str, usd: float) -> float:
+    import config
+    db = _spend_db()
+    key = f"{company}:{config.today()[:7]}"
+    db[key] = round(db.get(key, 0.0) + usd, 6)
+    _spend_save(db)
+    return db[key]
+
+
+def spent_usd(company: str) -> float:
+    import config
+    return _spend_db().get(f"{company}:{config.today()[:7]}", 0.0)
+
+
+def paid_allowed(company: str | None) -> bool:
+    """Cap gate: no company → uncapped (group-level calls); company over its
+    monthly cap → free-tier + KB only, until next month (honest degradation)."""
+    if company is None:
+        return True
+    return spent_usd(company) < MONTHLY_CAP_USD
+
 OPENROUTER_MODELS = [m.strip() for m in os.environ.get(
     "OPENROUTER_MODELS",
     "anthropic/claude-fable-5.1,openai/gpt-6-astra,google/gemini-4-argon,"
@@ -48,16 +112,21 @@ def _post(url: str, headers: dict, body: dict):
         return json.loads(r.read())
 
 
-def generate(prompt: str, system: str = "", kb_hit: str | None = None) -> dict:
+def generate(prompt: str, system: str = "", kb_hit: str | None = None,
+             company: str | None = None) -> dict:
     """KB-first routing (JARVIS b0969fb): a grounded KB answer costs ZERO model
-    tokens. Only out-of-scope prompts reach a provider. Returns
+    tokens. Only out-of-scope prompts reach a provider. Per-company monthly
+    cost caps apply to PAID providers (free tiers stay available). Returns
     {text, mode: kb|anthropic|openai|openrouter:<model>|template, provider_errs}."""
     if kb_hit:
         return {"text": kb_hit, "mode": "kb", "provider_errs": []}
     errs = []
+    paid = paid_allowed(company)
+    if not paid:
+        errs.append(f"cap: {company} at/over ${MONTHLY_CAP_USD}/mo — free tier + KB only")
     msgs = ([{"role": "system", "content": system}] if system else []) + \
            [{"role": "user", "content": prompt}]
-    if os.environ.get("ANTHROPIC_API_KEY"):
+    if paid and os.environ.get("ANTHROPIC_API_KEY"):
         try:
             j = _post("https://api.anthropic.com/v1/messages",
                       {"x-api-key": os.environ["ANTHROPIC_API_KEY"],
@@ -68,10 +137,12 @@ def generate(prompt: str, system: str = "", kb_hit: str | None = None) -> dict:
             t = "".join(c.get("text", "") for c in j.get("content", [])
                         if c.get("type") == "text")
             if t:
+                if company:
+                    record_spend(company, estimate_cost("anthropic", len(prompt) + len(system), MAX_TOKENS))
                 return {"text": t, "mode": "anthropic", "provider_errs": errs}
         except Exception as e:
             errs.append(f"anthropic: {str(e)[:90]}")
-    if os.environ.get("OPENAI_API_KEY"):
+    if paid and os.environ.get("OPENAI_API_KEY"):
         try:
             j = _post("https://api.openai.com/v1/chat/completions",
                       {"Authorization": "Bearer " + os.environ["OPENAI_API_KEY"]},
@@ -79,11 +150,16 @@ def generate(prompt: str, system: str = "", kb_hit: str | None = None) -> dict:
                        "messages": msgs, "max_completion_tokens": MAX_TOKENS})
             t = _extract(j)
             if t:
+                if company:
+                    record_spend(company, estimate_cost("openai", len(prompt) + len(system), MAX_TOKENS))
                 return {"text": t, "mode": "openai", "provider_errs": errs}
         except Exception as e:
             errs.append(f"openai: {str(e)[:90]}")
     if os.environ.get("OPENROUTER_API_KEY"):
         for m in OPENROUTER_MODELS:
+            if not paid and ":free" not in m:
+                errs.append(f"{m}: skipped (cap)")
+                continue
             try:
                 j = _post("https://openrouter.ai/api/v1/chat/completions",
                           {"Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"],
@@ -91,6 +167,8 @@ def generate(prompt: str, system: str = "", kb_hit: str | None = None) -> dict:
                           {"model": m, "messages": msgs, "max_tokens": MAX_TOKENS})
                 t = _extract(j)
                 if t:
+                    if company:
+                        record_spend(company, estimate_cost(f"openrouter:{m}", len(prompt) + len(system), MAX_TOKENS))
                     return {"text": t, "mode": f"openrouter:{m}", "provider_errs": errs}
                 errs.append(f"{m}: empty content")
             except urllib.error.HTTPError as e:

@@ -39,9 +39,11 @@ import squad               # noqa: E402
 import statsnr             # noqa: E402
 
 FAILS = []
+CHECKS = [0]
 
 
 def check(name, cond, extra=""):
+    CHECKS[0] += 1
     print(("PASS " if cond else "FAIL ") + name + (f"  | {extra}" if extra else ""))
     if not cond:
         FAILS.append(name)
@@ -432,6 +434,55 @@ def main() -> int:
     squad.mission_end("helix")
     check("mission: end recorded", squad.mission_status("helix")["status"] == "ENDED")
 
+    # ================= 13b. notify, cost caps, theme, branded report, QR =====
+    import notify, llm, json as _json
+    n = notify.notify("selftest", "notification path test", priority="low")
+    check("notify: no URL → honest ledger-only delivery (never silent drop)",
+          n["pushed"] is False and n["channel"] == "ledger-only")
+    gid = gates.stage("terra", {"kind": "spend", "amount_chf": 9999, "above_cap": True})
+    evs = [e for e in ledger.read(ledger.EVENTS) if e["kind"] == "notification"]
+    check("notify: G2 gate staging pushes to founder channel",
+          any("gate" in (e.get("payload", {}) or {}).get("title", "") for e in evs), gid)
+    check("llm: frontier estimate > value estimate > free = 0",
+          llm.estimate_cost("anthropic", 4000, 300) > llm.estimate_cost("openrouter:x/y", 4000, 300)
+          > llm.estimate_cost("openrouter:nvidia/nemotron:free", 4000, 300) == 0.0)
+    llm.MONTHLY_CAP_USD = 0.05
+    llm.record_spend("helix", 0.06)
+    check("llm: per-company monthly cap blocks paid providers, keeps free",
+          llm.paid_allowed("helix") is False and llm.paid_allowed("dossia") is True
+          and llm.paid_allowed(None) is True)
+    theme = _json.loads((config.ROOT / "data" / "theme.json").read_text(encoding="utf-8"))
+    check("theme: group + all 10 company accents defined (brand read by code)",
+          "bg" in theme["group"] and len(theme["companies"]) == 10
+          and all(v.get("accent", "").startswith("#") for v in theme["companies"].values()))
+    rep = registry.run_task("growth", "lead_report_html", {
+        "client": "ACME AG",
+        "csv": "name,email,company,role,note\nDr A,a@acme.ch,ACME,CTO," + "context " * 10})
+    html = (config.OUTBOX / rep["html_file"]).read_text(encoding="utf-8")
+    check("growth: branded report carries theme accent + evidence + version stamp",
+          theme["companies"]["growth"]["accent"] in html and rep["version_hash"][:8] in html
+          and "Validation" in html and rep["leads"] == 1)
+    rep2 = registry.run_task("growth", "lead_report_html", {
+        "client": "ACME AG",
+        "csv": "name,email,company,role,note\nDr A,a@acme.ch,ACME,CTO," + "context " * 10})
+    check("growth: deliverable versioning — identical input, identical hash",
+          rep2["version_hash"] == rep["version_hash"])
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "growth" / "tools"))
+    import qr_invoice as qr
+    check("qr: mod-10-recursive matches canonical PostFinance example",
+          qr.mod10_recursive("21000000000313947143000901") == "7")
+    check("qr: IBAN mod-97 accepts valid & rejects corrupted",
+          qr.iban_valid("CH93 0076 2011 6238 5295 7") and not qr.iban_valid("CH9300762011623852958"))
+    ref = qr.qrr_reference("G-2026-001")
+    check("qr: QRR reference = 27 digits, self-consistent check digit",
+          len(ref) == 27 and qr.mod10_recursive(ref[:-1]) == ref[-1])
+    f = qr.qr_payload(900.0, "CHF", {"name": "CogOps Group", "street": "s", "building": "",
+                                     "plz": "2501", "city": "Biel", "country": "CH"},
+                      "CH9300762011623852957", ref, "msg").split("\r\n")
+    check("qr: SIX payload layout (SPC/0200/1 … QRR@17 … EPD@20, 22 fields, CRLF)",
+          f[0:3] == ["SPC", "0200", "1"] and f[17] == "QRR" and f[18] == ref
+          and f[20] == "EPD" and len(f) == 23 and f[-1] == "")
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))
@@ -457,7 +508,7 @@ def main() -> int:
     if FAILS:
         print(f"FAILURES ({len(FAILS)}): {FAILS}")
         return 1
-    print("ALL GREEN — 89/89 checks, 0 failures")
+    print(f"ALL GREEN — {CHECKS[0]}/{CHECKS[0]} checks, 0 failures")
     return 0
 
 

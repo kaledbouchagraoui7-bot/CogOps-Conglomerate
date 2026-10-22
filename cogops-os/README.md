@@ -7,7 +7,7 @@
 
 ```bash
 cd cogops-os
-python3 selftest.py                 # 89-check regression suite → ALL GREEN (run before any change)
+python3 selftest.py                 # 100-check regression suite → ALL GREEN (run before any change)
 python3 cogops.py status            # group dashboard
 python3 cogops.py companies         # the ten, with stages & engine tasks
 python3 cogops.py run verde carbon_account --params '{"fuel_l":{"diesel":340},"electricity_kwh":4200,"grid_region":"CH"}'
@@ -75,12 +75,16 @@ Two-step gate flow everywhere: an action **stages** → founder **approves** →
 | `COGOPS_RUNTIME_DIR` | state directory (default `./runtime`) |
 | `COGOPS_FREEZE_CLOCK` | epoch seconds → byte-deterministic artifacts (tests) |
 | `COGOPS_CONFIRM_PHRASE` | G3 dual-confirm phrase (default `cogops approves`) |
+| `COGOPS_NOTIFY_URL` | **gate pushes to your phone** — any ntfy.sh topic or webhook (`notify.py`; G2/G3 gates push on staging; no URL ⇒ ledger-only, never silent) |
+| `LLM_MONTHLY_CAP_USD` | per-company monthly LLM cost cap (default 5.00; conservative estimates; over cap ⇒ free-tier + KB only) |
 | `OPENROUTER_API_KEY` / `OPENROUTER_MODELS` / `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` | LLM chain (absent ⇒ honest template mode) |
 | `ENV_STAGE*` / `FORTRESS_MONTHS` / `MONTHLY_FIXED_COSTS_CHF` / `SWEEP_PROFIT_SHARE` | doctrine tunables (DR-governed defaults in `config.py`) |
 
+Also here: `data/theme.json` — the brand system **code reads** (group palette + one accent per company, DR-0003); Growth's `lead_report_html` task renders the first branded, version-hashed client deliverable from it. Sibling tooling: `../growth/tools/qr_invoice.py` (Swiss QR-bill invoices — SIX-spec payload, mod-10-recursive references, ISO-1339 IBAN check; bank scan-check flagged for the first real invoice).
+
 ## Anti-snowball protocol (OS §15) — for any future session
 
-1. `python3 selftest.py` must be **ALL GREEN (89/89)** before and after any change.
+1. `python3 selftest.py` must be **ALL GREEN (100/100)** before and after any change.
 2. Never weaken a selftest to make it pass; fix the mechanism or write a Decision Record.
 3. Money/gate logic changes require new regression checks in the same commit.
 4. `python3 cogops.py audit` must return verdict PASS on a clean runtime.

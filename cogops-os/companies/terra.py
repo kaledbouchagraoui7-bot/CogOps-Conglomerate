@@ -114,7 +114,8 @@ def esg_brief(params: dict, slug: str) -> dict:
             f"Write a 250-word ESG research brief on '{topic}'. Use ONLY these "
             f"facts; cite sources by [n]. No invented numbers.\nFACTS:\n{facts_txt}\n"
             f"SOURCES:\n" + "\n".join(f"[{i+1}] {s}" for i, s in enumerate(sources)),
-            system="You are CogOps Terra's research agent. Citation discipline is absolute.")
+            system="You are CogOps Terra's research agent. Citation discipline is absolute.",
+            company=slug)
         body, mode = out["text"], out["mode"]
     except llm.LLMUnavailable:
         body = (f"# {topic}\n\n{facts_txt}\n\nSources:\n"

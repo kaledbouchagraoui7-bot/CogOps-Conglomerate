@@ -1,0 +1,9 @@
+name = "cogops-growth"
+compatibility_date = "2026-05-01"
+pages_build_output_dir = "public"
+
+# Waitlist/evidence store for CogOps Growth (created 2026-10-22 via API)
+kv_namespaces = [
+  { binding = "SIGNUPS", id = "ad67e0c90e7b42ba83d3bd40fff449b8" }
+]
+# Secrets (set via wrangler/dashboard, never here): ADMIN_TOKEN, NOTIFY_URL

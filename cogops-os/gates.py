@@ -67,6 +67,12 @@ def stage(company: str, action: dict, proposed_by: str = "squad") -> str:
     _save(q)
     ledger.decide("gate_staged", aid, {"company": company, "level": level,
                                        "type": dtype, "reason": reason})
+    if level in ("G2", "G3"):             # the phone learns before the inbox
+        try:
+            import notify
+            notify.notify_gate(q[aid])
+        except Exception:
+            pass                          # notification failure never blocks staging
     return aid
 
 

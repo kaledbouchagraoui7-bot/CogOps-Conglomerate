@@ -1,0 +1,29 @@
+{
+  "attribution": "Brand system scaffold (roadmap Aesthetics). Penpot remains the design source of truth for logo/type exploration; this file is what the CODE reads — site factory, report templates and dashboards must pull colors from here, never hardcode. DR-0003: 'CogOps X' endorsed-brand architecture, one accent per company.",
+  "asof": "2026-10",
+  "group": {
+    "name": "CogOps Group",
+    "bg": "#0b0e14",
+    "surface": "#121a28",
+    "ink": "#e8edf6",
+    "dim": "#9aa7bf",
+    "line": "#222c40",
+    "accent": "#7ee0b8",
+    "accent2": "#6ea8fe",
+    "warn": "#ffcf6e",
+    "font": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    "mono": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+  },
+  "companies": {
+    "intelligence": {"accent": "#7ee0b8", "label": "Intelligence", "tagline": "AI operations"},
+    "sentinel":     {"accent": "#6ea8fe", "label": "Sentinel",     "tagline": "cybersecurity & AI security"},
+    "capitalco":    {"accent": "#ffcf6e", "label": "Capital",      "tagline": "quant tools & research"},
+    "helix":        {"accent": "#b48eff", "label": "Helix",        "tagline": "computational biology"},
+    "dossia":       {"accent": "#ff9e7e", "label": "Dossia",       "tagline": "regulatory & medical writing"},
+    "medtech":      {"accent": "#7ed4e0", "label": "Medtech",      "tagline": "MedTech R&D enablement"},
+    "verde":        {"accent": "#9ee07e", "label": "Verde",        "tagline": "cleantech & energy software"},
+    "terra":        {"accent": "#e07ea8", "label": "Terra",        "tagline": "climate data & ESG"},
+    "growth":       {"accent": "#5ee6c8", "label": "Growth",       "tagline": "pipeline, manufactured"},
+    "talent":       {"accent": "#e0d47e", "label": "Talent",       "tagline": "train & place the scarce"}
+  }
+}
