@@ -7,7 +7,7 @@
 ## A. Before the first franc (now → first revenue)
 | # | Item | Owner | Status |
 |---|---|---|---|
-| A1 | Impressum + privacy live with honest "entity in formation" disclosure | ME | DONE ✓ (growth site) |
+| A1 | Impressum + privacy live with honest "entity in formation" disclosure | ME | DONE ✓ (growth site; privacy now names Cloudflare Web Analytics honestly) |
 | A2 | Client **terms of service** draft: liability cap, IP assignment of deliverables, replacement guarantee (14 d), cancellation (monthly), governing law CH, place of jurisdiction | ME draft → YOU/lawyer | next |
 | A3 | **DPA template** (nFADP + GDPR Art. 28): processors = Cloudflare, Supabase, OpenRouter; sub-processor list; deletion ≤30 d | ME draft → YOU/lawyer | next |
 | A4 | Data-processing register (RoPA/VVT, nDSG Art. 12): one row per data flow (signups KV, CRM Supabase, ledgers runtime, KV portal) | ME draft | **DRAFT v0.9 DONE ✓ `legal/ropa.md`** — 10 rows incl. outreach balancing test + e-privacy screen |

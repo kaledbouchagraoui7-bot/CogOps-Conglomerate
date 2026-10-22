@@ -2,6 +2,13 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CogOps Growth — B2B pipeline, manufactured. Human-approved.</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://cogops-growth.pages.dev/">
+<meta name="theme-color" content="#0b0e14">
+<meta property="og:image" content="https://cogops-growth.pages.dev/og-image.png">
+<meta property="og:url" content="https://cogops-growth.pages.dev/">
+<meta property="og:site_name" content="CogOps Growth">
+
 <meta name="description" content="Validated decision-maker lists, per-recipient outreach copy and programmatic SEO from your own data. Swiss-operated. Free sample batch: 25 validated leads in 48 hours.">
 <meta property="og:title" content="CogOps Growth — B2B pipeline, manufactured.">
 <meta property="og:description" content="Validated leads, per-recipient copy, long-tail pages that rank. Sourced per record, human-approved, Swiss-operated. Free 25-lead sample in 48 h.">
@@ -127,8 +134,8 @@ footer{border-top:1px solid var(--line);color:var(--dim);font-size:13px;padding:
   <h2 class="rv" style="text-align:center">Request your free sample batch</h2>
   <form class="signup rv" id="f">
     <div class="row">
-      <input name="email" type="email" required placeholder="Work email *">
-      <input name="company" type="text" required placeholder="Company *">
+      <input name="email" type="email" required placeholder="Work email *" aria-label="Work email">
+      <input name="company" type="text" required placeholder="Company *" aria-label="Company">
     </div>
     <div class="row">
       <select name="product" required>
@@ -138,9 +145,9 @@ footer{border-top:1px solid var(--line);color:var(--dim);font-size:13px;padding:
         <option>Media / newsletter</option>
         <option>All three</option>
       </select>
-      <input name="icp" type="text" placeholder="Your ideal customer (one line)">
+      <input name="icp" type="text" placeholder="Your ideal customer (one line)" aria-label="Your ideal customer, one line">
     </div>
-    <textarea name="note" rows="2" placeholder="Anything else? (optional)"></textarea>
+    <textarea name="note" rows="2" placeholder="Anything else? (optional)" aria-label="Anything else, optional"></textarea>
     <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
     <button class="btn grad" type="submit" id="go">Request my 25 free leads →</button>
     <div class="msg" id="m"></div>
@@ -165,7 +172,7 @@ footer{border-top:1px solid var(--line);color:var(--dim);font-size:13px;padding:
 
 <footer><div class="wrap">
   <b>CogOps Growth</b> · a CogOps Group company · Switzerland<br>
-  <a href="mailto:cogops.engine@gmail.com">cogops.engine@gmail.com</a> · <a href="/privacy.html">Privacy</a> · <a href="/imprint.html">Impressum</a> · Terms &amp; DPA provided with every contract<br>
+  <a href="mailto:cogops.engine@gmail.com">cogops.engine@gmail.com</a> · <a href="/privacy.html">Privacy</a> · <a href="/imprint.html">Impressum</a> · <a href="/terms.html">Terms</a> &amp; DPA with every contract<br>
   <span style="opacity:.7">© 2026 CogOps Group</span>
 </div></footer>
 
@@ -189,4 +196,5 @@ document.getElementById("f").addEventListener("submit",function(ev){
   .finally(function(){b.disabled=false;b.textContent="Request my 25 free leads →"});
 });
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5c19d2cc288d44a4aaf9a919576f1fa1"}'></script>
 </body></html>

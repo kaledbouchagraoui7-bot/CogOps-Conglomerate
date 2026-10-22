@@ -24,7 +24,7 @@
 | 2.4 | Persistent shared DB — one CRM for all ten | ME (migration) | Supabase `Jarvis-db` exists with the 6 CRM tables; wire signups/leads export → `leads` table next |
 | 2.5 | **A real gate — approvals on your phone** | DONE (code) + YOU (10 s) | `notify.py` pushes every G2/G3 gate to any ntfy.sh topic: install ntfy app → subscribe to a private topic → set `COGOPS_NOTIFY_URL` (locally) and/or the `NOTIFY_URL` secret on the Pages projects |
 | 2.6 | Payments & invoicing | DONE (tool) + YOU (accounts) | **Swiss QR-bill generator shipped** (`growth/tools/qr_invoice.py`, spec-verified; bank scan-check on first real invoice). Stripe/TWINT accounts = yours when first franc lands |
-| 2.7 | Email, calendar, analytics | YOU (accounts) → ME (wiring) | Gmail sending (workspace or forwarded domain mail), Cal.com booking link on landing, Cloudflare Web Analytics (free, cookieless) — each a 15-min wire once accounts exist |
+| 2.7 | Email, calendar, analytics | YOU (accounts) → ME (wiring) | **Analytics DONE ✓** (Cloudflare Web Analytics, cookieless, beacon + CSP + honest privacy text). Remaining: Gmail sending + Cal.com = yours |
 | 2.8 | LLM gateway + **cost cap per company** | — | **DONE ✓** provider chain + `LLM_MONTHLY_CAP_USD` (default $5/company/month, conservative estimates; free tier & KB always available) |
 | 2.9 | Real data — replace flagged placeholders | ME (next) | Carbon factors are loudly labeled placeholder-grade; replacement = licensed/current factor set before any client sees Verde output |
 | 2.10 | Automated tests + version history per deliverable engine | — | **DONE ✓** 111/111 selftest (run before/after any change, anti-snowball protocol); deliverables carry content-hash version stamps + as-of dates |
@@ -53,7 +53,7 @@
 | # | Item | Owner | Status |
 |---|---|---|---|
 | 5.1 | Brand system: name, logo, 2 colors, typeface, tone (Penpot) | YOU (Penpot) + DONE (code side) | Name ✓ · colors ✓ (`theme.json`: group + 10 accents) · type ✓ (system stack) · tone ✓ (candor-first) · **logo = yours in Penpot** |
-| 5.2 | One theme file the site factory reads | — | **DONE ✓** `cogops-os/data/theme.json` — code reads brand, never hardcodes; Growth's report + landing already follow it |
+| 5.2 | One theme file the site factory reads | — | **DONE ✓** `cogops-os/data/theme.json` — code reads brand, never hardcodes; Growth's report + landing follow it; favicon + OG image shipped from the same palette |
 | 5.3 | Branded report templates (highest-value visual work) | ME | **First one DONE ✓** (lead-batch report, themed + version-hashed); carbon/audit/backtest templates queued |
 | 5.4 | Group website + one page per company | ME (next) | Landing pattern proven on Growth; group site = same factory |
 | 5.5 | Visual founder dashboard (live map, replaces CLI status) | ME (next) | Data layer exists (`cogops.py status` JSON); web skin queued |
