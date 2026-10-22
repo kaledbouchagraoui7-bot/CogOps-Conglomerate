@@ -25,7 +25,7 @@ META = {
         {"key": "employer_repeat_rate_pct", "layer": "F", "owner": "partnership-scout", "floor": 30},
     ],
     "squad_roles": ["curriculum-designer", "matcher-engine", "placement-counselor",
-                    "training-coordinator", "market-researcher"],
+                    "training-coordinator", "market-researcher", "partnership-scout"],
 }
 
 
@@ -102,6 +102,68 @@ def market_brief(params: dict, slug: str) -> dict:
     return artifact
 
 
+
+
+def talent_report_html(params: dict, slug: str) -> dict:
+    """Client-facing skill-gap report: candidate skills vs target roles via the
+    explainable matcher, with training bridges — branded (sand accent),
+    version-stamped, human-of-record line included."""
+    import hashlib
+    import json as _json
+    theme = _json.loads((config.ROOT / "data" / "theme.json").read_text(encoding="utf-8"))
+    gr, ac = theme["group"], theme["companies"]["talent"]["accent"]
+    cand = params.get("candidate_skills", [])
+    roles = params.get("roles", [])
+    m = match({"candidate_skills": cand, "roles": roles}, slug)
+    rows = "".join(
+        f"<tr><td>{r['title']}</td><td>{r['score']:.3f}</td><td>{', '.join(r['matched_skills']) or '—'}</td>"
+        f"<td>{', '.join(r['skill_gaps'][:4]) or 'none'}</td><td>{r['training_bridge']}</td></tr>"
+        for r in m["ranked_roles"])
+    body = (f"<!DOCTYPE html><html><head><meta charset=utf-8><title>Skill-gap scan — CogOps Talent</title>"
+            f"<style>body{{background:{gr['bg']};color:{gr['ink']};font:14px/1.6 {gr['font']};padding:32px}}"
+            f".wrap{{max-width:880px;margin:0 auto}}h1{{color:{ac};font-size:22px}}"
+            f".badge{{display:inline-block;border:1px solid {gr['line']};color:{ac};border-radius:99px;padding:4px 12px;font-size:11px;letter-spacing:1px}}"
+            f"table{{width:100%;border-collapse:collapse;margin:14px 0}}td,th{{padding:8px 10px;border-bottom:1px solid {gr['line']};text-align:left;font-size:13px}}"
+            f"th{{color:{ac};font-size:11px;text-transform:uppercase;letter-spacing:1px}}"
+            f".foot{{color:{gr['dim']};font-size:12px;margin-top:24px;border-top:1px solid {gr['line']};padding-top:12px}}</style>"
+            f"</head><body><div class=wrap><span class=badge>COGOPS TALENT · a CogOps Group company</span>"
+            f"<h1>Skill-gap scan — {len(cand)} skills vs {len(roles)} roles</h1>"
+            f"<p>Generated {config.stamp()} · matcher: explainable TF cosine (per-skill contributions shown)</p>"
+            f"<table><tr><th>Role</th><th>Match</th><th>You have</th><th>Gaps</th><th>Training bridge</th></tr>{rows}</table>"
+            f"<div class=foot>Version stamp <b>{{HASH}}</b> · scores are decision support, not a hiring "
+            f"decision — a human counselor reviews every paid report · "
+            f"<b>Human of record: {META['human_of_record']}</b> · cogops.engine@gmail.com</div></div></body></html>")
+    hh = hashlib.sha256(body.encode()).hexdigest()[:16]
+    body = body.replace("{HASH}", hh)
+    p = config.OUTBOX / f"talent_scan_{config.today()}_{hh[:8]}.html"
+    p.write_text(body, encoding="utf-8")
+    ledger.event("talent_deliverable", slug, {"version": hh, "roles": len(roles)})
+    return {"mode": "engine", "html_file": p.name, "version_hash": hh,
+            "ranked": m["ranked_roles"], "asof": config.today()}
+
+
+def employer_prospects(params: dict, slug: str) -> dict:
+    """The Growth↔Talent link, direction 1: Talent buys employer prospect lists
+    FROM Growth through the internal market (platform ticket at DR-0002 price)
+    and turns them into placement-sales pipeline. The charge is real (notional)
+    on Talent's P&L — standalone books stay honest (I7)."""
+    import platformsvc
+    import registry
+    csv = params.get("csv", "")
+    n = max(1, len([l for l in csv.splitlines()[1:] if l.strip()]))
+    ticket = platformsvc.request(slug, "lead_gen", spec="employer prospects for placement sales", units=n)
+    enriched = registry.run_task("growth", "enrich_leads", {"csv": csv}, role="data-validator")
+    platformsvc.serve(ticket["id"], {"ref": f"talent-employer-prospects:{ticket['id']}"})
+    prospects = [l for l in enriched["leads"] if l["score"] >= 3]
+    artifact = {"mode": "engine", "ticket": ticket["id"],
+                "notional_chf": ticket["notional_chf"],
+                "prospects": prospects, "rejected": enriched["rejected"],
+                "next_action": "outreach-operator drafts touches via growth touch_draft; human sends",
+                "asof": config.today()}
+    _emit(slug, "employer_prospects", artifact)
+    return artifact
+
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     p.write_text(json.dumps(artifact, indent=1, sort_keys=True, default=str),
@@ -113,4 +175,6 @@ TASKS = {
     "curriculum": {"fn": curriculum, "role": "curriculum-designer"},
     "match": {"fn": match, "role": "matcher-engine"},
     "market_brief": {"fn": market_brief, "role": "market-researcher"},
+    "talent_report_html": {"fn": talent_report_html, "role": "placement-counselor"},
+    "employer_prospects": {"fn": employer_prospects, "role": "partnership-scout"},
 }

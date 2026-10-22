@@ -31,7 +31,7 @@ META = {
     ],
     "squad_roles": ["lead-researcher", "data-validator", "copywriter-personalization",
                     "seo-page-factory", "newsletter-composer", "funnel-analyst",
-                    "outreach-operator", "process-auditor"],
+                    "outreach-operator", "process-auditor", "media-editor"],
 }
 
 
@@ -419,6 +419,31 @@ def _jaccard(a: str, b: str) -> float:
     return len(sa & sb) / len(sa | sb) if (sa | sb) else 0.0
 
 
+
+
+def sister_digest(params: dict, slug: str) -> dict:
+    """The Growth↔Talent link, direction 2: Growth buys career-intel briefs
+    FROM Talent via the internal market (ticket at DR-0002 price) and publishes
+    them as the talent vertical of the media network — distribution for Talent,
+    content for Growth. Both P&Ls record the internal trade (I7)."""
+    import platformsvc
+    import registry
+    domain = params.get("domain", "quant_finance")
+    ticket = platformsvc.request(slug, "career_intel", spec=f"brief: {domain}", units=1)
+    brief = registry.run_task("talent", "market_brief", {"domain": domain}, role="market-researcher")
+    platformsvc.serve(ticket["id"], {"ref": f"growth-sister-digest:{ticket['id']}"})
+    issue = newsletter_issue({"domain": "talent-careers", "items": [
+        {"title": f"Market brief: {domain}", "summary": brief["brief_md"][:400]},
+        {"title": "Where the gaps pay", "summary": "The demand/supply ratios behind this "
+                                                    "issue — and the tracks that close them."}]}, slug)
+    artifact = {"mode": "engine", "ticket": ticket["id"],
+                "notional_chf": ticket["notional_chf"],
+                "brief_domain": domain, "issue_file": issue.get("issue_md", "")[:0] or issue["mode"],
+                "issue_mode": issue["mode"], "asof": config.today()}
+    _emit(slug, f"sister_digest_{domain}", artifact)
+    return artifact
+
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     import json
@@ -485,4 +510,5 @@ TASKS = {
     "quota_status": {"fn": quota_status, "role": "funnel-analyst"},
     "source_leads": {"fn": source_leads, "role": "lead-researcher"},
     "pseo_qa": {"fn": pseo_qa, "role": "process-auditor"},
+    "sister_digest": {"fn": sister_digest, "role": "media-editor"},
 }

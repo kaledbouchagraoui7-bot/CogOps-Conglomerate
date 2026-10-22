@@ -597,6 +597,27 @@ def main() -> int:
           "#b48eff" in hhtml and hr["version_hash"][:8] in hhtml
           and "Human of record" in hhtml)
 
+    # ================= 13f. Talent report + Growth<->Talent internal market ==
+    tr = registry.run_task("talent", "talent_report_html", {
+        "candidate_skills": ["python", "llm", "sql"],
+        "roles": [{"title": "AI Ops", "skills": ["python", "llm"]},
+                  {"title": "Bioinfo", "skills": ["r", "fasta"]}]})
+    thtml = (config.OUTBOX / tr["html_file"]).read_text(encoding="utf-8")
+    check("talent: branded scan report (accent + factors + human-of-record)",
+          "#e0d47e" in thtml and tr["version_hash"][:8] in thtml
+          and "Human of record" in thtml and tr["ranked"][0]["title"] == "AI Ops")
+    before_t = lifecycle.load("talent")["platform_charges_chf"]
+    ep = registry.run_task("talent", "employer_prospects", {
+        "csv": "name,email,company,role,note\nHr A,hr@labco.ch,LabCo,Head of People," + "hiring bioinformaticians in Basel " * 2})
+    check("link T->G: Talent buys employer prospects from Growth via ticket at DR-0002 price",
+          ep["notional_chf"] == 1.0 and ep["prospects"]
+          and lifecycle.load("talent")["platform_charges_chf"] == before_t + 1.0)
+    before_g = lifecycle.load("growth")["platform_charges_chf"]
+    sd = registry.run_task("growth", "sister_digest", {"domain": "comp_bio"})
+    check("link G->T: Growth publishes Talent career intel via ticket (internal market both ways)",
+          sd["notional_chf"] == 5.0 and sd["brief_domain"] == "comp_bio"
+          and lifecycle.load("growth")["platform_charges_chf"] == before_g + 5.0)
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))
