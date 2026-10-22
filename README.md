@@ -1,5 +1,17 @@
 # CogOps Group — The Conglomerate
 
+> ## Repository contents
+> | Document | What it is |
+> |---|---|
+> | **this file** | The blueprint v1.0 — the conglomerate and what each company does |
+> | [`research/00-methodology.md`](research/00-methodology.md) | How benchmarks were selected & analyzed (12-mechanism frame, evidence rules) |
+> | Case analyses — each with structure anatomy + adopt/adapt/reject decisions for CogOps: [01 Berkshire Hathaway](research/01-berkshire-hathaway.md) · [02 Alphabet](research/02-alphabet.md) · [03 Amazon](research/03-amazon.md) · [04 Constellation Software](research/04-constellation-software.md) · [05 Danaher (DBS)](research/05-danaher.md) · [06 Haier (Rendanheyi)](research/06-haier.md) · [07 Venture Studios](research/07-venture-studios.md) · [08 Micro-Holdcos](research/08-micro-holdcos.md) | The best existing companies that do what CogOps will do — decoded into 12 mechanisms each |
+> | [`research/09-swiss-holding-law.md`](research/09-swiss-holding-law.md) | The Swiss legal frame: entity forms, holding/participation exemption, naming, VAT, entity-evolution path |
+> | [`research/10-cross-case-synthesis.md`](research/10-cross-case-synthesis.md) | The comparison matrix (12 mechanisms × 8 benchmarks), scale-translation table, anti-pattern defenses, adoption ledger |
+> | [`structure/OPERATING-STRUCTURE.md`](structure/OPERATING-STRUCTURE.md) | **The operating system v1.0** — topology, decision rights, capital doctrine, lifecycle, autonomy contract, platform, cadence, metrics, workforce (CBS), risk gates, compounding, ten-company instantiation, invariants, change control |
+>
+> **Reading order:** methodology → cases → synthesis → operating structure. Every structural element in `structure/` carries a lineage tag `[case §M#]` back to the research.
+
 > **One central business. One company per domain.**
 > A conglomerate of small, AI-operated companies — each owning one theme/domain — running on a single shared core. Every company is buildable with **today's** technology (software, data, AI, services). Deep-tech domains (quantum and anything needing technology that does not yet exist at accessible cost) are **explicitly excluded** — see [Excluded domains](#excluded-domains).
 
