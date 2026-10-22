@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cogops-verde.pages.dev/sitemap.xml

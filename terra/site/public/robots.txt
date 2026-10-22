@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cogops-terra.pages.dev/sitemap.xml

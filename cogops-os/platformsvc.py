@@ -29,6 +29,8 @@ CATALOG = {
     "media_network":  {"chf": 25.0, "sla_h": 48, "provides": "newsletter slot in the company's domain journal"},
     "lead_gen":       {"chf": 1.0,  "sla_h": 48, "per": "lead",  "provides": "validated lead (internal price, DR-0002)"},
     "career_intel":   {"chf": 5.0,  "sla_h": 24, "per": "brief", "provides": "market brief / curriculum extract (internal, DR-0002)"},
+    "carbon_books":   {"chf": 8.0,  "sla_h": 48, "per": "book",  "provides": "carbon books computation (internal, DR-0008)"},
+    "climate_risk":   {"chf": 10.0, "sla_h": 48, "per": "screen","provides": "physical/transition risk screen (internal, DR-0008)"},
     "pseo_page":      {"chf": 10.0, "sla_h": 24, "per": "page",  "provides": "QA-passed programmatic page (internal, DR-0002)"},
     "gate_services":  {"chf": 0.0,  "sla_h": 0,  "provides": "Nexus gate, decision ledger, sweep engine"},
     "agent_core":     {"chf": 0.0,  "sla_h": 0,  "provides": "roster access + mission runtime"},

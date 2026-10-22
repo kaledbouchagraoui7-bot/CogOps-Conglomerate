@@ -618,6 +618,25 @@ def main() -> int:
           sd["notional_chf"] == 5.0 and sd["brief_domain"] == "comp_bio"
           and lifecycle.load("growth")["platform_charges_chf"] == before_g + 5.0)
 
+    # ================= 13g. climate pair link (Verde<->Terra) ================
+    before_v = lifecycle.load("verde")["platform_charges_chf"]
+    cf = registry.run_task("verde", "csrd_full", {
+        "company": "ACME", "fuel_l": {"diesel": 100}, "electricity_kwh": 1000,
+        "grid_region": "CH", "scope3_spend_chf": {"goods": 1000},
+        "assets": [{"id": "HQ", "region_class": "alpine_ch", "exposure_tag": "inland",
+                    "value_chf": 2_000_000}]})
+    check("link V->T: CSRD climate chapter bought from Terra via ticket (DR-0008)",
+          "CogOps Terra" in cf["report_md"] and cf["notional_chf"] == 10.0
+          and lifecycle.load("verde")["platform_charges_chf"] == before_v + 10.0)
+    before_t = lifecycle.load("terra")["platform_charges_chf"]
+    ov = registry.run_task("terra", "portfolio_carbon_overlay", {
+        "activities": {"fuel_l": {"diesel": 100}, "electricity_kwh": 1000, "grid_region": "CH"},
+        "portfolio_value_chf": 1_000_000,
+        "sector_profile": {"sector": "mfg", "profile": {"carbon_intensity": 6}}})
+    check("link T->V: transition overlay buys Verde books; adjustment capped & formula published",
+          ov["notional_chf"] == 8.0 and ov["adjustment"] <= 2.0 and ov["formula"]
+          and lifecycle.load("terra")["platform_charges_chf"] == before_t + 8.0)
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))

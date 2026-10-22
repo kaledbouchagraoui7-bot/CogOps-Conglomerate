@@ -127,6 +127,36 @@ def esg_brief(params: dict, slug: str) -> dict:
     return artifact
 
 
+
+
+def portfolio_carbon_overlay(params: dict, slug: str) -> dict:
+    """The Verde<->Terra link, direction 2: counterparties'/own carbon books
+    (bought from Verde via internal-market ticket, DR-0008 price) sharpen the
+    transition score: intensity (tCO2e per CHF m of stated value) adds a
+    documented adjustment, capped at +2.0 points. Formula published on every
+    artifact — no hidden sauce."""
+    import platformsvc
+    from companies import verde as verde_co
+    ticket = platformsvc.request(slug, "carbon_books", spec="carbon overlay for transition scoring", units=1)
+    carbon = verde_co.carbon_account(params.get("activities", {}), "verde")
+    platformsvc.serve(ticket["id"], {"ref": f"terra-carbon-overlay:{ticket['id']}"})
+    value = float(params.get("portfolio_value_chf", 1_000_000))
+    intensity = carbon["total_tco2e"] / max(value / 1e6, 1e-9)
+    adj = min(2.0, round(intensity * 0.2, 2))
+    base = transition_risk(params.get("sector_profile", {"sector": "overlay"}), slug)
+    composite = round(min(10.0, base["composite_0_10"] + adj), 2)
+    artifact = {"mode": "engine", "ticket": ticket["id"], "notional_chf": ticket["notional_chf"],
+                "carbon_total_tco2e": carbon["total_tco2e"],
+                "intensity_tco2e_per_chf_m": round(intensity, 3),
+                "adjustment": adj, "formula": "adj = min(2.0, intensity * 0.2)",
+                "transition_base": base["lever_scores"], "composite_with_overlay": composite,
+                "band": "low" if composite < 3 else "medium" if composite <= 6 else "high",
+                "carbon_provenance": "CogOps Verde books (internal market); factors sourced+dated",
+                "asof": config.today()}
+    _emit(slug, "carbon_overlay", artifact)
+    return artifact
+
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     p.write_text(json.dumps(artifact, indent=1, sort_keys=True, default=str),
@@ -138,4 +168,5 @@ TASKS = {
     "physical_risk": {"fn": physical_risk, "role": "risk-modeler"},
     "transition_risk": {"fn": transition_risk, "role": "risk-modeler"},
     "esg_brief": {"fn": esg_brief, "role": "research-briefer"},
+    "portfolio_carbon_overlay": {"fn": portfolio_carbon_overlay, "role": "risk-modeler"},
 }

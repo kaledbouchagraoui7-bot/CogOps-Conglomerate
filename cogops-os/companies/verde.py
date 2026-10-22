@@ -123,6 +123,45 @@ management information, not assured statements.
     return artifact
 
 
+
+
+def csrd_full(params: dict, slug: str) -> dict:
+    """The Verde<->Terra link, direction 1: the CSRD-lite report's climate-risk
+    chapter is bought from Terra through the internal market (ticket at the
+    DR-0008 price) — one integrated deliverable, two provenance chains, both
+    P&Ls honest (I7). ESRS logic: impacts (books) + risks & resilience (screens)."""
+    import platformsvc
+    from companies import terra as terra_co
+    carbon = carbon_account(params, slug)
+    assets = params.get("assets") or [{"id": "HQ", "region_class": params.get("region_class", "alpine_ch"),
+                                       "exposure_tag": params.get("exposure_tag", "inland"),
+                                       "value_chf": params.get("asset_value_chf", 1_000_000)}]
+    ticket = platformsvc.request(slug, "climate_risk", spec="climate-risk chapter for CSRD-lite",
+                                 units=len(assets))
+    risk = terra_co.physical_risk({"assets": assets}, "terra")
+    trans = None
+    if params.get("sector_profile"):
+        trans = terra_co.transition_risk(params["sector_profile"], "terra")
+    platformsvc.serve(ticket["id"], {"ref": f"verde-csrd-climate-chapter:{ticket['id']}"})
+    base = csrd_lite_report({**params, "carbon": carbon}, slug)
+    chapter = ("\n## 3b. Climate risks & resilience (via CogOps Terra, internal market)\n"
+               f"- Physical screen (model grade: {risk['model_note'].split('—')[0].strip()}): "
+               f"portfolio VaR proxy CHF {risk['value_at_risk_proxy_chf']:,.2f} "
+               f"({risk['var_pct']}% of stated value)\n"
+               + "".join(f"- asset {a['id']}: score {a['score_v0_heuristic']}/10, dominant hazard {a['dominant_hazard']}\n"
+                         for a in risk["scored"])
+               + (f"- Transition composite: {trans['composite_0_10']}/10 ({trans['band']})\n" if trans else "")
+               + "- Provenance: Terra ticket " + ticket["id"] + " at internal price; "
+                 "screening-grade v0, upgrade path documented (Terra model-grade doctrine).\n")
+    base["report_md"] = base["report_md"].replace("## 4. Limitations (mandatory)",
+                                                  chapter + "\n## 4. Limitations (mandatory)")
+    base["climate_chapter_ticket"] = ticket["id"]
+    base["notional_chf"] = ticket["notional_chf"]
+    _emit(slug, "csrd_full", {"mode": "engine", "ticket": ticket["id"],
+                              "total_tco2e": carbon["total_tco2e"]})
+    return base
+
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     p.write_text(json.dumps(artifact, indent=1, sort_keys=True, default=str),
@@ -133,4 +172,5 @@ def _emit(slug: str, kind: str, artifact: dict) -> None:
 TASKS = {
     "carbon_account": {"fn": carbon_account, "role": "carbon-accountant"},
     "csrd_lite_report": {"fn": csrd_lite_report, "role": "esrs-reporter"},
+    "csrd_full": {"fn": csrd_full, "role": "esrs-reporter"},
 }

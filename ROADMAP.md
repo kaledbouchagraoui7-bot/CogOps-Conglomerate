@@ -33,6 +33,7 @@
 
 | # | Item | Owner | Status |
 |---|---|---|---|
+| 3.1d | Verde + Terra live-validation & climate-pair link (DR-0008) | ME + YOU | **LIVE ✓** 2026-10-22 |
 | 3.1c | Talent live-validation (DR-0007) + Growth↔Talent link | ME + YOU | **LIVE ✓** 2026-10-22 |
 | 3.1b | Helix live-validation (DR-0006): landing https://cogops-helix.pages.dev, free 48 h QC sample, 90-day window | ME (machine) + YOU (outreach) | **LIVE ✓** 2026-10-22 |
 | 3.1 | One company with a paying stranger — **Growth chosen** | ME (machine) + YOU (outreach) | **Landing live: https://cogops-growth.pages.dev** — signup machine verified end-to-end (validation, dedupe, honeypot, rate-limit, live counter, admin export). Targets (DR-0005): 100 signups OR 3 pre-orders OR CHF 200 paid in 90 days |

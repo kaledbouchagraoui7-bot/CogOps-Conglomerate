@@ -1,0 +1,9 @@
+name = "cogops-talent"
+compatibility_date = "2026-05-01"
+pages_build_output_dir = "public"
+
+# Waitlist/evidence store (created 2026-10-22 via API)
+kv_namespaces = [
+  { binding = "SIGNUPS", id = "c10b1c6a863c4bab9ffec597faef29bc" }
+]
+# Secrets (set via wrangler/dashboard, never here): ADMIN_TOKEN, NOTIFY_URL
