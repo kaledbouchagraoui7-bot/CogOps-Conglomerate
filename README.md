@@ -12,7 +12,7 @@
 > | [`structure/decisions.md`](structure/decisions.md) | Decision Records (append-only) — DR-0001 profit split · DR-0002 internal prices · DR-0003 brand architecture · DR-0004 single-entity doctrine · DR-0005 Growth live validation |
 > | [`ROADMAP.md`](ROADMAP.md) | Blueprint → real business: the founder's plan with owners (**YOU** / **ME** / **DONE**) and the critical path to the first franc |
 > | [`growth/`](growth/OFFER.md) | **CogOps Growth, made real**: offer & sales playbook · live landing source (`growth/site/` → https://cogops-growth.pages.dev) · Swiss QR-bill invoicing tool (`growth/tools/`) |
-> | [`cogops-os/`](cogops-os/README.md) | **The operating system as running code** — every mechanism executable: gates (+ phone notifications), lifecycle, capital ladder, autonomy contract, SPQP metrics, cadence generators, CBS, agent squads & missions, per-company LLM cost caps, brand theme, and a state-of-the-art task engine per company. Pure stdlib Python; 100-check selftest ALL GREEN |
+> | [`cogops-os/`](cogops-os/README.md) | **The operating system as running code** — every mechanism executable: gates (+ phone notifications), lifecycle, capital ladder, autonomy contract, SPQP metrics, cadence generators, CBS, agent squads & missions, per-company LLM cost caps, brand theme, and a state-of-the-art task engine per company. Pure stdlib Python; 107-check selftest ALL GREEN |
 >
 > **Reading order:** methodology → cases → synthesis → operating structure → **cogops-os** (the structure, executed). Every structural element in `structure/` carries a lineage tag `[case §M#]` back to the research; every module in `cogops-os/` maps to an OS section in its README.
 

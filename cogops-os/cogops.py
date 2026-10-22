@@ -16,6 +16,10 @@
   python cogops.py sweep <net_profit_chf> <period> <price_chf>
   python cogops.py ladder <surplus_chf> [--opps '<json list>']
   python cogops.py audit                      the Auditing Agent (DBSL) run
+  python cogops.py inbox pull|list|show ID    reply queue: AI drafts, YOU decide
+  python cogops.py inbox approve ID [--text]  approve (edited) draft; then:
+  python cogops.py inbox sent ID              record that you sent it
+  python cogops.py inbox manual ID --text ..  your own words, recorded
   python cogops.py mission set|status|end ... (delegates to automaton)
   python cogops.py cycle | daemon [--interval S]
 """
@@ -187,6 +191,23 @@ def cmd_audit(_a) -> int:
     return 0
 
 
+def cmd_inbox(a) -> int:
+    import inbox
+    if a.icmd == "pull":
+        _p(inbox.pull())
+    elif a.icmd == "list":
+        _p(inbox.listq())
+    elif a.icmd == "show":
+        _p(inbox.show(a.id))
+    elif a.icmd == "approve":
+        _p(inbox.approve(a.id, a.text))
+    elif a.icmd == "sent":
+        _p(inbox.mark_sent(a.id))
+    elif a.icmd == "manual":
+        _p(inbox.mark_manual(a.id, a.text or ""))
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="cogops.py", description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -220,6 +241,10 @@ def main(argv=None) -> int:
     x = sub.add_parser("ladder"); x.add_argument("surplus", type=float); x.add_argument("--opps")
     x.set_defaults(fn=cmd_ladder)
     sub.add_parser("audit").set_defaults(fn=cmd_audit)
+    x = sub.add_parser("inbox"); x.add_argument("icmd",
+        choices=["pull", "list", "show", "approve", "sent", "manual"])
+    x.add_argument("id", nargs="?"); x.add_argument("--text")
+    x.set_defaults(fn=cmd_inbox)
     x = sub.add_parser("cycle"); x.set_defaults(fn=lambda a: __import__("automaton").main(["cycle"]))
     x = sub.add_parser("daemon"); x.add_argument("--interval", type=float, default=3600.0)
     x.set_defaults(fn=lambda a: __import__("automaton").main(["daemon", "--interval", str(a.interval)]))

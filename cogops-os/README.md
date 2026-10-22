@@ -7,7 +7,7 @@
 
 ```bash
 cd cogops-os
-python3 selftest.py                 # 100-check regression suite → ALL GREEN (run before any change)
+python3 selftest.py                 # 107-check regression suite → ALL GREEN (run before any change)
 python3 cogops.py status            # group dashboard
 python3 cogops.py companies         # the ten, with stages & engine tasks
 python3 cogops.py run verde carbon_account --params '{"fuel_l":{"diesel":340},"electricity_kwh":4200,"grid_region":"CH"}'
@@ -84,7 +84,7 @@ Also here: `data/theme.json` — the brand system **code reads** (group palette 
 
 ## Anti-snowball protocol (OS §15) — for any future session
 
-1. `python3 selftest.py` must be **ALL GREEN (100/100)** before and after any change.
+1. `python3 selftest.py` must be **ALL GREEN (107/107)** before and after any change.
 2. Never weaken a selftest to make it pass; fix the mechanism or write a Decision Record.
 3. Money/gate logic changes require new regression checks in the same commit.
 4. `python3 cogops.py audit` must return verdict PASS on a clean runtime.

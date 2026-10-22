@@ -61,7 +61,20 @@ The landing page **is** the validation instrument. Targets (any one suffices, 90
 
 Evidence lands automatically in KV and the ledger. **Miss the window → kill review as KILL_WIN** (the OS means it). Weekly: post the counter publicly (build-in-public = distribution).
 
-## 7. What is already real (as of 2026-10-22)
+## 7. Inquiry triage — AI drafts, the founder decides (founder rule)
+
+Every incoming request enters the **reply queue** (`cogops.py inbox`):
+1. `inbox pull` fetches unseen signups from the live export and drafts a reply
+   (LLM-labeled; honest template fallback — never faked).
+2. The founder reviews: `inbox approve ID` (optionally `--text` to edit), or
+   `inbox manual ID --text "…"` for a personally written email.
+3. `inbox sent ID` records delivery after the founder pastes into mail.
+**No send() function exists in the system — automated outbound mail is not a
+capability.** SLA: reply within **1 business day**; sample batch within
+**48 hours** of the approved target definition. Both numbers are promises on
+the landing page; both are the delivery procedure, not aspirations.
+
+## 8. What is already real (as of 2026-10-22)
 
 - ✅ Landing + pricing + FAQ live: https://cogops-growth.pages.dev (Lovable-grade dark glass)
 - ✅ Signup machine: validation, dedupe, disposable-domain screen, honeypot, per-IP rate limit, live counter, admin export (JSON/CSV), optional phone push per signup

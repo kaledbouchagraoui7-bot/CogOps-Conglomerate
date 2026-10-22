@@ -483,6 +483,46 @@ def main() -> int:
           f[0:3] == ["SPC", "0200", "1"] and f[17] == "QRR" and f[18] == ref
           and f[20] == "EPD" and len(f) == 23 and f[-1] == "")
 
+    # ================= 13c. inbox: AI drafts, founder decides ==============
+    import inbox
+    r = inbox.pull()
+    check("inbox: pull without token is an honest no-op (never half-fetches)",
+          r["status"] == "no_token")
+    su = {"email": "buyer@firma.ch", "company": "Firma AG", "product": "Lead enrichment",
+          "icp": "DACH agencies", "note": "", "at": config.stamp()}
+    d = inbox.draft_reply(su)
+    check("inbox: offline draft = labeled TEMPLATE, promises only offer facts",
+          d["mode"] == "template" and "48 hours" in d["text"] and "K. Bouchagraoui" in d["text"])
+    q = inbox._load(inbox.QUEUE)
+    q["IN-9001"] = {"id": "IN-9001", "signup": su, "draft": d["text"], "mode": d["mode"],
+                    "status": "DRAFT", "created": config.stamp()}
+    inbox._save(inbox.QUEUE, q)
+    fc = False
+    try:
+        inbox.approve("IN-NOPE")
+    except KeyError:
+        fc = True
+    check("inbox: unknown id fail-closed", fc)
+    prem = False
+    try:
+        inbox.mark_sent("IN-9001")
+    except ValueError:
+        prem = True
+    check("inbox: cannot mark SENT before approval (order enforced)", prem)
+    ap = inbox.approve("IN-9001", final_text=d["text"] + "\nPS: edited by founder")
+    check("inbox: approve records edit flag + final text",
+          ap["status"] == "APPROVED" and ap["edited"] is True and ap["final"].endswith("founder"))
+    inbox.mark_sent("IN-9001")
+    mn = inbox.mark_manual("IN-9001", "my own words") if False else None
+    check("inbox: no automated send capability exists (founder rule)",
+          not any(hasattr(inbox, n) for n in ("send", "send_email", "smtp", "dispatch")))
+    q2 = inbox._load(inbox.QUEUE)
+    q2["IN-9002"] = {"id": "IN-9002", "signup": su, "draft": "x", "mode": "template",
+                     "status": "DRAFT", "created": config.stamp()}
+    inbox._save(inbox.QUEUE, q2)
+    m = inbox.mark_manual("IN-9002", "Dear Firma AG, I will write this one myself.")
+    check("inbox: founder-written path recorded as MANUAL", m["status"] == "MANUAL")
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))
