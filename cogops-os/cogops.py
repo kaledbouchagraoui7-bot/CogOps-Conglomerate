@@ -182,6 +182,19 @@ def cmd_unfreeze(a) -> int:
     return 0
 
 
+def cmd_group(a) -> int:
+    import holding, groupsite
+    if a.gcmd == "brand":
+        _p(holding.brand_lockups())
+    elif a.gcmd == "status":
+        _p(holding.group_status(a.fetch_counts))
+    elif a.gcmd == "invariants":
+        _p(holding.invariants())
+    elif a.gcmd == "build":
+        _p(groupsite.build(a.fetch_counts))
+    return 0
+
+
 def cmd_audit(_a) -> int:
     """The Auditing Agent (Danaher DBSL analog): CBS conformance + invariants."""
     registry.ensure_registered()
@@ -273,6 +286,9 @@ def main(argv=None) -> int:
     sub.add_parser("signals").set_defaults(fn=cmd_signals)
     x = sub.add_parser("unfreeze"); x.add_argument("--reason"); x.add_argument("--confirm")
     x.set_defaults(fn=cmd_unfreeze)
+    x = sub.add_parser("group"); x.add_argument("gcmd",
+        choices=["brand", "status", "invariants", "build"])
+    x.add_argument("--fetch-counts", action="store_true"); x.set_defaults(fn=cmd_group)
     x = sub.add_parser("inbox"); x.add_argument("icmd",
         choices=["pull", "list", "show", "approve", "sent", "manual"])
     x.add_argument("id", nargs="?"); x.add_argument("--text")

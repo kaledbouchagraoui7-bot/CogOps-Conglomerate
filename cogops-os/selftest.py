@@ -760,6 +760,33 @@ def main() -> int:
     check("consciousness: static dashboard file written", Path(dp).exists()
           and Path(dp).stat().st_size > 4000)
 
+    # ================= 13k. THE HOLDING: clothes, keeper, skin =============
+    import holding, groupsite
+    locks = holding.brand_lockups()
+    g1 = (config.ROOT.parent / "brand" / "cogops-group.svg").read_text(encoding="utf-8")
+    g2 = holding.brand_lockups()
+    g2svg = (config.ROOT.parent / "brand" / "cogops-group.svg").read_text(encoding="utf-8")
+    check("clothes: 11 lockups generated, deterministic, wordmark present",
+          len(locks) == 11 and g1 == g2svg and "CogOps" in g1)
+    inv = holding.invariants()
+    check("keeper: all 12 invariants executable and passing on clean runtime",
+          len(inv) == 12 and all(r["ok"] for r in inv),
+          str([r["id"] for r in inv if not r["ok"]]))
+    gs = holding.group_status()
+    check("allocator view: 10 companies with URL+promise+boundary each",
+          len(gs["companies"]) == 10
+          and all(c["url"].startswith("https://cogops-") and c["promise"] and c["boundary"]
+                  for c in gs["companies"]))
+    tmp_site = _tmp / "groupsite"
+    built = groupsite.build(out=tmp_site)
+    idx = (tmp_site / "index.html").read_text(encoding="utf-8")
+    gov = (tmp_site / "governance.html").read_text(encoding="utf-8")
+    check("skin: group site renders 10 organs, live trade graph, invariants table",
+          built["invariants_pass"] == 12 and idx.count('class="card"') >= 16
+          and idx.count("<line") >= 20 and "DR-0001" in gov and "I12" in idx)
+    check("skin: governance page carries DR trail + nervous doctrine",
+          "DR-0011" in gov and "nervous" in gov.lower() and "freeze" in gov.lower())
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))

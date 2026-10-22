@@ -57,10 +57,10 @@
 
 | # | Item | Owner | Status |
 |---|---|---|---|
-| 5.1 | Brand system: name, logo, 2 colors, typeface, tone (Penpot) | YOU (Penpot) + DONE (code side) | Name ✓ · colors ✓ (`theme.json`: group + 10 accents) · type ✓ (system stack) · tone ✓ (candor-first) · **logo = yours in Penpot** |
+| 5.1 | Brand system: name, logo, 2 colors, typeface, tone (Penpot) | YOU (Penpot polish) + DONE (code side: `brand/` lockups generated from theme.json, DR-0012) | Name ✓ · colors ✓ (`theme.json`: group + 10 accents) · type ✓ (system stack) · tone ✓ (candor-first) · **logo = yours in Penpot** |
 | 5.2 | One theme file the site factory reads | — | **DONE ✓** `cogops-os/data/theme.json` — code reads brand, never hardcodes; Growth's report + landing follow it; favicon + OG image shipped from the same palette |
 | 5.3 | Branded report templates (highest-value visual work) | ME | **First one DONE ✓** (lead-batch report, themed + version-hashed); carbon/audit/backtest templates queued |
-| 5.4 | Group website + one page per company | ME (next) | Landing pattern proven on Growth; group site = same factory |
+| 5.4 | Group website + one page per company | ME | **DONE ✓** cogops-group.pages.dev (state-assembled: live trade graph, invariants, DR trail) + ten company sites = the ten pages |
 | 5.5 | Visual founder dashboard (live map, replaces CLI status) | ME | **DONE ✓** `cogops.py dashboard [--serve]` — the nervous system's consciousness (OS §16, DR-0011) |
 
 ## Critical path to the first franc

@@ -7,7 +7,7 @@
 
 ```bash
 cd cogops-os
-python3 selftest.py                 # 145-check regression suite → ALL GREEN (run before any change)
+python3 selftest.py                 # 150-check regression suite → ALL GREEN (run before any change)
 python3 cogops.py status            # group dashboard
 python3 cogops.py companies         # the ten, with stages & engine tasks
 python3 cogops.py run verde carbon_account --params '{"fuel_l":{"diesel":340},"electricity_kwh":4200,"grid_region":"CH"}'
