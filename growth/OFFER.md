@@ -23,7 +23,7 @@
 
 ## 3. Sales routine (weekly quota — the input metrics that matter)
 
-- **20 outreach touches/week** (email or LinkedIn) to ICP-fit companies — using our own product on ourselves (the engine enriches, a human approves every send; that's the demo).
+- **20 outreach touches/week** — engine-supported: `growth touch_draft` (day 0/+3/+7 sequence), `weekly_quota_sheet` (the cockpit with an AWAITING-HUMAN-SEND column), `quota_status` (misses demand a root cause) (email or LinkedIn) to ICP-fit companies — using our own product on ourselves (the engine enriches, a human approves every send; that's the demo).
 - **5 sample batches delivered/week** max (protects the 48 h promise).
 - **Follow-up rule:** every sample batch gets 2 follow-ups (day +3, day +7) with one concrete addition ("here are 5 more leads for your second persona — free, because the first batch converted 0 and I want to know why").
 - **Where the ICP lives:** LinkedIn (agency owners), Swiss startup directories, local B2B communities, the JARVIS reference deployment as proof-of-capability, build-in-public posts about the CogOps OS itself (the machine is the marketing).

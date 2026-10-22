@@ -523,6 +523,37 @@ def main() -> int:
     m = inbox.mark_manual("IN-9002", "Dear Firma AG, I will write this one myself.")
     check("inbox: founder-written path recorded as MANUAL", m["status"] == "MANUAL")
 
+    # ================= 13d. outreach quota (human-send doctrine) ===========
+    t0 = registry.run_task("growth", "touch_draft", {
+        "day": 0, "target": {"name": "Dr B", "role": "CTO", "company": "Beta AG",
+                             "context": "builds BIM software for Swiss architects",
+                             "country": "CH"}})
+    t3 = registry.run_task("growth", "touch_draft", {
+        "day": 3, "target": {"name": "Dr B", "role": "CTO", "company": "Beta AG",
+                             "context": "builds BIM software", "country": "CH"}})
+    check("outreach: touch1/touch2 drafts distinct, template-labeled, human-send rule",
+          t0["mode"] == "template" and t0["draft"] != t3["draft"]
+          and "HUMAN" in t0["send_rule"] and t0["sequence_step"] == "touch1")
+    badday = False
+    try:
+        registry.run_task("growth", "touch_draft", {"day": 5, "target": {"company": "X"}})
+    except ValueError:
+        badday = True
+    check("outreach: off-sequence day refused (0/+3/+7 only)", badday)
+    qs = registry.run_task("growth", "weekly_quota_sheet", {
+        "week": "2026-W43", "targets": [{"company": f"C{i}", "name": f"N{i}",
+                                         "country": "CH"} for i in range(25)]})
+    check("outreach: quota sheet caps at 20 touches with AWAITING-HUMAN-SEND column",
+          len(qs["rows"]) == 20 and all(r["approval"] == "AWAITING HUMAN SEND" for r in qs["rows"])
+          and (config.OUTBOX / qs["sheet_file"]).exists())
+    st = registry.run_task("growth", "quota_status",
+                           {"done": {"touches": 12, "samples": 5, "followups": 2}})
+    st2 = registry.run_task("growth", "quota_status",
+                            {"done": {"touches": 20, "samples": 5, "followups": 2}})
+    check("outreach: adherence flags misses + demands root cause (CBS Ch.4)",
+          st["root_cause_required"] is True and st["misses"] == ["touches"]
+          and st2["root_cause_required"] is False)
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))

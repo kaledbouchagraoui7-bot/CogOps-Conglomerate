@@ -30,7 +30,8 @@ META = {
         {"key": "newsletter_subs_per_domain", "layer": "F", "owner": "newsletter-composer", "floor": 100},
     ],
     "squad_roles": ["lead-researcher", "data-validator", "copywriter-personalization",
-                    "seo-page-factory", "newsletter-composer", "funnel-analyst"],
+                    "seo-page-factory", "newsletter-composer", "funnel-analyst",
+                    "outreach-operator"],
 }
 
 EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
@@ -163,6 +164,113 @@ def newsletter_issue(params: dict, slug: str) -> dict:
     return artifact
 
 
+# ------------------------------------------------ outreach quota (OFFER §3) --
+# Touch sequence per OFFER §3: touch1 day 0 (value-first), touch2 day +3 (proof),
+# touch3 day +7 (break-up with a concrete addition). Drafts only — a human
+# approves and sends every message (founder rule; inbox.py doctrine).
+SEQUENCE = (
+    (0, "touch1", "value-first opener referencing the prospect's public context"),
+    (3, "touch2", "add proof: one anonymized sample-batch outcome or validation stat"),
+    (7, "touch3", "break-up: offer the free 25-lead sample one last time, then close the file"),
+)
+
+
+def touch_draft(params: dict, slug: str) -> dict:
+    """Draft one outreach touch for a target. Facts-only grounding (the
+    target's public context + the published offer); honest mode label."""
+    t = params.get("target", {})
+    day = int(params.get("day", 0))
+    step = next((s for s in SEQUENCE if s[0] == day), None)
+    if step is None:
+        raise ValueError(f"day {day} not in sequence {[s[0] for s in SEQUENCE]}")
+    facts = (f"target={t.get('name')} role={t.get('role')} company={t.get('company')} "
+             f"context={t.get('context', '')[:240]} jurisdiction={t.get('country', 'CH')}")
+    prompt = (f"Write ONE B2B email ({step[2]}), max 90 words, confident and direct, "
+              f"no hedging, one call-to-action (30-minute target-definition call or the "
+              f"free 25-lead sample). Facts only:\n{facts}")
+    try:
+        out = llm.generate(prompt, system=OFFER_SYSTEM, company=slug)
+        text, mode = out["text"], out["mode"]
+    except llm.LLMUnavailable:
+        cta = ("Would a 30-minute call this week work to fix your target definition? "
+               if day == 0 else
+               "The free 25-lead sample stands — one email and it is yours."
+               if day == 7 else
+               "Happy to send three sample records for your second persona, free.")
+        text = (f"Hi {t.get('name', 'there')} — {t.get('company', 'your team')} shows up in "
+                f"{t.get('context', 'your space')[:80]}. We manufacture validated B2B leads: "
+                f"sourced per record, deduped against your CRM, copy written for one person "
+                f"at a time, human-approved before anything sends. {cta}")
+        mode = "template"
+    artifact = {"mode": mode, "sequence_step": step[1], "day_offset": day,
+                "target": t, "draft": text,
+                "send_rule": "HUMAN approves or rewrites; never automated (founder rule)",
+                "compliance_note": "e-privacy screen required for non-CH recipients "
+                                   "before send (RoPA R4)",
+                "asof": config.today()}
+    _emit(slug, f"touch_{step[1]}_{(t.get('company') or 'target').lower().replace(' ', '_')}",
+          artifact)
+    return artifact
+
+
+OFFER_SYSTEM = ("You write outreach for CogOps Growth. Confident, direct, zero hedging. "
+                "Facts only from the target context and the published offer: free 25-lead "
+                "sample in 48h after approved target definition; CHF 1-3 per validated lead; "
+                "retainers CHF 1,500-3,500/month cancel monthly; 14-day replacement guarantee; "
+                "reply within 1 business day.")
+
+
+def weekly_quota_sheet(params: dict, slug: str) -> dict:
+    """The founder's weekly outreach cockpit (OFFER §3 quota): 20 touches,
+    5 sample batches, 2 follow-ups per open sample. One row per target with
+    its sequence stage, drafted touch and an explicit APPROVAL column — the
+    sheet is a work list for a human, never an auto-sender."""
+    week = params.get("week", config.today()[:7])
+    targets = params.get("targets", [])
+    quota = params.get("quota", {"touches": 20, "samples": 5, "followups": 2})
+    rows = []
+    for i, t in enumerate(targets[: quota["touches"]], 1):
+        stage = int(t.get("stage", 0))
+        step = SEQUENCE[min(stage, len(SEQUENCE) - 1)]
+        rows.append({"#": i, "company": t.get("company"), "name": t.get("name"),
+                     "country": t.get("country", "CH"),
+                     "touch": step[1], "day_offset": step[0],
+                     "approval": "AWAITING HUMAN SEND"})
+    md = [f"# Outreach sheet — {week} — CogOps Growth", "",
+          f"**Quota:** {quota['touches']} touches · {quota['samples']} sample batches · "
+          f"{quota['followups']} follow-ups per open sample", "",
+          "| # | Company | Contact | Country | Touch | Day | Approval |",
+          "|---|---|---|---|---|---|---|"]
+    md += [f"| {r['#']} | {r['company']} | {r['name']} | {r['country']} | {r['touch']} "
+           f"| +{r['day_offset']}d | **{r['approval']}** |" for r in rows]
+    md += ["", "_Every line is drafted by the engine (`touch_draft`) and sent only by a "
+           "human. Non-CH rows require the e-privacy screen (RoPA R4) before send._"]
+    p = config.OUTBOX / f"growth_outreach_{week}.md"
+    p.write_text("\n".join(md), encoding="utf-8")
+    ledger.event("outreach_sheet", slug, {"week": week, "rows": len(rows)})
+    return {"mode": "engine", "week": week, "rows": rows, "quota": quota,
+            "sheet_file": p.name, "asof": config.today()}
+
+
+def quota_status(params: dict, slug: str) -> dict:
+    """Adherence vs quota with root-cause demand on miss (CBS Ch.4: misses get
+    root-caused, not excused)."""
+    quota = params.get("quota", {"touches": 20, "samples": 5, "followups": 2})
+    done = params.get("done", {"touches": 0, "samples": 0, "followups": 0})
+    res = {}
+    misses = []
+    for k in quota:
+        ok = done.get(k, 0) >= quota[k]
+        res[k] = {"done": done.get(k, 0), "quota": quota[k], "met": ok}
+        if not ok:
+            misses.append(k)
+    return {"mode": "engine", "adherence": res, "misses": misses,
+            "root_cause_required": bool(misses),
+            "action": ("write the root cause into the weekly review (CBS Ch.4)"
+                       if misses else "quota met — log the win"),
+            "asof": config.today()}
+
+
 def _emit(slug: str, kind: str, artifact: dict) -> None:
     p = config.OUTBOX / f"{slug}_{kind}_{config.today()}.json"
     import json
@@ -223,4 +331,7 @@ TASKS = {
     "lead_report_html": {"fn": lead_report_html, "role": "copywriter-personalization"},
     "pseo_pages": {"fn": pseo_pages, "role": "seo-page-factory"},
     "newsletter_issue": {"fn": newsletter_issue, "role": "newsletter-composer"},
+    "touch_draft": {"fn": touch_draft, "role": "outreach-operator"},
+    "weekly_quota_sheet": {"fn": weekly_quota_sheet, "role": "funnel-analyst"},
+    "quota_status": {"fn": quota_status, "role": "funnel-analyst"},
 }

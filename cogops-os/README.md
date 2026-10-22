@@ -7,7 +7,7 @@
 
 ```bash
 cd cogops-os
-python3 selftest.py                 # 107-check regression suite → ALL GREEN (run before any change)
+python3 selftest.py                 # 111-check regression suite → ALL GREEN (run before any change)
 python3 cogops.py status            # group dashboard
 python3 cogops.py companies         # the ten, with stages & engine tasks
 python3 cogops.py run verde carbon_account --params '{"fuel_l":{"diesel":340},"electricity_kwh":4200,"grid_region":"CH"}'
@@ -61,7 +61,7 @@ Two-step gate flow everywhere: an action **stages** → founder **approves** →
 | **medtech** | `mdr_doc_tree` (Annex II/III, class-scoped, signoff flags) · `alcoa_log` (append-only experiment trail) · `imaging_pipeline_spec` (research-use only) |
 | **verde** | `carbon_account` (GHG Protocol S1/S2/S3-lite, sourced factors) · `csrd_lite_report` (limitations section mandatory) |
 | **terra** | `physical_risk` (**labeled heuristic v0**) · `transition_risk` (TCFD levers) · `esg_brief` (≥5 sources enforced) |
-| **growth** | `enrich_leads` (validate/dedupe/disposable-incl-subdomains/score + per-prospect copy) · `pseo_pages` (byte-deterministic page factory + sitemap) · `newsletter_issue` |
+| **growth** | `enrich_leads` (validate/dedupe/disposable-incl-subdomains/score + per-prospect copy) · `lead_report_html` (branded version-hashed deliverable) · `pseo_pages` (byte-deterministic page factory + sitemap) · `newsletter_issue` · `touch_draft` + `weekly_quota_sheet` + `quota_status` (outreach quota, human-send doctrine) |
 | **talent** | `curriculum` (gap-evidence-sourced tracks) · `match` (explainable cosine matcher) · `market_brief` (as-of-dated analysis quotes) |
 
 **Statistics kernel** (`statsnr.py`): Welch t-test and χ² from Numerical Recipes (series + continued-fraction, correct initialization per the portfolio's FIXES.md #2) — validated in-suite against textbook critical values (χ²(3.841, df1)→p≈0.05; t=−1, df8→p≈0.3466; 2×2 no-Yates χ²=20/3→p≈0.00982).
@@ -84,7 +84,7 @@ Also here: `data/theme.json` — the brand system **code reads** (group palette 
 
 ## Anti-snowball protocol (OS §15) — for any future session
 
-1. `python3 selftest.py` must be **ALL GREEN (107/107)** before and after any change.
+1. `python3 selftest.py` must be **ALL GREEN (111/111)** before and after any change.
 2. Never weaken a selftest to make it pass; fix the mechanism or write a Decision Record.
 3. Money/gate logic changes require new regression checks in the same commit.
 4. `python3 cogops.py audit` must return verdict PASS on a clean runtime.

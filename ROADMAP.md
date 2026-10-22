@@ -10,7 +10,7 @@
 | 1.2 | Single legal name everywhere (GmbH, domain, GitHub, invoices) | YOU + ME | **DR-0003**: "CogOps Group" settled; handles + email already consistent; **domain purchase is yours** (cogops.ch/.com — check availability, wire to Pages) |
 | 1.3 | Group bank account + internal ledgers — one cost centre per company, real numbers | YOU (bank) + DONE (code) | Cost centres are real in `cogops-os` (per-company P&L, envelope accounting, platform charges); bank feed/QR-bill reconciliation after account exists |
 | 1.4 | Bookkeeping + VAT with a Swiss fiduciary; chart of accounts matching the ten companies | YOU | Pick a Treuhänder (e.g. via canton fiduciary association); hand them `research/09-swiss-holding-law.md` + DR-0004; VAT registration at CHF 100k global turnover (8.1%) |
-| 1.5 | Standard contracts: client terms w/ liability cap, DPA (nFADP/GDPR), "never the signatory" clauses (Dossia/Sentinel/Medtech) | ME (drafts) → YOU (lawyer review) | **Checklist + triggers in `LEGAL.md` §A2–A5**; delivery procedures already encode the human-of-record rule (`growth/OFFER.md` §4, OS §13) |
+| 1.5 | Standard contracts: client terms w/ liability cap, DPA (nFADP/GDPR), "never the signatory" clauses (Dossia/Sentinel/Medtech) | ME (drafts) → YOU (lawyer review) | **DRAFTS v0.9 DONE ✓** `legal/tos.md` · `legal/dpa.md` · `legal/ropa.md` · `legal/retention.md`; checklist/triggers in `LEGAL.md`; lawyer review = yours |
 | 1.6 | Professional liability insurance (priority: Sentinel, Dossia, Capital) | YOU | Get quotes once entity exists; brokers ask for the service descriptions — `OFFER.md` + blueprint serve directly |
 | 1.7 | Lawyer boundary check: Capital (FINMA), Dossia (Swissmedic), Medtech (MDR) stay on the safe side | YOU | One-off review (~CHF 500–1,500); boundaries as drawn: tools-not-advice / never-signatory / research-use-not-device — written to be defensible, need confirming. Full document/registration memory: **`LEGAL.md` §C** |
 
@@ -19,7 +19,7 @@
 | # | Item | Owner | Status |
 |---|---|---|---|
 | 2.1 | Code in GitHub | — | **DONE ✓** private repo `CogOps-Conglomerate`, pushed + verified |
-| 2.2 | Code onto your PC | YOU | `git clone https://github.com/kaledbouchagraoui7-bot/CogOps-Conglomerate.git` → `cd cogops-os && python3 selftest.py` (expect 107/107) |
+| 2.2 | Code onto your PC | YOU | `git clone https://github.com/kaledbouchagraoui7-bot/CogOps-Conglomerate.git` → `cd cogops-os && python3 selftest.py` (expect 111/111) |
 | 2.3 | 24/7 server (small VPS, backups, logs, secrets in Bitwarden) | YOU (order ~CHF 5–10/mo) → ME (runbook + systemd/docker + automaton daemon) | Automaton already daemonizes (`automaton.py daemon`); runbook queued |
 | 2.4 | Persistent shared DB — one CRM for all ten | ME (migration) | Supabase `Jarvis-db` exists with the 6 CRM tables; wire signups/leads export → `leads` table next |
 | 2.5 | **A real gate — approvals on your phone** | DONE (code) + YOU (10 s) | `notify.py` pushes every G2/G3 gate to any ntfy.sh topic: install ntfy app → subscribe to a private topic → set `COGOPS_NOTIFY_URL` (locally) and/or the `NOTIFY_URL` secret on the Pages projects |
@@ -27,7 +27,7 @@
 | 2.7 | Email, calendar, analytics | YOU (accounts) → ME (wiring) | Gmail sending (workspace or forwarded domain mail), Cal.com booking link on landing, Cloudflare Web Analytics (free, cookieless) — each a 15-min wire once accounts exist |
 | 2.8 | LLM gateway + **cost cap per company** | — | **DONE ✓** provider chain + `LLM_MONTHLY_CAP_USD` (default $5/company/month, conservative estimates; free tier & KB always available) |
 | 2.9 | Real data — replace flagged placeholders | ME (next) | Carbon factors are loudly labeled placeholder-grade; replacement = licensed/current factor set before any client sees Verde output |
-| 2.10 | Automated tests + version history per deliverable engine | — | **DONE ✓** 107/107 selftest (run before/after any change, anti-snowball protocol); deliverables carry content-hash version stamps + as-of dates |
+| 2.10 | Automated tests + version history per deliverable engine | — | **DONE ✓** 111/111 selftest (run before/after any change, anti-snowball protocol); deliverables carry content-hash version stamps + as-of dates |
 
 ## 3 · Organs (the parts that make money)
 

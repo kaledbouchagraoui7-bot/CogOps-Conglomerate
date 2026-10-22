@@ -10,8 +10,8 @@
 | A1 | Impressum + privacy live with honest "entity in formation" disclosure | ME | DONE ✓ (growth site) |
 | A2 | Client **terms of service** draft: liability cap, IP assignment of deliverables, replacement guarantee (14 d), cancellation (monthly), governing law CH, place of jurisdiction | ME draft → YOU/lawyer | next |
 | A3 | **DPA template** (nFADP + GDPR Art. 28): processors = Cloudflare, Supabase, OpenRouter; sub-processor list; deletion ≤30 d | ME draft → YOU/lawyer | next |
-| A4 | Data-processing register (RoPA/VVT, nDSG Art. 12): one row per data flow (signups KV, CRM Supabase, ledgers runtime, KV portal) | ME draft | next |
-| A5 | Records-retention policy: commercial records 10 y (OR 958f); client data per DPA; ledgers append-only | ME draft | next |
+| A4 | Data-processing register (RoPA/VVT, nDSG Art. 12): one row per data flow (signups KV, CRM Supabase, ledgers runtime, KV portal) | ME draft | **DRAFT v0.9 DONE ✓ `legal/ropa.md`** — 10 rows incl. outreach balancing test + e-privacy screen |
+| A5 | Records-retention policy: commercial records 10 y (OR 958f); client data per DPA; ledgers append-only | ME draft | **DRAFT v0.9 DONE ✓ `legal/retention.md`** — schedule + 30-day deletion procedure + legal-hold rule |
 | A6 | Trademark "CogOps" + word/figurative mark (IPI, ~CHF 550/10 y, classes 9/35/42) + EUIPO if EU-facing | YOU | queued |
 | A7 | Domains: cogops.ch / cogops.com / cogops.group (registrar, 2 y) | YOU | queued |
 
