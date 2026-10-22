@@ -528,7 +528,7 @@ def lead_report_html(params: dict, slug: str) -> dict:
 
 
 # Star link: Intelligence <-> this company (DR-0010)
-LINKS = {"intelligence": "intelligence_ops"}
+LINKS = {"talent": "sister_digest", "intelligence": "intelligence_ops"}
 
 TASKS = {
     "intelligence_ops": {"fn": intelligence_ops, "role": "funnel-analyst"},

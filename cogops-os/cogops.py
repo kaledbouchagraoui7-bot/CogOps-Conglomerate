@@ -156,6 +156,32 @@ def cmd_ladder(a) -> int:
     return 0
 
 
+def cmd_dashboard(a) -> int:
+    import dashboard
+    if a.serve:
+        dashboard.serve(a.port)
+        return 0
+    p = dashboard.write_dashboard(a.out)
+    print(f"dashboard written: {p}")
+    return 0
+
+
+def cmd_signals(_a) -> int:
+    import nervous
+    _p(nervous.signals(40))
+    return 0
+
+
+def cmd_unfreeze(a) -> int:
+    import nervous
+    try:
+        _p(nervous.unfreeze(a.reason, confirm=a.confirm or ""))
+    except PermissionError as e:
+        print(f"refused: {e}")
+        return 1
+    return 0
+
+
 def cmd_audit(_a) -> int:
     """The Auditing Agent (Danaher DBSL analog): CBS conformance + invariants."""
     registry.ensure_registered()
@@ -241,6 +267,12 @@ def main(argv=None) -> int:
     x = sub.add_parser("ladder"); x.add_argument("surplus", type=float); x.add_argument("--opps")
     x.set_defaults(fn=cmd_ladder)
     sub.add_parser("audit").set_defaults(fn=cmd_audit)
+    x = sub.add_parser("dashboard"); x.add_argument("--serve", action="store_true")
+    x.add_argument("--port", type=int, default=8020); x.add_argument("--out")
+    x.set_defaults(fn=cmd_dashboard)
+    sub.add_parser("signals").set_defaults(fn=cmd_signals)
+    x = sub.add_parser("unfreeze"); x.add_argument("--reason"); x.add_argument("--confirm")
+    x.set_defaults(fn=cmd_unfreeze)
     x = sub.add_parser("inbox"); x.add_argument("icmd",
         choices=["pull", "list", "show", "approve", "sent", "manual"])
     x.add_argument("id", nargs="?"); x.add_argument("--text")

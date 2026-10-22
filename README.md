@@ -19,7 +19,7 @@
 > | [`talent/`](talent/OFFER.md) | **CogOps Talent, made real:** offer & delivery playbook · live landing (`talent/site/` → https://cogops-talent.pages.dev) · Growth↔Talent internal-market link (DR-0007) |
 > | [`helix/`](helix/OFFER.md) | **CogOps Helix, made real:** offer & delivery playbook · live landing source (`helix/site/` → https://cogops-helix.pages.dev) — free 48 h QC sample as the evidence machine |
 > | [`growth/`](growth/OFFER.md) | **CogOps Growth, made real**: offer & sales playbook · live landing source (`growth/site/` → https://cogops-growth.pages.dev) · Swiss QR-bill invoicing tool (`growth/tools/`) |
-> | [`cogops-os/`](cogops-os/README.md) | **The operating system as running code** — every mechanism executable: gates (+ phone notifications), lifecycle, capital ladder, autonomy contract, SPQP metrics, cadence generators, CBS, agent squads & missions, per-company LLM cost caps, brand theme, and a state-of-the-art task engine per company. Pure stdlib Python; 111-check selftest ALL GREEN |
+> | [`cogops-os/`](cogops-os/README.md) | **The operating system as running code** — every mechanism executable: gates (+ phone notifications), lifecycle, capital ladder, autonomy contract, SPQP metrics, cadence generators, CBS, agent squads & missions, per-company LLM cost caps, brand theme, and a state-of-the-art task engine per company. Pure stdlib Python; 145-check selftest ALL GREEN |
 >
 > **Reading order:** methodology → cases → synthesis → operating structure → **cogops-os** (the structure, executed). Every structural element in `structure/` carries a lineage tag `[case §M#]` back to the research; every module in `cogops-os/` maps to an OS section in its README.
 

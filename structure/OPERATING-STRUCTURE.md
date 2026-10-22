@@ -1,9 +1,9 @@
-# CogOps Group — Operating Structure v1.0
+# CogOps Group — Operating Structure v1.1
 
 > **What this document is:** the complete operating system of the conglomerate — every structure copied or adapted from the benchmark research (`../research/`), instantiated for a Swiss, solo-founder, AI-operated group of ten domain companies.
 > **Lineage rule:** no element exists here without a source tag `[case §M#]`. The full adoption ledger is `../research/10-cross-case-synthesis.md` §4.
 > **Change rule:** this document is amended only through Decision Records (§15). Numbers marked *(default)* are founder-tunable via a DR; invariants (§14) are not tunable outside a DR with evidence.
-> Version 1.0 · 2026-10-22 · supersedes: nothing · status: ACTIVE pending founder ratification keystroke.
+> Version 1.1 · 2026-10-22 · v1.0 ratified in practice by DR-0001…0010 · §16 added by DR-0011.
 
 ---
 
@@ -283,4 +283,18 @@ Squad composition per company draws from the 7 universes (revenue, delivery, cap
 5. **Anti-snowball protocol** (methodology §4): before any future session edits this structure: re-read §14 + the adoption ledger; verify any number being changed against its cited source; if a fact cannot be re-verified, mark it *(unverified)* rather than propagating it.
 
 ---
-*Operating Structure v1.0 — ratified by: founder keystroke pending. Lineage: research/01–10. Blueprint: ../README.md. Legal frame: research/09.*
+
+## §16 The Nervous System (v1.1, DR-0011)
+
+The body metaphor made executable (`nervous.py` + `dashboard.py`):
+
+- **Senses:** `sense()` sweeps every organ — fortress, ledger chains, gate age, ticket SLAs, metric floors, missions, LLM caps, contribution, and (optionally) the ten live sites — emitting typed, deduplicated signals onto `signals.jsonl`.
+- **Reflexes:** protective reactions that need no founder awake: spend-freeze on fortress breach (auto-releases when healed), kill-review staging on repeat floor breaches, spin-down reviews on negative contribution, dependency flags propagated along the trade graph (`LINKS`-derived nerves). Reflexes **never spend, send or approve** — they freeze, flag, stage and inform.
+- **Pain:** critical signals write `FREEZE.json`; `lifecycle.spend()` refuses while it exists. Fortress freezes heal themselves; **ledger-integrity freezes release only via founder keystroke** (`cogops.py unfreeze --confirm <phrase>`). The machine stops; it does not limp.
+- **Nerves:** the dependency graph is derived from the companies' LINKS registries (pairs + clique + star): a degraded seller flags every buyer's evidence chain.
+- **Consciousness:** `cogops.py dashboard` renders the body — organ map with every trade edge, vitals, gate queue, signal feed, missions — as one HTML page (static or `--serve` on 127.0.0.1, localhost-only like GenevaOS). Replaces the CLI status as the founder's daily view (roadmap 5.5).
+
+Cadence integration: the automaton runs `nervous.cycle()` every cycle (§8); the weekly sheet quotes the signal feed; the annual letter quotes freeze history.
+
+---
+*Operating Structure v1.1 — amendments via DR only (§15). Lineage: research/01–10. Blueprint: ../README.md. Legal frame: research/09.*

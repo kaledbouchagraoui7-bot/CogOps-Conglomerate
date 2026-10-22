@@ -99,6 +99,9 @@ def cycle() -> dict:
             continue
         step = _advance_mission(slug, m)
         report["missions"].append({"slug": slug, **step})
+    # 4b. nervous system: sense -> reflexes (protective, never external)
+    import nervous
+    report["nervous"] = nervous.cycle()
     # 5. health
     import metrics
     cos = [lifecycle.load(s) for s in lifecycle.all_slugs()]

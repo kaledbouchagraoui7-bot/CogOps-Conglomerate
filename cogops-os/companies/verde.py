@@ -197,7 +197,7 @@ def _emit(slug: str, kind: str, artifact: dict) -> None:
 
 
 # Star link: Intelligence <-> this company (DR-0010)
-LINKS = {"intelligence": "intelligence_ops"}
+LINKS = {"terra": "csrd_full", "intelligence": "intelligence_ops"}
 
 TASKS = {
     "intelligence_ops": {"fn": intelligence_ops, "role": "carbon-accountant"},

@@ -712,6 +712,54 @@ def main() -> int:
     check("audit carries EU AI Act watch (as-of dated, sourced)",
           au["reg_watch"]["asof"] == "2026-10" and "2026-08-02" in str(au["reg_watch"]["facts"]))
 
+    # ================= 13j. nervous system: senses, reflexes, pain ==========
+    import nervous, dashboard
+    deps = nervous.dependents_of("sentinel")
+    check("nerves: dependency map derived from LINKS (sentinel's buyers)",
+          {"intelligence", "helix", "dossia", "medtech", "capitalco"} <= set(deps), str(deps))
+    w = capital._wallet(); capital._save_wallet({**w, "cash_chf": 100.0})
+    sig = nervous.sense(); act = nervous.reflexes()
+    check("reflex: fortress breach sensed critical + spend FREEZE engaged",
+          any(x["kind"] == "fortress_below_floor" and x["severity"] == "critical" for x in sig)
+          and nervous.frozen() is not None)
+    frz = False
+    try:
+        lifecycle.spend("growth", 10.0, "during freeze")
+    except lifecycle.FreezeActive:
+        frz = True
+    check("pain: lifecycle.spend refuses while frozen", frz)
+    capital._save_wallet(w)
+    nervous.cycle()
+    check("reflex: fortress freeze auto-releases when healed",
+          not any(r["reason"] == "fortress" for r in (nervous.frozen() or {}).get("reasons", [])))
+    ev = ledger.EVENTS.read_text(encoding="utf-8")
+    ledger.EVENTS.write_text(ev.replace('"kind"', '"Kind"', 1), encoding="utf-8")
+    nervous.sense(); nervous.reflexes()
+    hard = any(r["reason"] == "ledger_integrity" for r in (nervous.frozen() or {}).get("reasons", []))
+    badconf = False
+    try:
+        nervous.unfreeze(confirm="wrong phrase")
+    except PermissionError:
+        badconf = False if False else True
+    check("pain: ledger tamper => HARD freeze; wrong phrase refused", hard and badconf)
+    ledger.EVENTS.write_text(ev, encoding="utf-8")
+    nervous.unfreeze(reason="ledger_integrity", confirm=config.CONFIRM_PHRASE)
+    check("pain: integrity freeze releases only via founder phrase",
+          not any(r["reason"] == "ledger_integrity" for r in (nervous.frozen() or {}).get("reasons", []))
+          and ledger.verify_chain(ledger.EVENTS))
+    metrics.observe("growth", "validated_leads_month", 5, "t2")
+    sig2 = nervous.sense(); act2 = nervous.reflexes()
+    check("reflex: repeat floor breach stages a kill-review gate (deduped per day)",
+          any(x["kind"] == "metric_floor_repeat" for x in sig2)
+          and any(a["action"].startswith("kill-review") for a in act2))
+    html = dashboard.build_html(nervous.state())
+    check("consciousness: dashboard renders 10 organs + edges + signals + freeze-aware",
+          all(f'>{n["name"].replace("CogOps ", "")}<' in html for n in nervous.state()["nodes"])
+          and html.count("<line") >= 20 and "Signal feed" in html)
+    dp = dashboard.write_dashboard()
+    check("consciousness: static dashboard file written", Path(dp).exists()
+          and Path(dp).stat().st_size > 4000)
+
     # ================= 14. ledger integrity =================
     check("ledger: decision chain verifies", ledger.verify_chain(ledger.DECISIONS))
     check("ledger: event chain verifies", ledger.verify_chain(ledger.EVENTS))

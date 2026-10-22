@@ -26,6 +26,10 @@ class EnvelopeExceeded(RuntimeError):
     pass
 
 
+class FreezeActive(RuntimeError):
+    """The nervous system's pain response: protective freeze on spending."""
+
+
 def _path(slug: str) -> Path:
     return config.COMPANY_DIR / f"{slug}.json"
 
@@ -74,6 +78,14 @@ def spend(slug: str, amount_chf: float, what: str, by: str = "squad") -> dict:
     amount ≤ cap  → Type-2, recorded.
     amount > cap  → auto Type-1: staged at the gate, NOT executed until approved.
     Envelope breach → hard stop (invariant: no silent top-ups, OS §4)."""
+    fz = config.RUNTIME_DIR / "FREEZE.json"
+    if fz.exists():
+        import json as _j
+        reasons = [r["reason"] for r in _j.loads(fz.read_text(encoding="utf-8")).get("reasons", [])]
+        if reasons:
+            raise FreezeActive(f"group FREEZE active {reasons} — spend refused; "
+                               f"integrity freezes release only by founder keystroke "
+                               f"(cogops.py unfreeze --confirm)")
     c = load(slug)
     if amount_chf <= 0:
         raise ValueError("spend must be positive")

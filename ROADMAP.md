@@ -61,7 +61,7 @@
 | 5.2 | One theme file the site factory reads | — | **DONE ✓** `cogops-os/data/theme.json` — code reads brand, never hardcodes; Growth's report + landing follow it; favicon + OG image shipped from the same palette |
 | 5.3 | Branded report templates (highest-value visual work) | ME | **First one DONE ✓** (lead-batch report, themed + version-hashed); carbon/audit/backtest templates queued |
 | 5.4 | Group website + one page per company | ME (next) | Landing pattern proven on Growth; group site = same factory |
-| 5.5 | Visual founder dashboard (live map, replaces CLI status) | ME (next) | Data layer exists (`cogops.py status` JSON); web skin queued |
+| 5.5 | Visual founder dashboard (live map, replaces CLI status) | ME | **DONE ✓** `cogops.py dashboard [--serve]` — the nervous system's consciousness (OS §16, DR-0011) |
 
 ## Critical path to the first franc
 

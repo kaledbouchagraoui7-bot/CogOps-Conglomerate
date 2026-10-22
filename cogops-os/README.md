@@ -7,7 +7,7 @@
 
 ```bash
 cd cogops-os
-python3 selftest.py                 # 111-check regression suite → ALL GREEN (run before any change)
+python3 selftest.py                 # 145-check regression suite → ALL GREEN (run before any change)
 python3 cogops.py status            # group dashboard
 python3 cogops.py companies         # the ten, with stages & engine tasks
 python3 cogops.py run verde carbon_account --params '{"fuel_l":{"diesel":340},"electricity_kwh":4200,"grid_region":"CH"}'
@@ -81,6 +81,10 @@ Two-step gate flow everywhere: an action **stages** → founder **approves** →
 | `ENV_STAGE*` / `FORTRESS_MONTHS` / `MONTHLY_FIXED_COSTS_CHF` / `SWEEP_PROFIT_SHARE` | doctrine tunables (DR-governed defaults in `config.py`) |
 
 Also here: `data/theme.json` — the brand system **code reads** (group palette + one accent per company, DR-0003); Growth's `lead_report_html` task renders the first branded, version-hashed client deliverable from it. Sibling tooling: `../growth/tools/qr_invoice.py` (Swiss QR-bill invoices — SIX-spec payload, mod-10-recursive references, ISO-1339 IBAN check; bank scan-check flagged for the first real invoice).
+
+## The nervous system (OS §16)
+
+`python3 cogops.py dashboard` — the consciousness: organ map with every trade edge, vitals, gate queue, signal feed, missions (static HTML or `--serve` on 127.0.0.1). `cogops.py signals` reads the bus; `cogops.py unfreeze --confirm "<phrase>"` is the only way out of an integrity freeze. Reflexes protect; they never act externally.
 
 ## Anti-snowball protocol (OS §15) — for any future session
 
