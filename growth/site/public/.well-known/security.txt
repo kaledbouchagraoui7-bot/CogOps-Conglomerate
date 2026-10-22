@@ -1,0 +1,5 @@
+Contact: mailto:cogops.engine@gmail.com
+Expires: 2027-10-22T00:00:00.000Z
+Preferred-Languages: en, fr, de
+Policy: https://cogops-growth.pages.dev/privacy.html
+Canonical: https://cogops-growth.pages.dev/.well-known/security.txt
