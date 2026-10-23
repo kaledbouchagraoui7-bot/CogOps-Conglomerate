@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import html
 import json
+import math
 import re
 from pathlib import Path
 
@@ -105,6 +106,249 @@ def tree() -> str:
     return html.escape("\n".join(lines))
 
 
+# ---------------------------------------------------------------- visual tree
+COMPANIES = ["growth", "talent", "helix", "dossia", "medtech", "sentinel",
+             "capitalco", "verde", "terra", "intelligence"]
+
+
+def _accent(slug: str) -> str:
+    try:
+        m = re.search(r'--acc:\s*(#[0-9a-fA-F]{3,8})',
+                      (ROOT / slug / "site" / "public" / "index.html").read_text(encoding="utf-8"))
+        return m.group(1) if m else "#7ee0b8"
+    except OSError:
+        return "#7ee0b8"
+
+
+ACC = {s: _accent(s) for s in COMPANIES}
+ACC["group"] = _accent("group")
+
+CAT = {"cogops-os": "#4ade80", "tools": "#22d3ee", "structure": "#f87171",
+       "legal": "#f87171", "holding": "#f87171", "analysis": "#60a5fa",
+       "brand": "#fbbf24", "vault": "#fbbf24"}
+
+
+def tree_data() -> dict:
+    """Nested JSON tree with per-node colors (category / company accent)."""
+    def color(parts):
+        top = parts[0] if parts else ""
+        if len(parts) >= 2 and top in ACC and parts[1] == "site":
+            return "#a78bfa"
+        if top in ACC:
+            return ACC[top]
+        if top == "cogops-os" and len(parts) >= 3 and parts[1] == "companies":
+            return ACC.get(Path(parts[2]).stem, "#4ade80")
+        return CAT.get(top, "#94a3b8")
+
+    def walk(d: Path, parts):
+        kids = []
+        entries = sorted(
+            [p for p in d.iterdir()
+             if p.name not in EXCLUDE and not p.name.endswith(".pyc")
+             and not (p.is_dir() and p.name == "functions"
+                      and parts and parts[-1] == "public")],
+            key=lambda p: (p.is_file(), p.name.lower()))
+        for p in entries:
+            pp = parts + [p.name]
+            if p.is_dir():
+                kids.append({"n": p.name, "d": 1, "c": color(pp), "k": walk(p, pp)})
+            else:
+                kids.append({"n": p.name, "d": 0, "c": color(pp)})
+        return kids
+
+    return {"n": ROOT.name + "/", "d": 1, "c": "#e8edf6", "k": walk(ROOT, [])}
+
+
+def _count(node):
+    if not node.get("d"):
+        return 0, 1
+    df = ff = 0
+    for k in node.get("k", []):
+        a, b = _count(k)
+        df += a
+        ff += b
+    return df + 1, ff
+
+
+GRAPH_HOVER = """<script>
+if(!window.__rg){window.__rg=1;
+document.addEventListener('mouseover',function(ev){
+  var g=ev.target.closest&&ev.target.closest('g.nd');
+  document.querySelectorAll('svg line.e').forEach(function(l){l.classList.remove('hi');});
+  if(!g)return; var s=g.dataset.s;
+  document.querySelectorAll('svg line.e').forEach(function(l){
+    if(l.dataset.a===s||l.dataset.b===s)l.classList.add('hi');});
+});}
+</script>"""
+
+
+def rel_graph() -> str:
+    """SVG relationship graph: holding hub + 10 companies, star/clique/pair edges."""
+    order = ["intelligence", "growth", "talent", "helix", "dossia", "medtech",
+             "sentinel", "capitalco", "verde", "terra"]
+    cx, cy, rx, ry = 450, 330, 330, 225
+    pos = {}
+    for i, s in enumerate(order):
+        a = math.radians(-90 + i * 36)
+        pos[s] = (cx + rx * math.cos(a), cy + ry * math.sin(a))
+    e = []
+    for s in order:
+        x, y = pos[s]
+        e.append(f'<line x1="{cx}" y1="{cy}" x2="{x:.0f}" y2="{y:.0f}" stroke="#26334a" stroke-width="1"/>')
+    for s in order:
+        if s == "intelligence":
+            continue
+        x1, y1 = pos["intelligence"]
+        x2, y2 = pos[s]
+        e.append(f'<line class="e" data-a="intelligence" data-b="{s}" x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" stroke="#7ee0b8" stroke-width="1.5" stroke-dasharray="5 5" opacity=".5"/>')
+    k5 = ["helix", "dossia", "medtech", "sentinel", "capitalco"]
+    for i in range(len(k5)):
+        for j in range(i + 1, len(k5)):
+            a, b = k5[i], k5[j]
+            x1, y1 = pos[a]
+            x2, y2 = pos[b]
+            e.append(f'<line class="e" data-a="{a}" data-b="{b}" x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" stroke="#6ea8fe" stroke-width="1.8" opacity=".45"/>')
+    for a, b in [("growth", "talent"), ("verde", "terra")]:
+        x1, y1 = pos[a]
+        x2, y2 = pos[b]
+        e.append(f'<line class="e" data-a="{a}" data-b="{b}" x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" stroke="#ffcf6e" stroke-width="2.4" opacity=".7"/>')
+    g = []
+    for s in order:
+        x, y = pos[s]
+        r = 30 if s == "intelligence" else 23
+        nm = "Capital" if s == "capitalco" else s.title()
+        url = f"https://cogops-{'capital' if s == 'capitalco' else s}.pages.dev"
+        g.append(f'<a href="{url}" target="_blank" rel="noopener"><g class="nd" data-s="{s}">'
+                 f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r + 6}" fill="{ACC[s]}" opacity=".14"/>'
+                 f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r}" fill="{ACC[s]}"/>'
+                 f'<text x="{x:.0f}" y="{y + 4:.0f}" text-anchor="middle" font-size="10.5" font-weight="800" fill="#0a0d12">{nm[:2].upper()}</text>'
+                 f'<text x="{x:.0f}" y="{y + r + 17:.0f}" text-anchor="middle" font-size="11.5" fill="#c6d2e4">{nm}</text></g></a>')
+    hub = (f'<g class="nd" data-s="group"><circle cx="{cx}" cy="{cy}" r="42" fill="#101722" stroke="#7ee0b8" stroke-width="2"/>'
+           f'<text x="{cx}" y="{cy - 3}" text-anchor="middle" font-size="10.5" font-weight="800" fill="#7ee0b8">HOLDING</text>'
+           f'<text x="{cx}" y="{cy + 12}" text-anchor="middle" font-size="9" fill="#93a1b8">CogOps Group</text></g>')
+    legend = ('<g font-size="11" fill="#93a1b8">'
+              '<line x1="40" y1="628" x2="78" y2="628" stroke="#7ee0b8" stroke-width="1.5" stroke-dasharray="5 5"/>'
+              '<text x="86" y="632">star — Intelligence ↔ all (the multiplier)</text>'
+              '<line x1="350" y1="628" x2="388" y2="628" stroke="#6ea8fe" stroke-width="1.8"/>'
+              '<text x="396" y="632">clique K5 — deep-domain internal market</text>'
+              '<line x1="660" y1="628" x2="698" y2="628" stroke="#ffcf6e" stroke-width="2.4"/>'
+              '<text x="706" y="632">pairs — shared pipelines</text></g>')
+    return ('<style>svg line.e{transition:opacity .15s,stroke-width .15s}svg line.e.hi{opacity:1!important;stroke-width:3.2}'
+            'svg g.nd{cursor:pointer}svg g.nd:hover circle{filter:brightness(1.2)}</style>'
+            '<svg viewBox="0 0 900 655" style="width:100%;height:auto;background:#0b1017;border:1px solid var(--line);border-radius:14px" '
+            'role="img" aria-label="CogOps relationship graph: holding hub, ten companies, star/clique/pair links">'
+            + "".join(e) + hub + "".join(g) + legend + '</svg>' + GRAPH_HOVER)
+
+
+TREE_CSS = """
+.vt,.vkids{list-style:none;margin:0;padding:0}
+.vkids{margin-left:20px;border-left:1px dashed var(--line);padding-left:10px}
+.vrow{display:flex;align-items:center;gap:8px;padding:3px 8px;border-radius:8px;cursor:pointer;color:var(--dim);font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}
+.vrow:hover,.vrow:focus{background:#111a26;color:var(--ink);outline:none}
+.vcar{width:12px;flex:none;color:var(--acc);font-size:11px}
+.vdot{width:8px;height:8px;border-radius:50%;flex:none}
+.vdir{color:var(--ink);font-weight:600}
+.vic{margin-left:auto;opacity:.45}
+.vcnt{margin-left:auto;font-size:11px;opacity:.5}
+li.hit>.vrow .vname{background:rgba(255,207,110,.16);color:var(--warn);border-radius:4px}
+.vctl{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.vctl input{flex:1;min-width:220px;background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:9px 13px;font:inherit}
+.vctl input:focus{border-color:var(--acc)}
+.vctl button{background:var(--card);border:1px solid var(--line);color:var(--dim);border-radius:10px;padding:9px 15px;cursor:pointer;font:inherit}
+.vctl button:hover{color:var(--acc);border-color:var(--acc)}
+.vchips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.vchip{border:1px solid var(--line);border-radius:99px;padding:3px 12px;font-size:12px;color:var(--dim)}
+.vchip b{color:var(--ink)}
+.vleg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--dim);margin:4px 0 12px}
+.vleg span{display:inline-flex;align-items:center;gap:6px}
+.vleg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+#vtree{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;max-height:70vh;overflow:auto}
+details.raw summary{cursor:pointer;color:var(--acc2);margin:18px 0 8px}
+"""
+
+TREE_JS = """
+(function(){
+var DATA = __DATA__;
+var host = document.getElementById('vtree');
+var OPEN_DEPTH = 1;
+var FIC = {py:'\\u25C6',md:'\\u25A4',html:'\\u25C8',js:'\\u2B22',json:'\\u2B21',toml:'\\u2B2C',ts:'\\u2B22',css:'\\u25C8',svg:'\\u25C8',png:'\\u25A3',txt:'\\u25A4'};
+function icon(n){ if(n.d) return ''; var x=n.n.split('.').pop(); return FIC[x]||'\\u00B7'; }
+function cnt(n){ var d=0,f=0;(n.k||[]).forEach(function(k){ if(k.d){var r=cnt(k);d+=r[0];f+=r[1];} else f++; }); return [d,f]; }
+function render(node, depth, ul){
+  var li=document.createElement('li'); li.className='vn'; li.dataset.name=node.n.toLowerCase();
+  var row=document.createElement('div'); row.className='vrow'; row.tabIndex=0;
+  var car=document.createElement('span'); car.className='vcar'; car.textContent=node.d?(depth<OPEN_DEPTH?'\\u25BE':'\\u25B8'):' ';
+  var dot=document.createElement('span'); dot.className='vdot'; dot.style.background=node.c;
+  var nm=document.createElement('span'); nm.className='vname'+(node.d?' vdir':''); nm.textContent=node.n;
+  row.appendChild(car); row.appendChild(dot); row.appendChild(nm);
+  if(node.d){ var c=cnt(node); var b=document.createElement('span'); b.className='vcnt'; b.textContent=c[0]+'d \\u00B7 '+c[1]+'f'; row.appendChild(b); }
+  else { var ic=document.createElement('span'); ic.className='vic'; ic.textContent=icon(node); row.appendChild(ic); }
+  li.appendChild(row);
+  if(node.d){
+    var kids=document.createElement('ul'); kids.className='vkids';
+    (node.k||[]).forEach(function(k){ render(k, depth+1, kids); });
+    if(depth>=OPEN_DEPTH) kids.style.display='none';
+    li.appendChild(kids);
+    var toggle=function(){ var open=kids.style.display!=='none'; kids.style.display=open?'none':'block'; car.textContent=open?'\\u25B8':'\\u25BE'; };
+    row.addEventListener('click',toggle);
+    row.addEventListener('keydown',function(ev){ if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggle();} });
+  }
+  ul.appendChild(li);
+}
+function draw(){ host.innerHTML=''; var ul=document.createElement('ul'); ul.className='vt'; render(DATA,0,ul); host.appendChild(ul); }
+draw();
+document.getElementById('vexp').addEventListener('click',function(){ host.querySelectorAll('.vkids').forEach(function(u){u.style.display='block';}); host.querySelectorAll('li.vn .vcar').forEach(function(c){ if(c.textContent!==' ') c.textContent='\\u25BE'; }); });
+document.getElementById('vcol').addEventListener('click',function(){ OPEN_DEPTH=0; draw(); OPEN_DEPTH=1; });
+var q=document.getElementById('vq');
+q.addEventListener('input',function(){
+  var v=q.value.trim().toLowerCase();
+  if(!v){ draw(); return; }
+  host.querySelectorAll('li.vn').forEach(function(li){ li.classList.remove('hit'); li.style.display=''; });
+  host.querySelectorAll('li.vn').forEach(function(li){
+    if(li.dataset.name.indexOf(v)>=0){
+      li.classList.add('hit');
+      var p=li.parentElement;
+      while(p&&p!==host){ if(p.tagName==='UL'&&p.classList.contains('vkids')){ p.style.display='block'; var lp=p.parentElement; if(lp){var c=lp.querySelector('.vcar'); if(c&&c.textContent!==' ')c.textContent='\\u25BE';} } p=p.parentElement; }
+    }
+  });
+  host.querySelectorAll('li.vn').forEach(function(li){ if(!li.classList.contains('hit')&&!li.querySelector('li.hit')) li.style.display='none'; });
+});
+})();
+"""
+
+
+def tree_page_body() -> str:
+    data = tree_data()
+    d, f = _count(data)
+    d -= 1  # root itself
+    chips = (f"<div class='vchips'><span class='vchip'><b>{d}</b> folders</span>"
+             f"<span class='vchip'><b>{f}</b> files</span>"
+             f"<span class='vchip'><b>10</b> companies + holding</span>"
+             f"<span class='vchip'><b>12</b> live deployments</span>"
+             f"<span class='vchip'>built {data and __import__('datetime').date.today().isoformat()}</span></div>")
+    legend = ("<div class='vleg'>"
+              + "".join(f"<span><i style='background:{c}'></i>{n}</span>" for n, c in [
+                  ("OS engine", CAT["cogops-os"]), ("tools", CAT["tools"]),
+                  ("sites & functions", "#a78bfa"), ("governance / legal", CAT["structure"]),
+                  ("research", CAT["analysis"]), ("brand & vault", CAT["brand"]),
+                  ("root files", "#94a3b8")])
+              + "<span><i style='background:linear-gradient(90deg,#7ee0b8,#b48eff,#6ea8fe,#ff9e7e)'></i>companies carry their own accent</span></div>")
+    js = TREE_JS.replace("__DATA__", json.dumps(data, separators=(",", ":")))
+    return ("<style>" + TREE_CSS + "</style>"
+            "<h1>Structure — a map, not a listing</h1>"
+            "<p>Click any folder to open it; search filters live; companies glow in their own accent. "
+            "Generated from the repository at build time (excludes .git / caches / runtime state / deploy copies).</p>"
+            + chips + legend
+            + "<div class='vctl'><input id='vq' type='search' placeholder='Filter paths… (e.g. gates, DR, count.js)' aria-label='filter tree'>"
+              "<button id='vexp' type='button'>Expand all</button><button id='vcol' type='button'>Collapse all</button></div>"
+            + "<div id='vtree' aria-label='repository tree'></div>"
+            + "<h2>Relationship graph</h2>"
+            + "<p>The same structure as a network: hover a node to light its links; click to open the live site.</p>"
+            + rel_graph()
+            + "<details class='raw'><summary>raw listing (for copying exact paths)</summary><pre>" + tree() + "</pre></details>"
+            + "<script>" + js + "</script>")
+
+
 def modules() -> list:
     rows = []
     for f in sorted((ROOT / "cogops-os").glob("*.py")):
@@ -159,9 +403,9 @@ def build() -> None:
          f"<div class='grid'>"
          f"<div class='card'><h3>Group map</h3><img src='assets/map.png' alt='CogOps group map'></div>"
          f"<div class='card'><h3>State, as of 2026-10-22</h3><ul>"
-         f"<li><span class='k'>10 companies</span> + holding · 2 active lines, 8 dormant (DR-0013)</li>"
+         f"<li><span class='k'>10 companies</span> + holding · all active (DR-0015)</li>"
          f"<li><span class='k'>{len(drs)} decision records</span> append-only (DR-0001…)</li>"
-         f"<li><span class='k'>155/155</span> OS selftest checks green</li>"
+         f"<li><span class='k'>156/156</span> OS selftest checks green</li>"
          f"<li><span class='k'>11 live sites</span> + this vault</li>"
          f"<li><span class='k'>0</span> unrelated-party revenue — the invoice wall ends 2027-06-16 (DR-0014)</li>"
          f"</ul></div>"
@@ -178,11 +422,8 @@ def build() -> None:
          + "</div>"]
     (OUT / "index.html").write_text(page("index", "".join(b)), encoding="utf-8")
 
-    # tree
-    (OUT / "tree.html").write_text(page(
-        "tree", "<h1>Complete path structure</h1><p>Generated from the repository at build time; "
-        "excludes .git / caches / runtime state.</p><pre>" + tree() + "</pre>"),
-        encoding="utf-8")
+    # tree — interactive visual (DR-0016): color-coded collapsible tree + relationship graph
+    (OUT / "tree.html").write_text(page("tree", tree_page_body()), encoding="utf-8")
 
     # ai
     mods = "".join(f"<tr><td><code>{f}</code></td><td>{html.escape(d)}</td></tr>"
@@ -200,7 +441,7 @@ def build() -> None:
         "<li>Gates Type-1/2/3, levels G1–G3; consume-on-approve; fail-closed; append-only ledger (hash-chained).</li>"
         "<li>Nervous system: senses → reflexes → pain (freeze) → dependency nerves → consciousness dashboard (localhost-only).</li>"
         "<li>Capital: profit sweep → ladder → fortress; Swiss private-investor guardrails; no leverage, no derivatives.</li>"
-        "<li>Dormancy (DR-0013) is enforced in <code>gates.stage()</code>: dormant companies' external/money/public actions are REFUSED at the door.</li>"
+        "<li>Dormancy instrument (DR-0013) stays enforced in <code>gates.stage()</code>: if a future DR re-dorms a company, its external/money/public actions are REFUSED at the door. Per DR-0015 all ten lines are currently active.</li>"
         "<li>Inbox has no send(): every external message waits for a human keystroke.</li></ul>"),
         encoding="utf-8")
 
@@ -221,8 +462,13 @@ def build() -> None:
         "the multiplier (Intelligence), group engines (Growth, Talent). Pairs: Growth↔Talent, Verde↔Terra. "
         "Clique K5: Helix·Dossia·Medtech·Sentinel·Capital. Star: Intelligence↔all nine. "
         "Excluded forever-for-now: quantum, semis, nuclear, defense-tech, synbio, cell&gene, battery materials.</p>"
+        "<h2>Relationship graph</h2><p>Hover a node to light its links; click to open the live site.</p>"
+        + rel_graph() +
+        "<h2>Roster</h2>"
         "<table><tr><th>company</th><th>mode</th><th>one line</th><th>evidence machine</th></tr>" + rows + "</table>"
-        "<h2>Dormancy rules (DR-0013)</h2><ul>" + "".join(f"<li>{r}</li>" for r in dorm["rules"]) + "</ul>"),
+        "<h2>Dormancy instrument (DR-0013 → DR-0015)</h2><p>All ten active since DR-0015; the refusal "
+        "mechanism stays in <code>gates.stage()</code> and stays tested, so re-dorming any line remains "
+        "one JSON edit away.</p><ul>" + "".join(f"<li>{r}</li>" for r in dorm["rules"]) + "</ul>"),
         encoding="utf-8")
 
     # analysis
