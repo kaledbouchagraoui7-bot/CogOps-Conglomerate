@@ -57,6 +57,51 @@ footer{border-top:1px solid var(--line);color:var(--dim);font-size:13px;padding:
 .rv{opacity:0;transform:translateY(18px);transition:.6s}.rv.in{opacity:1;transform:none}
 @media(max-width:640px){.nlinks{display:none}form.signup .row{grid-template-columns:1fr}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+
+/* ---- experience pack v2: identity, motion, usability, delight ---- */
+:root{--font-display:"Space Grotesk","Avenir Next","Segoe UI Variable Display",system-ui,sans-serif;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+html{scroll-behavior:smooth}
+main h1,main h2{font-family:var(--font-display);font-weight:800;letter-spacing:-.02em}
+.eyebrow,.num,.tchip,.stepper b,.slots,.slots strong,.slots em,.vt-sec{font-family:var(--mono)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.hero section>*{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+.hero section>*:nth-child(2){animation-delay:.08s}
+.hero section>*:nth-child(3){animation-delay:.16s}
+.hero section>*:nth-child(4){animation-delay:.24s}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,-30px) scale(1.15)}}
+.blob{animation:drift 22s ease-in-out infinite alternate}
+.blob:nth-of-type(2){animation-duration:28s;animation-direction:alternate-reverse}
+.card{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(15,20,27,.10)}
+.btn:active{transform:scale(.97)}
+.msg.ok{animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+.skip{position:fixed;top:-60px;left:16px;z-index:60;background:var(--accent);color:#fff;
+  padding:10px 18px;border-radius:10px;font-weight:700;transition:top .2s;text-decoration:none}
+.skip:focus{top:12px}
+[role="status"],.slots{transition:background .3s}
+table{scroll-margin-top:80px}
+@media (max-width:640px){table{display:block;overflow-x:auto;max-width:100%;white-space:nowrap}}
+.est{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--panel);
+  box-shadow:0 2px 10px rgba(15,20,27,.04)}
+.est .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:14px}
+.est label{display:block;font-size:.8rem;color:var(--dim);margin-bottom:5px;font-weight:600}
+.est input[type=number],.est select,.est textarea{width:100%;background:var(--bg);border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;color:var(--ink);font-family:var(--mono);font-size:.92rem}
+.est textarea{min-height:96px;resize:vertical}
+.est .chips{display:flex;flex-wrap:wrap;gap:8px}
+.est .chip{cursor:pointer;user-select:none;border:1px solid var(--line);border-radius:99px;
+  padding:7px 14px;font-size:.84rem;font-weight:600;color:var(--dim);background:var(--bg);
+  transition:all .2s}
+.est .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.est .out{margin-top:16px;padding:16px;border-radius:12px;background:var(--bg);border:1px dashed var(--line)}
+.est .big{font-family:var(--mono);font-size:1.7rem;font-weight:700;color:var(--accent)}
+.est .note{font-size:.82rem;color:var(--dim);margin-top:10px;line-height:1.55}
+.est ul{margin:8px 0 0 18px;font-size:.88rem;color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.hero section>*,.blob,.msg.ok{animation:none}}
+<!-- polish-pack v2 -->
+:root{/*ALIAS-VARS*/--accent:var(--acc);--muted:var(--dim);--panel:var(--card)}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"CogOps Intelligence",
@@ -91,6 +136,7 @@ details summary:hover{color:var(--accent)}
 @media (max-width:600px){.stepper i{display:none}}
 </style>
 </head><body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="blobs"><i></i><i></i></div>
 <nav><div class="wrap navin">
   <span class="brand">CogOps <em>Intelligence</em></span>
@@ -155,6 +201,14 @@ details summary:hover{color:var(--accent)}
   <p class="rv" style="color:var(--dim);font-size:13px;margin-top:12px">All prices in CHF, excl. VAT where applicable. Swiss QR-bill, net 14 days. Model token spend on your assistant is capped per month at a number you set — the cap is enforced in code.</p>
 </div></section>
 
+  <!-- interactive discovery (pack v2) -->
+  <section class="block" id="try"><div class="inner">
+    <span class="eyebrow">Interactive</span>
+    <h2>Try the math yourself</h2>
+    <p class="sub">List a real process — the classifier that runs our internal market decides what an agent may do and what needs a human or a gate.</p>
+    <div class="est" id="est"></div>
+  </div></section>
+  <script type="application/json" id="est-cfg">{"type": "classify", "label": "Your process, one step per line", "agentKw": ["extract", "parse", "summarize", "draft", "monitor", "scrape", "format", "translate", "tag", "classify", "search", "compare", "generate", "collect", "report"], "gateKw": ["legal", "medical", "sign", "approve", "file", "submit", "certify", "pay", "contract", "regulator", "delete personal"], "note": "Same delegation rules as the paid audit (agents draft, humans decide, gates on money/regulator/medical/legal). The audit adds the runbook, cost model and KPI pack per agent."}</script>
 <section id="signup"><div class="wrap" style="max-width:640px">
   <div class="eyebrow rv" style="text-align:center">Start here</div>
   <h2 class="rv" style="text-align:center">Request your free automation audit</h2>
@@ -294,4 +348,178 @@ if(sl&&typeof d.slots_left==='number'){sl.textContent=d.slots_left>0?
 })();
 </script>
 
+<script>
+
+/* experience pack v2 */
+(function(){
+  /* View Transitions for cross-page nav (progressive enhancement) */
+  if (document.startViewTransition) {
+    document.addEventListener('click', function(e){
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a || a.target === '_blank' || e.metaKey || e.ctrlKey) return;
+      var u = new URL(a.href, location.href);
+      if (u.origin !== location.origin || u.pathname === location.pathname) return;
+      e.preventDefault();
+      document.startViewTransition(function(){ location.href = a.href; });
+    });
+  }
+  /* haptic tick when the signup succeeds (mobile), purely decorative */
+  var m = document.getElementById('m');
+  if (m && window.MutationObserver) {
+    new MutationObserver(function(){
+      if ((m.className||'').indexOf('ok') >= 0 && navigator.vibrate) navigator.vibrate([8,24,8]);
+    }).observe(m, {attributes:true, attributeFilter:['class']});
+  }
+  /* ---- interactive discovery widget ---- */
+  var cfgEl = document.getElementById('est-cfg');
+  var host = document.getElementById('est');
+  if (!cfgEl || !host) return;
+  var C = JSON.parse(cfgEl.textContent);
+  var $ = function(t, cls, txt){ var e = document.createElement(t); if(cls) e.className = cls; if(txt!=null) e.textContent = txt; return e; };
+  var state = {};
+
+  function run(){
+    var out = document.getElementById('est-out'); out.innerHTML = '';
+    var res = null;
+    try { res = LIB[C.type](C, state); } catch(err){ res = {big:'—', note:'Check the inputs.'}; }
+    out.appendChild($('<div class="big">', null, res.big));
+    if (res.rows) { var ul = $('ul'); res.rows.forEach(function(r){ ul.appendChild($('li', null, r)); }); out.appendChild(ul); }
+    out.appendChild($('<div class="note">', null, res.note || C.note || ''));
+    out.style.animation = 'none'; void out.offsetWidth; out.style.animation = 'pop .3s';
+  }
+
+  var LIB = {
+    calc: function(c, s){
+      var v = {}; c.inputs.forEach(function(i){ v[i.k] = parseFloat(s[i.k] != null ? s[i.k] : i.d); });
+      var r = (new Function(Object.keys(v), 'return (' + c.formula + ')')).apply(null, Object.keys(v).map(function(k){return v[k];}));
+      return {big: (Math.round(r*100)/100).toLocaleString('de-CH') + ' ' + c.unit, note: c.note};
+    },
+    match: function(c, s){
+      var role = c.roles[s.role || c.defRole]; var got = s.skills || [];
+      var tot = 0, hit = 0, gaps = [];
+      Object.keys(role).forEach(function(k){ tot += role[k]; if (got.indexOf(k) >= 0) hit += role[k]; else gaps.push(k); });
+      var pct = Math.round(100*hit/tot);
+      return {big: pct + '% match — ' + (s.roleLabel || ''),
+        rows: gaps.length ? ['Missing for this role: ' + gaps.join(', ')] : ['No gaps for this role — the scan would go straight to portfolio evidence.'],
+        note: pct < 70 ? 'Below 70%? The free skill-gap scan shows exactly where, and what it costs to close.' : c.note};
+    },
+    fasta: function(c, s){
+      var seq = (s.seq || '').toUpperCase().replace(/[^ACGTUN]/g, '');
+      if (seq.length < 20) return {big: 'paste a sequence', note: '20+ bases needed (browser-side preview only).'};
+      var gc = (seq.match(/[GC]/g) || []).length;
+      var pct = Math.round(1000*gc/seq.length)/10;
+      var best = 0;
+      var frames = [seq, seq.slice(1), seq.slice(2)];
+      frames.forEach(function(f){
+        for (var i = 0; i + 3 <= f.length; i += 3) {
+          var codon = f.substr(i, 3), run = 0;
+          while (codon !== 'TAA' && codon !== 'TAG' && codon !== 'TGA' && i + 3 <= f.length) {
+            run++; i += 3; codon = f.substr(i, 3);
+          }
+          if (run > best) best = run;
+        }
+      });
+      var rows = ['Length: ' + seq.length + ' nt', 'GC: ' + pct + '% (' + (pct >= 40 && pct <= 60 ? 'in range' : 'flagged') + ')',
+        'Longest ORF frame-scan: ~' + best + ' aa'];
+      return {big: pct + '% GC', rows: rows, note: c.note};
+    },
+    quiz: function(c, s){
+      var yes = 0; c.qs.forEach(function(q, i){ if (s['q'+i] === 'yes') yes++; });
+      var pct = Math.round(100*yes/c.qs.length);
+      var verdict = pct >= 84 ? 'Strong baseline — the snapshot would hunt the subtle stuff.' :
+        pct >= 50 ? 'Half-covered. The un-checked items are exactly where the free snapshot starts.' :
+        'Exposed. Take the free edge snapshot before it gets expensive.';
+      return {big: pct + '% covered', rows: [verdict], note: c.note};
+    },
+    map: function(c, s){
+      var sel = s.pick || c.options[0].v;
+      var opt = null; c.options.forEach(function(o){ if (o.v === sel) opt = o; });
+      return {big: opt.h, rows: opt.rows, note: c.note};
+    },
+    classify: function(c, s){
+      var lines = (s.steps || '').split('\n').map(function(x){return x.trim();}).filter(Boolean);
+      if (!lines.length) return {big: 'list your steps', note: 'One step per line.'};
+      var agent = [], human = [], gate = [];
+      lines.forEach(function(l){
+        var t = l.toLowerCase();
+        if (c.gateKw.some(function(k){ return t.indexOf(k) >= 0; })) gate.push(l);
+        else if (c.agentKw.some(function(k){ return t.indexOf(k) >= 0; })) agent.push(l);
+        else human.push(l);
+      });
+      return {big: agent.length + ' agent · ' + gate.length + ' gated · ' + human.length + ' human',
+        rows: ['Delegation potential: ' + Math.round(100*agent.length/lines.length) + '% of listed steps'],
+        note: c.note};
+    }
+  };
+
+  /* render inputs */
+  var form = $('<div>'); var row = $('<div class="row">'); form.appendChild(row);
+  function numIn(i){
+    var lab = $('<label>'); lab.textContent = i.label;
+    var inp = $('<input type="number">'); inp.value = i.d; inp.step = 'any';
+    inp.addEventListener('input', function(){ state[i.k] = inp.value; run(); });
+    state[i.k] = i.d; lab.appendChild(inp); return lab;
+  }
+  function selIn(i, onChange){
+    var lab = $('<label>'); lab.textContent = i.label;
+    var sel = $('<select>');
+    i.o.forEach(function(o){
+      var op = $('<option>'); op.value = (typeof o === 'object') ? o.v : o;
+      op.textContent = (typeof o === 'object') ? o.label : o; sel.appendChild(op);
+    });
+    state[i.k] = sel.value = (i.d != null ? i.d : ((typeof i.o[0] === 'object') ? i.o[0].v : i.o[0]));
+    sel.value = state[i.k];
+    sel.addEventListener('change', function(){ state[i.k] = sel.value; onChange && onChange(sel); run(); });
+    lab.appendChild(sel); return lab;
+  }
+  if (C.type === 'calc') C.inputs.forEach(function(i){
+    row.appendChild(i.t === 'select' ? selIn(i) : numIn(i));
+  });
+  else if (C.type === 'match') {
+    var wrap = $('<div>'); wrap.appendChild($('<label>', null, 'Your skills (tap)'));
+    var chips = $('<div class="chips">'); state.skills = [];
+    C.skills.forEach(function(sk){
+      var ch = $('<span class="chip">', null, sk);
+      ch.addEventListener('click', function(){
+        var ix = state.skills.indexOf(sk);
+        if (ix >= 0) { state.skills.splice(ix, 1); ch.classList.remove('on'); }
+        else { state.skills.push(sk); ch.classList.add('on'); }
+        run();
+      });
+      chips.appendChild(ch);
+    });
+    wrap.appendChild(chips); row.appendChild(wrap);
+    row.appendChild(selIn({k:'role', label:'Target role', o: Object.keys(C.roles).map(function(r){return {v:r, label:r};}), d: C.defRole},
+      function(sel){ state.roleLabel = sel.options[sel.selectedIndex].textContent; }));
+    state.roleLabel = C.defRole;
+  }
+  else if (C.type === 'fasta') {
+    var lab = $('<label>', null, C.label || 'Paste DNA (FASTA or raw)');
+    var ta = $('<textarea>'); ta.placeholder = '>seq1\nATGCGT…';
+    ta.addEventListener('input', function(){ state.seq = ta.value; run(); });
+    lab.appendChild(ta); row.appendChild(lab);
+  }
+  else if (C.type === 'quiz') {
+    C.qs.forEach(function(q, i){
+      row.appendChild(selIn({k:'q'+i, label:q, o:[{v:'no',label:'no'},{v:'yes',label:'yes'}], d:'no'}));
+    });
+  }
+  else if (C.type === 'map') {
+    row.appendChild(selIn({k:'pick', label:C.pickLabel, o: C.options.map(function(o){return {v:o.v, label:o.label};}), d: C.options[0].v}));
+  }
+  else if (C.type === 'classify') {
+    var lab2 = $('<label>', null, C.label || 'Your process, one step per line');
+    var ta2 = $('<textarea>'); ta2.placeholder = 'extract invoices\ncheck compliance\nemail client';
+    ta2.addEventListener('input', function(){ state.steps = ta2.value; run(); });
+    lab2.appendChild(ta2); row.appendChild(lab2);
+  }
+  var btn = $('<button class="btn ghost">', null, C.runLabel || 'Run');
+  btn.type = 'button'; btn.addEventListener('click', run);
+  form.appendChild(btn);
+  var out = $('<div class="out" id="est-out">'); form.appendChild(out);
+  host.appendChild(form);
+  run();
+})();
+
+</script>
 </body></html>
