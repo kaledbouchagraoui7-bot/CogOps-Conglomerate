@@ -1,6 +1,19 @@
 # Money Play v2 — what you can ACTUALLY do to reach €3,000 cumulative before 2027-06-16
 
 Date: 2026-10-23 · Author: analyst seat · Supersedes v1 (2026-10-22).
+
+## BOTTOM LINE (the no-maybes answer)
+
+There is exactly **one** combination that passes every legal gate verified on 2026-10-23:
+
+1. **Rail:** your own **Livret A** (openable alone at 16 — CMF L221-3). Primary rail = SEPA virement from clients; fallback rail = **cash deposited at the counter** (deposits are unrestricted; only withdrawals were restricted before 16 — F2365/F21035). The rail therefore cannot fail; the €1 test only decides *which* rail is primary.
+2. **Core engine (≈70%):** **online tutoring** — maths/physique/SVT (collège→Première), Python for teens, Italian (native, rare in Nantes). Superprof accepts tutors from 16; direct payment = you keep 100% [FACT]. Start €15–17/h → €20/h in January → €22–25/h in bac season.
+3. **Accelerator (≈25%):** **fixed-price micro-gigs for EU clients only** (SEPA is your only electronic rail): scraping €40–120, automation €80–250, one-page sites €250–450, bots €60–150. Your 12 live production sites are the portfolio.
+4. **Arithmetic:** €3,000 over 33 weeks = €91/week ≈ **4.5 h/week blended** — inside your 10 h cap. Trajectory below crosses €3k ~1 May 2027 and ends ~€3.5k on 14 Jun 2027.
+5. **The single decisive variable:** ≥10 outreaches/week. Not talent, not legality, not ideas — outreach volume. Day-60 kill test: 22 Dec 2026.
+6. Everything else (jobs, CESU, Fiverr/Upwork/ComeUp, PayPal/Stripe, YouTube, dropshipping, Vinted…) is **verified dead** before 2027-06-16 — skip list at the bottom. Do not revisit these; they waste the exact hours that fund the plan.
+
+Execute Steps 1–2 within 72 h. The plan has no other branch.
 Mission (founder brief): "tell me what I can do thanks to what I have to make money — even if I only make 3 thousand cumulative before 16-06-2027. No maybes, no things I can't do. Do the research."
 Constraints taken as given: home-based income only (no off-premises work before Sept 2027) · no parental signatures available · Terminale → Bac June 2027 is priority #1 · hard cap ≤10 h/week on money work · CH relocation Sept 2027.
 
