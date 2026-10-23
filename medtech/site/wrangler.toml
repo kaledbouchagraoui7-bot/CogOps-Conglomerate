@@ -6,3 +6,6 @@ kv_namespaces = [
   { binding = "SIGNUPS", id = "d6f91793dd6f4b7dbc440b5386d6b6c1" }
 ]
 # Secrets (set via wrangler/dashboard, never here): ADMIN_TOKEN, NOTIFY_URL
+
+[vars]
+SAMPLE_CAP = "3"

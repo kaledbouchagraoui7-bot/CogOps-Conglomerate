@@ -24,6 +24,7 @@ for k in ("ANTHROPIC_API_KEY", "OPENAI_API_KEY", "OPENROUTER_API_KEY"):
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import json             # noqa: E402
 import autonomy            # noqa: E402
 import cadence             # noqa: E402
 import capital             # noqa: E402
@@ -813,21 +814,28 @@ def main() -> int:
     dec_txt = (config.ROOT.parent / "structure" / "decisions.md").read_text(encoding="utf-8")
     check("dormancy: partition of registry + DR cited + effective date",
           dormancy.assert_consistent(registry.COMPANIES, dec_txt) == [])
-    d0 = dormancy.load()["dormant"][0]
-    aid_r = gates.stage(d0, {"external": True, "kind": "outreach"})
-    st_r = gates.queue("REFUSED")
-    check("dormancy: external action of dormant company REFUSED fail-closed",
-          any(x["id"] == aid_r and "DR-0013" in x["reason"] for x in st_r))
-    aid_o = gates.stage(d0, {"external": True, "kind": "reactivation",
-                             "dr_override": "DR-00XX", "money_movement": True})
-    q_all = {x["id"]: x for x in gates.queue("PENDING")}
-    check("dormancy: dr_override reactivation passes the door as G3 pending",
-          q_all.get(aid_o, {}).get("status") == "PENDING"
-          and q_all.get(aid_o, {}).get("level") == "G3")
-    aid_a = gates.stage("growth", {"external": True, "kind": "outreach"})
-    check("dormancy: active line still stages normally (no regression)",
-          gates.queue("REFUSED") and
-          all(x["id"] != aid_a for x in gates.queue("REFUSED")))
+    check("dormancy: DR-0015 reactivation — all ten active, none dormant",
+          dormancy.load()["dormant"] == [] and len(dormancy.load()["active"]) == 10)
+    orig_file = dormancy.FILE
+    tmpf = _tmp / "dormancy_test.json"
+    tmpf.write_text(json.dumps({"dr": "DR-TEST", "effective": "2026-01-01",
+                                "dormant": ["terra"], "active": ["growth"], "rules": []}))
+    dormancy.FILE = tmpf
+    try:
+        aid_r = gates.stage("terra", {"external": True, "kind": "outreach"})
+        check("dormancy: instrument still refuses external action of a (test-)dormant company",
+              any(x["id"] == aid_r for x in gates.queue("REFUSED")))
+        aid_o = gates.stage("terra", {"external": True, "kind": "reactivation",
+                                      "dr_override": "DR-00XX", "money_movement": True})
+        q_all = {x["id"]: x for x in gates.queue("PENDING")}
+        check("dormancy: dr_override reactivation passes the door as G3 pending",
+              q_all.get(aid_o, {}).get("status") == "PENDING"
+              and q_all.get(aid_o, {}).get("level") == "G3")
+        aid_a = gates.stage("growth", {"external": True, "kind": "outreach"})
+        check("dormancy: active company stages normally under override (no regression)",
+              all(x["id"] != aid_a for x in gates.queue("REFUSED")))
+    finally:
+        dormancy.FILE = orig_file
     res = (config.ROOT.parent / "legal" / "reservation-agreement.md")
     rtxt = res.read_text(encoding="utf-8") if res.exists() else ""
     check("DR-0014: reservation template exists, zero-consideration + majority date",

@@ -1,14 +1,23 @@
 {
-  "dr": "DR-0013",
-  "effective": "2026-10-22",
-  "active": ["growth", "dossia"],
-  "dormant": ["intelligence", "sentinel", "capitalco", "helix", "medtech",
-              "verde", "terra", "talent"],
-  "rules": [
-    "dormant companies: no outreach, no spend, no public statements (gates refuse)",
-    "live sites stay up as evidence machines; stores stay purged",
-    "reactivation = Decision Record + dr_override flag on the staged action (G3)",
-    "dossia active conditional on expert co-signer LoI by end of month 4 (DR-0014)",
-    "exam shield: June-July 2027 blackout for both active lines (DR-0013)"
-  ]
+ "dr": "DR-0015",
+ "effective": "2026-10-22",
+ "active": [
+  "intelligence",
+  "sentinel",
+  "capitalco",
+  "helix",
+  "dossia",
+  "medtech",
+  "verde",
+  "terra",
+  "growth",
+  "talent"
+ ],
+ "dormant": [],
+ "rules": [
+  "DR-0015: all ten active; breadth governed by per-company weekly quotas + real sample caps (DR-0016)",
+  "dormancy instrument retained in code (gates refuse when a future DR re-dorms a company)",
+  "DR-0014 kill criteria apply per active line, reviewed quarterly",
+  "visitor-facing scarcity must be computed live from real caps \u2014 never fabricated (DR-0016)"
+ ]
 }
