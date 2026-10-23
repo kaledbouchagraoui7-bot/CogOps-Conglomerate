@@ -841,6 +841,20 @@ def main() -> int:
     check("DR-0014: reservation template exists, zero-consideration + majority date",
           res.exists() and "2027-06-16" in rtxt and "EUR 0 / CHF 0" in rtxt)
 
+    # DR-0016: persuasion/experience packs present on all ten company sites
+    site_root = config.ROOT.parent
+    _slugs = ["growth", "talent", "helix", "verde", "terra", "sentinel",
+              "capitalco", "dossia", "medtech", "intelligence"]
+    packs_ok = slots_ok = True
+    for _s in _slugs:
+        _idx = (site_root / _s / "site" / "public" / "index.html").read_text(encoding="utf-8")
+        packs_ok = packs_ok and all(m in _idx for m in
+            ("polish-pack v1", "polish-pack v2", 'id="try"', "est-cfg", "ALIAS-VARS"))
+        _cj = (site_root / _s / "site" / "functions" / "api" / "count.js").read_text(encoding="utf-8")
+        slots_ok = slots_ok and "slots_left" in _cj and "SAMPLE_CAP" in _cj
+    check("DR-0016: all ten sites carry persuasion packs v1+v2 with an interactive widget", packs_ok)
+    check("DR-0016: all ten /api/count compute live slots_left from real caps", slots_ok)
+
     print()
     if FAILS:
         print(f"FAILURES ({len(FAILS)}): {FAILS}")
